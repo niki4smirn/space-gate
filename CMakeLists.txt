@@ -14,6 +14,12 @@ find_package(Qt5 COMPONENTS
         REQUIRED
         )
 
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
+
+find_package(Protobuf REQUIRED)
+set(scheme_PROTOS Protobuf/scheme.proto)
+include_directories(${Protobuf_INCLUDE_DIRS})
+
 set(COMMON_SRC
         src/AbstractController/abstract_controller.cpp
         src/Event/event.cpp
@@ -35,7 +41,7 @@ add_executable(client
         src/Client/Controller/client_controller.cpp
         )
 
-set(REQUIRED_LIBS
+set(REQUIRED_QT_PARTS
         Qt::Core
         Qt::Gui
         Qt::Widgets
@@ -43,7 +49,8 @@ set(REQUIRED_LIBS
         Qt::WebSockets
         )
 
-target_link_libraries(server ${REQUIRED_LIBS})
-target_link_libraries(client ${REQUIRED_LIBS})
-
-
+foreach (executable server; client)
+    target_link_libraries(${executable} ${REQUIRED_QT_PARTS})
+    target_link_libraries(${executable} protobuf::libprotobuf)
+    protobuf_generate(TARGET ${executable} PROTOC_OUT_DIR ../ PROTOS ${scheme_PROTOS})
+endforeach()

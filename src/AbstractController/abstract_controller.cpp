@@ -2,10 +2,6 @@
 
 #include <QDebug>
 
-QDebug& operator<<(QDebug& os, const Event& event) {
-  return os;
-}
-
 AbstractController::AbstractController() {
   connect(&timer_, &QTimer::timeout, this, &AbstractController::Tick);
 }

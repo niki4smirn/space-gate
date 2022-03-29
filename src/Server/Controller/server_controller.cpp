@@ -8,10 +8,40 @@ ServerController::ServerController()
             this,
             &ServerController::OnSocketConnect);
   }
+  StartTicking();
 }
 
 void ServerController::OnByteArrayReceived(const QByteArray& message) {
-  qInfo() << "Got message" << message;
+  auto got_event = Event(message);
+  qInfo() << "Got event" << got_event;
+
+  auto message_socket = qobject_cast<QWebSocket*>(sender());
+  auto user = server_model_.GetUserBySocket(message_socket).lock();
+  UserId user_id = user->GetId();
+
+  switch (got_event.type) {
+    case Event::Type::kCreateRoom: {
+      RoomId new_room_id = server_model_.GetUnusedRoomId();
+      server_model_.AddRoom(
+          std::make_shared<RoomController>(new_room_id, user));
+      break;
+    }
+    case Event::Type::kEnterRoom: {
+      if (server_model_.ExistsRoom(got_event.argument) &&
+          !server_model_.IsInSomeRoom(user_id)) {
+        server_model_.AddUserToRoom(user_id, got_event.argument);
+      }
+      break;
+    }
+    case Event::Type::kLeaveRoom: {
+      if (server_model_.IsInSomeRoom(user_id)) {
+        RoomId room_id = server_model_.GetRoomIdByUserId(user_id);
+        server_model_.DeleteUserFromRoom(user_id, room_id);
+      }
+      break;
+    }
+    default: {}
+  }
 }
 
 void ServerController::OnSocketConnect() {

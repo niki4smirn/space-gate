@@ -5,9 +5,7 @@
 #include <QObject>
 #include <QTimer>
 
-struct Event{
-  friend QDebug& operator<<(QDebug& os, const Event& event);
-};
+#include "../Event/event.h"
 
 class AbstractController : public QObject {
  public:

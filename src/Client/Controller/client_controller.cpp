@@ -18,3 +18,15 @@ void ClientController::OnConnect() {
 void ClientController::OnDisconnect() {
   qInfo() << "Disconnected from" << server_url_;
 }
+
+QString ClientController::GetControllerName() const {
+  return "Client";
+}
+
+void ClientController::OnTick() {
+
+}
+
+void ClientController::Send(const Event& event) {
+
+}

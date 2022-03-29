@@ -43,3 +43,15 @@ void ServerController::OnSocketDisconnect() {
     server_model_.DeleteUser(user_id);
   }
 }
+
+QString ServerController::GetControllerName() const {
+  return "Server";
+}
+
+void ServerController::OnTick() {
+
+}
+
+void ServerController::Send(const Event& event) {
+
+}

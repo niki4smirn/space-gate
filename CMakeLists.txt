@@ -14,7 +14,11 @@ find_package(Qt5 COMPONENTS
         REQUIRED
         )
 
+set(COMMON_SRC
+        src/AbstractController/abstract_controller.cpp)
+
 add_executable(server
+        ${COMMON_SRC}
         src/Server/server_main.cpp
         src/Server/Controller/server_controller.cpp
         src/Server/Models/User/user.cpp
@@ -22,6 +26,7 @@ add_executable(server
         )
 
 add_executable(client
+        ${COMMON_SRC}
         src/Client/client_main.cpp
         src/Client/Controller/client_controller.cpp
         )

@@ -4,13 +4,22 @@
 #include <QUrl>
 #include <QWebSocket>
 
-class ClientController : public QObject {
+#include "../../AbstractController/abstract_controller.h"
+
+class ClientController : public AbstractController {
  public:
   explicit ClientController(const QUrl& url);
+  ~ClientController() override = default;
+
+  QString GetControllerName() const override;
 
   public Q_SLOTS:
   void OnConnect();
   void OnDisconnect();
+
+ protected:
+  void OnTick() override;
+  void Send(const Event& event) override;
 
  private:
   QUrl server_url_;

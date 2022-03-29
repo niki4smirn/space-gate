@@ -9,14 +9,32 @@ find_package(Qt5 COMPONENTS
         Core
         Gui
         Widgets
-        REQUIRED)
+        Network
+        WebSockets
+        REQUIRED
+        )
 
-add_executable(server main.cpp)
+add_executable(server
+        src/Server/server_main.cpp
+        src/Server/Controller/server_controller.cpp
+        src/Server/Models/User/user.cpp
+        src/Server/Models/ServerModel/server_model.cpp
+        )
 
-target_link_libraries(server
+add_executable(client
+        src/Client/client_main.cpp
+        src/Client/Controller/client_controller.cpp
+        )
+
+set(REQUIRED_LIBS
         Qt::Core
         Qt::Gui
         Qt::Widgets
+        Qt::Network
+        Qt::WebSockets
         )
+
+target_link_libraries(server ${REQUIRED_LIBS})
+target_link_libraries(client ${REQUIRED_LIBS})
 
 

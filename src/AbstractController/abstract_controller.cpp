@@ -1,5 +1,7 @@
 #include "abstract_controller.h"
 
+#include "Constants/constants.h"
+
 AbstractController::AbstractController() {
   connect(&timer_, &QTimer::timeout, this, &AbstractController::Tick);
 }
@@ -20,8 +22,7 @@ void AbstractController::LogReceive(const proto::Event& event) const {
 }
 
 void AbstractController::StartTicking() {
-  // TODO(Everyone): remove magic number
-  timer_.start(50);
+  timer_.start(constants::kTickTime);
 }
 
 void AbstractController::Tick() {

@@ -1,8 +1,10 @@
 #include "server_controller.h"
 
+#include "Constants/constants.h"
+
 ServerController::ServerController()
   :  web_socket_server_("", QWebSocketServer::NonSecureMode) {
-  if (web_socket_server_.listen(QHostAddress::Any, 1337)) {
+  if (web_socket_server_.listen(QHostAddress::Any, constants::kDefaultPort)) {
     connect(&web_socket_server_,
             &QWebSocketServer::newConnection,
             this,
@@ -33,6 +35,8 @@ void ServerController::OnSocketConnect() {
   auto new_user = std::make_shared<User>(new_user_id,
                                          current_socket);
   // TODO(Everyone): replace with adding to handle queue
+  // so, this TODO is not really relevant, because it may cause some
+  // security problems
   server_model_.AddUser(new_user);
 
   connect(new_user->GetSocket().get(),
@@ -52,6 +56,8 @@ void ServerController::OnSocketDisconnect() {
   if (web_socket) {
     UserId user_id = server_model_.GetUserBySocket(web_socket).lock()->GetId();
     // TODO(Everyone): replace with adding to handle queue
+    // so, this TODO is not really relevant, because it may cause some
+    // security problems
     server_model_.DeleteUser(user_id);
   }
 }

@@ -1,12 +1,19 @@
 #include <QApplication>
 #include <QUrl>
 
+#include "Constants/constants.h"
 #include "Controller/client_controller.h"
 
 int main(int argc, char* argv[]) {
   QApplication app(argc, argv);
-  // TODO(Everyone): remove hardcoded url
-  QUrl server_url("ws://localhost:1337");
+  QString url_str = "ws://";
+  if (argc > 1) {
+    url_str += argv[1];
+  } else {
+    url_str += constants::kDefaultServerIp;
+  }
+  url_str += ":" + QString::number(constants::kDefaultPort);
+  QUrl server_url(url_str);
   auto* client_controller = new ClientController(server_url);
   return QApplication::exec();
 }

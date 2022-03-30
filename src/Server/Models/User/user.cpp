@@ -1,6 +1,6 @@
 #include "user.h"
 
-User::User(UserId id, std::shared_ptr<QWebSocket> socket)
+User::User(UserId id, const std::shared_ptr<QWebSocket>& socket)
     : id_(id), socket_(socket) {}
 
 UserId User::GetId() const {

@@ -6,10 +6,13 @@ RoomModel::RoomModel(RoomId room_id, const std::shared_ptr<User>& host)
 }
 
 void RoomModel::AddUser(const std::shared_ptr<User>& user) {
-  users_list_[user->GetId()] = user;
+  UserId id = user->GetId();
+  users_list_[id] = user;
+  waiting_status_for_user_id_[id] = WaitingStatus::kNotReady;
 }
 
 void RoomModel::DeleteUser(UserId id) {
+  Q_ASSERT(HasUser(id));
   users_list_.erase(id);
 }
 
@@ -34,14 +37,15 @@ void RoomModel::SetHostId(UserId id) {
 }
 
 UserId RoomModel::GetRandomUser() const {
+  Q_ASSERT(!IsEmpty());
   return users_list_.begin()->first;
 }
 
-void RoomModel::ChangeUserWaitingStatus(UserId id) {
-  WaitingStatus& cur_status = waiting_status_for_user_id_[id];
-  if (cur_status == WaitingStatus::kReady) {
-    cur_status = WaitingStatus::kNotReady;
-  } else if (cur_status == WaitingStatus::kNotReady) {
-    cur_status = WaitingStatus::kReady;
-  }
+void RoomModel::SetUserWaitingStatus(UserId id, WaitingStatus status) {
+  waiting_status_for_user_id_[id] = status;
+}
+
+WaitingStatus RoomModel::GetUserWaitingStatus(UserId id) const {
+  Q_ASSERT(HasUser(id));
+  return waiting_status_for_user_id_.at(id);
 }

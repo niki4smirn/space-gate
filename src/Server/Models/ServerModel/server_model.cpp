@@ -68,6 +68,9 @@ void ServerModel::DeleteUserFromRoom(UserId user_id, RoomId room_id) {
 
   auto room = rooms_[room_id];
   room->DeleteUser(user_id);
+  if (room->IsEmpty()) {
+    DeleteRoom(room_id);
+  }
 }
 
 RoomId ServerModel::GetRoomIdByUserId(UserId id) const {

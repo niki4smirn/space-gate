@@ -12,6 +12,8 @@ class RoomController : public AbstractController {
   void AddUser(const std::shared_ptr<User>& user);
   void DeleteUser(UserId id);
 
+  bool IsEmpty() const;
+
  protected:
   void OnTick() override;
 

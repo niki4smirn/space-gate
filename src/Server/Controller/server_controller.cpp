@@ -68,12 +68,12 @@ void ServerController::OnSocketDisconnect() {
     // TODO(Everyone): replace with adding to handle queue
     // so, this TODO is not really relevant, because it may cause some
     // security problems
-    server_model_.DeleteUser(user_id);
     if (server_model_.IsInSomeRoom(user_id)) {
       RoomId room_id = server_model_.GetRoomIdByUserId(user_id);
       auto room = server_model_.GetRoomById(room_id).lock();
       room->DeleteUser(user_id);
     }
+    server_model_.DeleteUser(user_id);
   }
 }
 

@@ -7,6 +7,7 @@
 using RoomId = uint64_t;
 
 enum class WaitingStatus {
+  kNone,
   kNotReady,
   kReady
 };
@@ -29,7 +30,8 @@ class RoomModel {
 
   UserId GetRandomUser() const;
 
-  void ChangeUserWaitingStatus(UserId id);
+  WaitingStatus GetUserWaitingStatus(UserId id) const;
+  void SetUserWaitingStatus(UserId id, WaitingStatus status);
 
  private:
   RoomId id_;

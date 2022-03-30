@@ -7,7 +7,7 @@ using UserId = uint64_t;
 
 class User {
  public:
-  User(UserId id, std::shared_ptr<QWebSocket> socket);
+  User(UserId id, const std::shared_ptr<QWebSocket>& socket);
 
   UserId GetId() const;
 

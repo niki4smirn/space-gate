@@ -24,7 +24,9 @@ void ServerModel::AddUser(const std::shared_ptr<User>& user) {
 }
 
 void ServerModel::DeleteUser(UserId id) {
+  Q_ASSERT(ExistsUser(id));
   user_id_by_socket_.erase(GetUserById(id).lock()->GetSocket().get());
+  room_id_for_user_id_.erase(id);
   users_.erase(id);
 }
 
@@ -33,11 +35,11 @@ bool ServerModel::ExistsUser(UserId id) const {
 }
 
 UserId ServerModel::GetUnusedUserId() const {
-  return users_.empty() ? 1 : users_.rbegin()->first + 1;
+  return users_.empty() ? 0 : users_.rbegin()->first + 1;
 }
 
 RoomId ServerModel::GetUnusedRoomId() const {
-  return rooms_.empty() ? 1 : rooms_.rbegin()->first + 1;
+  return rooms_.empty() ? 0 : rooms_.rbegin()->first + 1;
 }
 
 void ServerModel::AddRoom(const std::shared_ptr<RoomController>& room) {
@@ -45,6 +47,7 @@ void ServerModel::AddRoom(const std::shared_ptr<RoomController>& room) {
 }
 
 void ServerModel::DeleteRoom(RoomId id) {
+  Q_ASSERT(ExistsRoom(id));
   rooms_.erase(id);
 }
 
@@ -53,7 +56,7 @@ bool ServerModel::ExistsRoom(RoomId id) const {
 }
 
 void ServerModel::AddUserToRoom(UserId user_id, RoomId room_id) {
-  room_id_for_user_[user_id] = room_id;
+  room_id_for_user_id_[user_id] = room_id;
 
   auto user = users_[user_id];
   auto room = rooms_[room_id];
@@ -61,16 +64,23 @@ void ServerModel::AddUserToRoom(UserId user_id, RoomId room_id) {
 }
 
 void ServerModel::DeleteUserFromRoom(UserId user_id, RoomId room_id) {
-  room_id_for_user_[user_id] = std::nullopt;
+  room_id_for_user_id_[user_id] = std::nullopt;
 
   auto room = rooms_[room_id];
   room->DeleteUser(user_id);
 }
 
 RoomId ServerModel::GetRoomIdByUserId(UserId id) const {
-  return room_id_for_user_.at(id).value();
+  Q_ASSERT(IsInSomeRoom(id));
+  return room_id_for_user_id_.at(id).value();
 }
 
 bool ServerModel::IsInSomeRoom(UserId id) const {
-  return room_id_for_user_.at(id).has_value();
+  Q_ASSERT(ExistsUser(id));
+  return room_id_for_user_id_.at(id).has_value();
+}
+
+std::weak_ptr<RoomController> ServerModel::GetRoomById(RoomId id) const {
+  Q_ASSERT(ExistsRoom(id));
+  return rooms_.at(id);
 }

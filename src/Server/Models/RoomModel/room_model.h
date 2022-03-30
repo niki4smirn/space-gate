@@ -6,6 +6,11 @@
 
 using RoomId = uint64_t;
 
+enum class WaitingStatus {
+  kNotReady,
+  kReady
+};
+
 class RoomModel {
  public:
   RoomModel(RoomId room_id, const std::shared_ptr<User>& host);
@@ -24,10 +29,11 @@ class RoomModel {
 
   UserId GetRandomUser() const;
 
+  void ChangeUserWaitingStatus(UserId id);
+
  private:
   RoomId id_;
   UserId host_id_;
   std::unordered_map<UserId, std::weak_ptr<User>> users_list_;
+  std::unordered_map<UserId, WaitingStatus> waiting_status_for_user_id_;
 };
-
-

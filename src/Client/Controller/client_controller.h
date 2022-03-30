@@ -22,7 +22,6 @@ class ClientController : public AbstractController {
   void Send(const proto::Event& event) override;
   void Handle(const proto::Event& event) override;
 
-
  private:
   QUrl server_url_;
   QWebSocket socket_;

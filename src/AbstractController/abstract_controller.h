@@ -15,6 +15,9 @@ class AbstractController : public QObject {
 
   virtual QString GetControllerName() const = 0;
 
+  void AddEventToHandle(const proto::Event& event);
+  void AddEventToSend(const proto::Event& event);
+
  protected:
   AbstractController();
 
@@ -26,9 +29,6 @@ class AbstractController : public QObject {
   void LogSending(const proto::Event& event) const;
   void LogHandling(const proto::Event& event) const;
   void LogReceive(const proto::Event& event) const;
-
-  void AddEventToHandle(const proto::Event& event);
-  void AddEventToSend(const proto::Event& event);
 
   void StartTicking();
 

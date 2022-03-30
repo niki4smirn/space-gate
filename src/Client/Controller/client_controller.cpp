@@ -13,8 +13,13 @@ ClientController::ClientController(const QUrl& url) : server_url_(url) {
 void ClientController::OnConnect() {
   qInfo().noquote() << "Connected to" << server_url_;
   // proto::Event create_room;
-  // create_room.set_type(proto::EventType::kCreateRoom);
+  // create_room.set_type(proto::Event::kCreateRoom);
+  // create_room.set_receiver_type(proto::Event::kServer);
   // Send(create_room);
+  // proto::Event change_waiting_status;
+  // change_waiting_status.set_type(proto::Event::kChangeWaitingStatus);
+  // change_waiting_status.set_receiver_type(proto::Event::kRoom);
+  // Send(change_waiting_status);
 }
 
 void ClientController::OnDisconnect() {

@@ -14,6 +14,8 @@ class ServerModel {
   std::weak_ptr<User> GetUserBySocket(QWebSocket* socket) const;
   std::weak_ptr<User> GetUserById(UserId id) const;
 
+  std::weak_ptr<RoomController> GetRoomById(RoomId id) const;
+
   void AddUser(const std::shared_ptr<User>& user);
   void DeleteUser(UserId id);
   void AddRoom(const std::shared_ptr<RoomController>& room);
@@ -34,7 +36,7 @@ class ServerModel {
  private:
   std::map<UserId, std::shared_ptr<User>> users_;
   std::map<RoomId, std::shared_ptr<RoomController>> rooms_;
-  std::unordered_map<UserId, std::optional<RoomId>> room_id_for_user_;
+  std::unordered_map<UserId, std::optional<RoomId>> room_id_for_user_id_;
   std::unordered_map<QWebSocket*, UserId> user_id_by_socket_;
 };
 

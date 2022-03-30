@@ -27,4 +27,14 @@ void RoomController::DeleteUser(UserId id) {
   room_model_.DeleteUser(id);
 }
 
-void RoomController::Handle(const proto::Event& event) {}
+void RoomController::Handle(const proto::Event& event) {
+  LogHandling(event);
+  switch (event.type()) {
+    case proto::Event::kChangeWaitingStatus: {
+      UserId user_id = event.sender_id();
+      room_model_.ChangeUserWaitingStatus(user_id);
+      break;
+    }
+    default: {}
+  }
+}

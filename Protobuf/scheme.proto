@@ -1,17 +1,26 @@
 syntax = "proto3";
 package proto;
 
-enum EventType {
-  kNone = 0;
-  kCreateRoom = 1;
-  kEnterRoom = 2;
-  kLeaveRoom = 3;
-}
-
 message Event {
   string name = 15;
 
-  EventType type = 1;
+  enum Type {
+    // for server
+    kNone = 0;
+    kCreateRoom = 1;
+    kEnterRoom = 2;
+    kLeaveRoom = 3;
+
+    // for room
+    kChangeWaitingStatus = 4;
+  }
+  Type type = 1;
   repeated int32 arguments = 2;
   uint64 sender_id = 3;
+
+  enum ReceiverType {
+    kServer = 0;
+    kRoom = 1;
+  }
+  ReceiverType receiver_type = 4;
 }

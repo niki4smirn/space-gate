@@ -26,6 +26,8 @@ class ServerController : public AbstractController {
   void Handle(const proto::Event& event) override;
 
  private:
+  void SendEventToRoom(const proto::Event& event) const;
+
   QWebSocketServer web_socket_server_;
   ServerModel server_model_;
 };

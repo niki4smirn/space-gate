@@ -29,7 +29,7 @@ void AbstractController::Tick() {
   this->OnTick();
 
   while (!events_to_handle_.empty()) {
-    this->LogHandling(events_to_handle_.front());
+    this->Handle(events_to_handle_.front());
     events_to_handle_.pop();
   }
 

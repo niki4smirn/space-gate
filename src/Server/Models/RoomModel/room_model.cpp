@@ -36,3 +36,12 @@ void RoomModel::SetHostId(UserId id) {
 UserId RoomModel::GetRandomUser() const {
   return users_list_.begin()->first;
 }
+
+void RoomModel::ChangeUserWaitingStatus(UserId id) {
+  WaitingStatus& cur_status = waiting_status_for_user_id_[id];
+  if (cur_status == WaitingStatus::kReady) {
+    cur_status = WaitingStatus::kNotReady;
+  } else if (cur_status == WaitingStatus::kNotReady) {
+    cur_status = WaitingStatus::kReady;
+  }
+}

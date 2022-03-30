@@ -4,7 +4,7 @@
 #include <QUrl>
 #include <QWebSocket>
 
-#include "../../AbstractController/abstract_controller.h"
+#include "src/AbstractController/abstract_controller.h"
 
 class ClientController : public AbstractController {
  public:

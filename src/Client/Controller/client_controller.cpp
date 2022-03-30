@@ -1,7 +1,5 @@
 #include "client_controller.h"
 
-#include <iostream>
-
 ClientController::ClientController(const QUrl& url) : server_url_(url) {
   qInfo().noquote() << "Connecting to" << url.host();
   connect(&socket_, &QWebSocket::connected, this,

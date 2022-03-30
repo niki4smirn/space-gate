@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../../AbstractController/abstract_controller.h"
+#include "src/AbstractController/abstract_controller.h"
 #include "../Models/RoomModel/room_model.h"
 
 class RoomController : public AbstractController {

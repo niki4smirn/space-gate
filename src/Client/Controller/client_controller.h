@@ -20,6 +20,8 @@ class ClientController : public AbstractController {
  protected:
   void OnTick() override;
   void Send(const proto::Event& event) override;
+  void Handle(const proto::Event& event) override;
+
 
  private:
   QUrl server_url_;

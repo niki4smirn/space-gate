@@ -12,6 +12,9 @@ ClientController::ClientController(const QUrl& url) : server_url_(url) {
 
 void ClientController::OnConnect() {
   qInfo().noquote() << "Connected to" << server_url_;
+  // proto::Event create_room;
+  // create_room.set_type(proto::EventType::kCreateRoom);
+  // Send(create_room);
 }
 
 void ClientController::OnDisconnect() {
@@ -33,3 +36,5 @@ void ClientController::Send(const proto::Event& event) {
   LogSending(event);
   events_to_send_.push_back(event);
 }
+
+void ClientController::Handle(const proto::Event& event) {}

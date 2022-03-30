@@ -14,35 +14,15 @@ ServerController::ServerController()
 void ServerController::OnByteArrayReceived(const QByteArray& message) {
   proto::Event got_event;
   got_event.ParseFromArray(message.data(), message.size());
-  qInfo().noquote() << "Got event" << got_event.ShortDebugString();
 
   auto message_socket = qobject_cast<QWebSocket*>(sender());
   auto user = server_model_.GetUserBySocket(message_socket).lock();
   UserId user_id = user->GetId();
+  got_event.set_sender_id(user_id);
 
-  switch (got_event.type()) {
-    case proto::EventType::kCreateRoom: {
-      RoomId new_room_id = server_model_.GetUnusedRoomId();
-      server_model_.AddRoom(
-          std::make_shared<RoomController>(new_room_id, user));
-      break;
-    }
-    case proto::EventType::kEnterRoom: {
-      if (server_model_.ExistsRoom(got_event.arguments(0)) &&
-          !server_model_.IsInSomeRoom(user_id)) {
-        server_model_.AddUserToRoom(user_id, got_event.arguments(0));
-      }
-      break;
-    }
-    case proto::EventType::kLeaveRoom: {
-      if (server_model_.IsInSomeRoom(user_id)) {
-        RoomId room_id = server_model_.GetRoomIdByUserId(user_id);
-        server_model_.DeleteUserFromRoom(user_id, room_id);
-      }
-      break;
-    }
-    default: {}
-  }
+  LogReceive(got_event);
+
+  AddEventToHandle(got_event);
 }
 
 void ServerController::OnSocketConnect() {
@@ -83,3 +63,31 @@ QString ServerController::GetControllerName() const {
 void ServerController::OnTick() {}
 
 void ServerController::Send(const proto::Event& event) {}
+
+void ServerController::Handle(const proto::Event& event) {
+  UserId user_id = event.sender_id();
+  auto user = server_model_.GetUserById(user_id).lock();
+  switch (event.type()) {
+    case proto::EventType::kCreateRoom: {
+      RoomId new_room_id = server_model_.GetUnusedRoomId();
+      server_model_.AddRoom(
+          std::make_shared<RoomController>(new_room_id, user));
+      break;
+    }
+    case proto::EventType::kEnterRoom: {
+      if (server_model_.ExistsRoom(event.arguments(0)) &&
+          !server_model_.IsInSomeRoom(user_id)) {
+        server_model_.AddUserToRoom(user_id, event.arguments(0));
+      }
+      break;
+    }
+    case proto::EventType::kLeaveRoom: {
+      if (server_model_.IsInSomeRoom(user_id)) {
+        RoomId room_id = server_model_.GetRoomIdByUserId(user_id);
+        server_model_.DeleteUserFromRoom(user_id, room_id);
+      }
+      break;
+    }
+    default: {}
+  }
+}

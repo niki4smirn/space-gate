@@ -20,10 +20,15 @@ class AbstractController : public QObject {
 
   virtual void OnTick() = 0;
 
-  void Handle(const proto::Event& event);
   virtual void Send(const proto::Event& event) = 0;
+  virtual void Handle(const proto::Event& event) = 0;
 
   void LogSending(const proto::Event& event) const;
+  void LogHandling(const proto::Event& event) const;
+  void LogReceive(const proto::Event& event) const;
+
+  void AddEventToHandle(const proto::Event& event);
+  void AddEventToSend(const proto::Event& event);
 
   void StartTicking();
 

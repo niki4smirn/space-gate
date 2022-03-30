@@ -4,15 +4,19 @@ AbstractController::AbstractController() {
   connect(&timer_, &QTimer::timeout, this, &AbstractController::Tick);
 }
 
-void AbstractController::Handle(const proto::Event& event) {
-  qDebug().noquote() << GetControllerName()
+void AbstractController::LogHandling(const proto::Event& event) const {
+  qDebug().noquote().nospace() << GetControllerName()
       << " handling " << event.ShortDebugString();
-  // TODO(niki4smirn): somehow execute corresponding function
 }
 
 void AbstractController::LogSending(const proto::Event& event) const {
-  qDebug().noquote() << GetControllerName()
+  qDebug().noquote().nospace() << GetControllerName()
       << " sending " << event.ShortDebugString();
+}
+
+void AbstractController::LogReceive(const proto::Event& event) const {
+  qInfo().noquote().nospace() << GetControllerName()
+      << " received " << event.ShortDebugString();
 }
 
 void AbstractController::StartTicking() {
@@ -24,7 +28,7 @@ void AbstractController::Tick() {
   this->OnTick();
 
   while (!events_to_handle_.empty()) {
-    this->Handle(events_to_handle_.front());
+    this->LogHandling(events_to_handle_.front());
     events_to_handle_.pop();
   }
 
@@ -32,4 +36,12 @@ void AbstractController::Tick() {
     this->Send(events_to_send_.front());
     events_to_send_.pop();
   }
+}
+
+void AbstractController::AddEventToHandle(const proto::Event& event) {
+  events_to_handle_.push(event);
+}
+
+void AbstractController::AddEventToSend(const proto::Event& event) {
+  events_to_send_.push(event);
 }

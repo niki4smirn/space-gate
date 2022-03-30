@@ -26,3 +26,5 @@ void RoomController::AddUser(const std::shared_ptr<User>& user) {
 void RoomController::DeleteUser(UserId id) {
   room_model_.DeleteUser(id);
 }
+
+void RoomController::Handle(const proto::Event& event) {}

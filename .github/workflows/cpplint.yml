@@ -1,0 +1,26 @@
+name: cpplint
+
+on: [push, pull_request]
+
+jobs:
+  cpplint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2.4.0
+        name: Checkout
+      - run: pip install cpplint
+        name: Install cpplint
+      - uses: reviewdog/action-cpplint@master
+        name: Check errors and add to comments
+        with:
+          github_token: ${{ secrets.github_token }}
+          reporter: github-pr-review
+          filter: "-build/include
+              ,-runtime/int
+              ,-build/include_subdir
+              ,-legal/copyright
+              ,-build/c++20
+              ,-build/c++11
+             "
+      - run: cpplint --recursive --filter=-build/include,-runtime/int,-build/include_subdir,-legal/copyright,-build/c++20,-build/c++11 .
+        name: Run cpplint

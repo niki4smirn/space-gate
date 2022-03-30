@@ -1,22 +1,22 @@
 #include "abstract_controller.h"
 
-#include <QDebug>
-
 AbstractController::AbstractController() {
   connect(&timer_, &QTimer::timeout, this, &AbstractController::Tick);
 }
 
-void AbstractController::Handle(const Event& event) {
-  qDebug() << GetControllerName() << " handling " << event;
-  // TODO: somehow execute corresponding function
+void AbstractController::Handle(const proto::Event& event) {
+  qDebug().noquote() << GetControllerName()
+      << " handling " << event.ShortDebugString();
+  // TODO(niki4smirn): somehow execute corresponding function
 }
 
-void AbstractController::LogSending(const Event& event) const {
-  qDebug() << GetControllerName() << " sending " << event;
+void AbstractController::LogSending(const proto::Event& event) const {
+  qDebug().noquote() << GetControllerName()
+      << " sending " << event.ShortDebugString();
 }
 
 void AbstractController::StartTicking() {
-  // TODO: remove magic number
+  // TODO(Everyone): remove magic number
   timer_.start(50);
 }
 

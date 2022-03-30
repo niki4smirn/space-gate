@@ -19,13 +19,11 @@ class ClientController : public AbstractController {
 
  protected:
   void OnTick() override;
-  void Send(const Event& event) override;
+  void Send(const proto::Event& event) override;
 
  private:
   QUrl server_url_;
   QWebSocket socket_;
 
-  std::vector<Event> events_to_send_;
+  std::vector<proto::Event> events_to_send_;
 };
-
-

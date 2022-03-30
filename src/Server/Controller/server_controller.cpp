@@ -12,28 +12,29 @@ ServerController::ServerController()
 }
 
 void ServerController::OnByteArrayReceived(const QByteArray& message) {
-  auto got_event = Event(message);
-  qInfo() << "Got event" << got_event;
+  proto::Event got_event;
+  got_event.ParseFromArray(message.data(), message.size());
+  qInfo().noquote() << "Got event" << got_event.ShortDebugString();
 
   auto message_socket = qobject_cast<QWebSocket*>(sender());
   auto user = server_model_.GetUserBySocket(message_socket).lock();
   UserId user_id = user->GetId();
 
-  switch (got_event.type) {
-    case Event::Type::kCreateRoom: {
+  switch (got_event.type()) {
+    case proto::EventType::kCreateRoom: {
       RoomId new_room_id = server_model_.GetUnusedRoomId();
       server_model_.AddRoom(
           std::make_shared<RoomController>(new_room_id, user));
       break;
     }
-    case Event::Type::kEnterRoom: {
-      if (server_model_.ExistsRoom(got_event.argument) &&
+    case proto::EventType::kEnterRoom: {
+      if (server_model_.ExistsRoom(got_event.arguments(0)) &&
           !server_model_.IsInSomeRoom(user_id)) {
-        server_model_.AddUserToRoom(user_id, got_event.argument);
+        server_model_.AddUserToRoom(user_id, got_event.arguments(0));
       }
       break;
     }
-    case Event::Type::kLeaveRoom: {
+    case proto::EventType::kLeaveRoom: {
       if (server_model_.IsInSomeRoom(user_id)) {
         RoomId room_id = server_model_.GetRoomIdByUserId(user_id);
         server_model_.DeleteUserFromRoom(user_id, room_id);
@@ -51,7 +52,7 @@ void ServerController::OnSocketConnect() {
   UserId new_user_id = server_model_.GetUnusedUserId();
   auto new_user = std::make_shared<User>(new_user_id,
                                          current_socket);
-
+  // TODO(Everyone): replace with adding to handle queue
   server_model_.AddUser(new_user);
 
   connect(new_user->GetSocket().get(),
@@ -70,6 +71,7 @@ void ServerController::OnSocketDisconnect() {
   qInfo() << "Socket disconnected:" << web_socket;
   if (web_socket) {
     UserId user_id = server_model_.GetUserBySocket(web_socket).lock()->GetId();
+    // TODO(Everyone): replace with adding to handle queue
     server_model_.DeleteUser(user_id);
   }
 }
@@ -78,10 +80,6 @@ QString ServerController::GetControllerName() const {
   return "Server";
 }
 
-void ServerController::OnTick() {
+void ServerController::OnTick() {}
 
-}
-
-void ServerController::Send(const Event& event) {
-
-}
+void ServerController::Send(const proto::Event& event) {}

@@ -5,7 +5,7 @@
 
 int main(int argc, char* argv[]) {
   QApplication app(argc, argv);
-  // TODO: remove hardcoded url
+  // TODO(Everyone): remove hardcoded url
   QUrl server_url("ws://localhost:1337");
   auto* client_controller = new ClientController(server_url);
   return QApplication::exec();

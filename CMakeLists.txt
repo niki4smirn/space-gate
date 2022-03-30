@@ -22,7 +22,7 @@ include_directories(${Protobuf_INCLUDE_DIRS})
 
 set(COMMON_SRC
         src/AbstractController/abstract_controller.cpp
-        src/Event/event.cpp
+        src/Helpers/helpers.cpp
         )
 
 add_executable(server

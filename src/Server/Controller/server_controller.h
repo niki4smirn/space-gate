@@ -22,7 +22,7 @@ class ServerController : public AbstractController {
 
  protected:
   void OnTick() override;
-  void Send(const Event& event) override;
+  void Send(const proto::Event& event) override;
 
  private:
   QWebSocketServer web_socket_server_;

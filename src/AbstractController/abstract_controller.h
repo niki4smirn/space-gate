@@ -5,7 +5,9 @@
 #include <QObject>
 #include <QTimer>
 
-#include "../Event/event.h"
+#include "Protobuf/scheme.pb.h"
+
+#include "src/Helpers/helpers.h"
 
 class AbstractController : public QObject {
  public:
@@ -18,10 +20,10 @@ class AbstractController : public QObject {
 
   virtual void OnTick() = 0;
 
-  void Handle(const Event& event);
-  virtual void Send(const Event& event) = 0;
+  void Handle(const proto::Event& event);
+  virtual void Send(const proto::Event& event) = 0;
 
-  void LogSending(const Event& event) const;
+  void LogSending(const proto::Event& event) const;
 
   void StartTicking();
 
@@ -30,8 +32,6 @@ class AbstractController : public QObject {
 
   QTimer timer_;
 
-  std::queue<Event> events_to_handle_;
-  std::queue<Event> events_to_send_;
+  std::queue<proto::Event> events_to_handle_;
+  std::queue<proto::Event> events_to_send_;
 };
-
-

@@ -2,10 +2,8 @@
 
 #include <iostream>
 
-#include <QDebug>
-
 ClientController::ClientController(const QUrl& url) : server_url_(url) {
-  qInfo() << "Connecting to" << url.host();
+  qInfo().noquote() << "Connecting to" << url.host();
   connect(&socket_, &QWebSocket::connected, this,
           &ClientController::OnConnect);
   connect(&socket_, &QWebSocket::disconnected, this,
@@ -15,11 +13,11 @@ ClientController::ClientController(const QUrl& url) : server_url_(url) {
 }
 
 void ClientController::OnConnect() {
-  qInfo() << "Connected to" << server_url_;
+  qInfo().noquote() << "Connected to" << server_url_;
 }
 
 void ClientController::OnDisconnect() {
-  qInfo() << "Disconnected from" << server_url_;
+  qInfo().noquote() << "Disconnected from" << server_url_;
 }
 
 QString ClientController::GetControllerName() const {
@@ -28,12 +26,12 @@ QString ClientController::GetControllerName() const {
 
 void ClientController::OnTick() {
   for (const auto& event : events_to_send_) {
-    socket_.sendBinaryMessage(event.ToByteArray());
+    socket_.sendBinaryMessage(event.SerializeAsString().data());
   }
   events_to_send_.clear();
 }
 
-void ClientController::Send(const Event& event) {
+void ClientController::Send(const proto::Event& event) {
   LogSending(event);
   events_to_send_.push_back(event);
 }

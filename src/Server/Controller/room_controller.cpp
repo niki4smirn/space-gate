@@ -11,13 +11,9 @@ QString RoomController::GetControllerName() const {
   return "Room";
 }
 
-void RoomController::OnTick() {
+void RoomController::OnTick() {}
 
-}
-
-void RoomController::Send(const Event& event) {
-
-}
+void RoomController::Send(const proto::Event& event) {}
 
 RoomId RoomController::GetId() const {
   return room_model_.GetRoomId();

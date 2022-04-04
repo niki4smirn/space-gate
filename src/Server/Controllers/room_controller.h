@@ -1,7 +1,7 @@
 #pragma once
 
 #include "src/AbstractController/abstract_controller.h"
-#include "../Models/RoomModel/room_model.h"
+#include "src/Server/Models/RoomModel/room_model.h"
 
 class RoomController : public AbstractController {
  public:

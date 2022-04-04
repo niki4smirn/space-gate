@@ -6,7 +6,7 @@
 #include <QWebSocketServer>
 
 #include "src/AbstractController/abstract_controller.h"
-#include "../Models/ServerModel/server_model.h"
+#include "src/Server/Models/ServerModel/server_model.h"
 
 class ServerController : public AbstractController {
  public:

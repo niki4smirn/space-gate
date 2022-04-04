@@ -2,7 +2,7 @@
 
 #include <cstdint>
 
-#include "../User/user.h"
+#include "src/Server/Models/User/user.h"
 
 using RoomId = uint64_t;
 

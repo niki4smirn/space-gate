@@ -6,8 +6,8 @@
 
 #include <QWebSocket>
 
-#include "../User/user.h"
-#include "../../Controller/room_controller.h"
+#include "src/Server/Models/User/user.h"
+#include "src/Server/Controllers/room_controller.h"
 
 class ServerModel {
  public:

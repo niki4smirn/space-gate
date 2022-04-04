@@ -29,10 +29,10 @@ set(COMMON_SRC
 add_executable(server
         ${COMMON_SRC}
         src/Server/server_main.cpp
-        src/Server/Controller/server_controller.cpp
+        src/Server/Controllers/server_controller.cpp
         src/Server/Models/User/user.cpp
         src/Server/Models/ServerModel/server_model.cpp
-        src/Server/Controller/room_controller.cpp
+        src/Server/Controllers/room_controller.cpp
         src/Server/Models/RoomModel/room_model.cpp
         )
 

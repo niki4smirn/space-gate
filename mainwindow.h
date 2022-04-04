@@ -12,6 +12,7 @@
 #include <QTimerEvent>
 #include <QGraphicsPixmapItem>
 #include <QMainWindow>
+#include <QBasicTimer>
 
 class MainWindow : public QMainWindow {
  Q_OBJECT
@@ -19,12 +20,15 @@ class MainWindow : public QMainWindow {
   MainWindow();
   void SetupScene();
   void paintEvent(QPaintEvent*) override;
+  void timerEvent(QTimerEvent* event) override;
 
 
  private:
   void Connect();
+  QBasicTimer animation_timer_;
 
   PaintWidget* widget_;
+
 
  signals:
 };

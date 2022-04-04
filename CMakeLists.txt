@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.20)
-project(Lab2Project)
+project(SpaceGate)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_AUTOMOC ON)
@@ -13,8 +13,8 @@ find_package(Qt6 COMPONENTS
         Widgets
         REQUIRED)
 
-add_executable(Lab3Project main.cpp mainwindow.cpp mainwindow.h paint_widget.cpp paint_widget.h)
-target_link_libraries(Lab3Project
+add_executable(SpaceGate main.cpp mainwindow.cpp mainwindow.h paint_widget.cpp paint_widget.h stars.cpp stars.h)
+target_link_libraries(SpaceGate
         Qt::Core
         Qt::Gui
         Qt::Widgets

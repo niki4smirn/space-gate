@@ -38,15 +38,15 @@ void RoomController::Handle(const proto::Event& event) {
   switch (event.type()) {
     case proto::Event::kChangeWaitingStatus: {
       UserId user_id = event.sender_id();
-      WaitingStatus current_status = room_model_.GetUserWaitingStatus(user_id);
-      WaitingStatus new_status{WaitingStatus::kNone};
+      auto current_status = room_model_.GetUserWaitingStatus(user_id);
+      User::WaitingStatus new_status{User::WaitingStatus::kNone};
       switch (current_status) {
-        case WaitingStatus::kNotReady: {
-          new_status = WaitingStatus::kReady;
+        case User::WaitingStatus::kNotReady: {
+          new_status = User::WaitingStatus::kReady;
           break;
         }
-        case WaitingStatus::kReady: {
-          new_status = WaitingStatus::kNotReady;
+        case User::WaitingStatus::kReady: {
+          new_status = User::WaitingStatus::kNotReady;
           break;
         }
         default: {}

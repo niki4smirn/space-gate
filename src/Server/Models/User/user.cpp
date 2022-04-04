@@ -10,3 +10,11 @@ UserId User::GetId() const {
 std::shared_ptr<QWebSocket> User::GetSocket() const {
   return socket_;
 }
+
+User::WaitingStatus User::GetStatus() const {
+  return status_;
+}
+
+void User::SetStatus(User::WaitingStatus new_status) {
+  status_ = new_status;
+}

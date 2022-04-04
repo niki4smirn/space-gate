@@ -10,9 +10,7 @@ std::weak_ptr<User> ServerModel::GetUserBySocket(QWebSocket* socket) const {
 
 std::weak_ptr<User> ServerModel::GetUserById(UserId id) const {
   auto user_it = users_.find(id);
-  if (user_it == users_.end()) {
-    return {};
-  }
+  Q_ASSERT(user_it != users_.end());
   return user_it->second;
 }
 
@@ -21,6 +19,7 @@ void ServerModel::AddUser(const std::shared_ptr<User>& user) {
   auto socket = user->GetSocket();
   users_[id] = user;
   user_id_by_socket_[socket.get()] = id;
+  room_id_for_user_id_[id] = std::nullopt;
 }
 
 void ServerModel::DeleteUser(UserId id) {

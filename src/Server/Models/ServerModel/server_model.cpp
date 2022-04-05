@@ -55,10 +55,11 @@ bool ServerModel::ExistsRoom(RoomId id) const {
 }
 
 void ServerModel::AddUserToRoom(UserId user_id, RoomId room_id) {
+  Q_ASSERT(ExistsUser(user_id) && ExistsRoom(room_id));
   room_id_for_user_id_[user_id] = room_id;
 
-  auto user = users_[user_id];
-  auto room = rooms_[room_id];
+  auto user = users_.at(user_id);
+  auto room = rooms_.at(room_id);
   room->AddUser(user);
 }
 

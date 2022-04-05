@@ -21,7 +21,7 @@ QString GetProcessStringByType(Type type) {
   }
   return result;
 }
-}
+}  // namespace Log
 
 AbstractController::AbstractController() {
   connect(&timer_, &QTimer::timeout, this, &AbstractController::Tick);

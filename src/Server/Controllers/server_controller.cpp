@@ -22,7 +22,7 @@ void ServerController::OnByteArrayReceived(const QByteArray& message) {
   UserId user_id = user->GetId();
   received_event.set_sender_id(user_id);
 
-  LogReceive(received_event);
+  LogEvent(received_event, Log::Type::kReceive);
 
   switch (received_event.receiver_type()) {
     case proto::Event::kServer: {
@@ -84,7 +84,7 @@ QString ServerController::GetControllerName() const {
 void ServerController::OnTick() {}
 
 void ServerController::Send(const proto::Event& event) {
-  LogSending(event);
+  LogEvent(event, Log::Type::kSend);
   switch (event.receiver_type()) {
     case proto::Event::kRoom: {
       SendEventToRoom(event);
@@ -95,7 +95,7 @@ void ServerController::Send(const proto::Event& event) {
 }
 
 void ServerController::Handle(const proto::Event& event) {
-  LogHandling(event);
+  LogEvent(event, Log::Type::kHandle);
   UserId user_id = event.sender_id();
   auto user = server_model_.GetUserById(user_id).lock();
   switch (event.type()) {

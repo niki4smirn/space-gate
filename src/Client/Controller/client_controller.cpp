@@ -30,7 +30,7 @@ void ClientController::OnTick() {
 }
 
 void ClientController::Send(const proto::Event& event) {
-  LogSending(event);
+  LogEvent(event, Log::Type::kSend);
   events_to_send_.push_back(event);
 }
 

@@ -9,6 +9,16 @@
 
 #include "src/Helpers/helpers.h"
 
+namespace Log {
+enum class Type {
+  kHandle,
+  kSend,
+  kReceive
+};
+
+QString GetProcessStringByType(Type type);
+}
+
 class AbstractController : public QObject {
  public:
   ~AbstractController() override = default;
@@ -26,9 +36,7 @@ class AbstractController : public QObject {
   virtual void Send(const proto::Event& event) = 0;
   virtual void Handle(const proto::Event& event) = 0;
 
-  void LogSending(const proto::Event& event) const;
-  void LogHandling(const proto::Event& event) const;
-  void LogReceive(const proto::Event& event) const;
+  void LogEvent(const proto::Event& event, Log::Type log_type) const;
 
   void StartTicking();
 

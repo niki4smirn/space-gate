@@ -34,7 +34,7 @@ void RoomController::DeleteUser(UserId id) {
 }
 
 void RoomController::Handle(const proto::Event& event) {
-  LogHandling(event);
+  LogEvent(event, Log::Type::kHandle);
   switch (event.type()) {
     case proto::Event::kChangeWaitingStatus: {
       UserId user_id = event.sender_id();

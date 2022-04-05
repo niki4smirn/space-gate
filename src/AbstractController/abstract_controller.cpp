@@ -2,23 +2,36 @@
 
 #include "Constants/constants.h"
 
+namespace Log {
+QString GetProcessStringByType(Type type) {
+  QString result;
+  switch (type) {
+    case Type::kHandle: {
+      result = " handling ";
+      break;
+    }
+    case Type::kSend: {
+      result = " sending ";
+      break;
+    }
+    case Type::kReceive: {
+      result = " receive";
+      break;
+    }
+  }
+  return result;
+}
+}
+
 AbstractController::AbstractController() {
   connect(&timer_, &QTimer::timeout, this, &AbstractController::Tick);
 }
 
-void AbstractController::LogHandling(const proto::Event& event) const {
+void AbstractController::LogEvent(
+    const proto::Event& event,
+    Log::Type log_type) const {
   qDebug().noquote().nospace() << GetControllerName()
-      << " handling " << event.ShortDebugString();
-}
-
-void AbstractController::LogSending(const proto::Event& event) const {
-  qDebug().noquote().nospace() << GetControllerName()
-      << " sending " << event.ShortDebugString();
-}
-
-void AbstractController::LogReceive(const proto::Event& event) const {
-  qInfo().noquote().nospace() << GetControllerName()
-      << " received " << event.ShortDebugString();
+      << Log::GetProcessStringByType(log_type) << event.ShortDebugString();
 }
 
 void AbstractController::StartTicking() {

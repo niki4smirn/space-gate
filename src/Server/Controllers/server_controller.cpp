@@ -104,6 +104,8 @@ void ServerController::Handle(const proto::Event& event) {
       server_model_.AddRoom(
           std::make_shared<RoomController>(new_room_id, user));
       server_model_.AddUserToRoom(user_id, new_room_id);
+      auto room = server_model_.GetRoomById(new_room_id).lock();
+      room->AddUser(user);
       break;
     }
     case proto::Event::kEnterRoom: {
@@ -116,7 +118,12 @@ void ServerController::Handle(const proto::Event& event) {
     case proto::Event::kLeaveRoom: {
       if (server_model_.IsInSomeRoom(user_id)) {
         RoomId room_id = server_model_.GetRoomIdByUserId(user_id);
-        server_model_.DeleteUserFromRoom(user_id, room_id);
+        server_model_.DeleteUserFromRoom(user_id);
+        auto room = server_model_.GetRoomById(room_id).lock();
+        room->DeleteUser(user_id);
+        if (room->IsEmpty()) {
+          server_model_.DeleteRoom(room_id);
+        }
       }
       break;
     }

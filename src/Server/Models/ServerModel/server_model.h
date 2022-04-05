@@ -28,7 +28,7 @@ class ServerModel {
   RoomId GetUnusedRoomId() const;
 
   void AddUserToRoom(UserId user_id, RoomId room_id);
-  void DeleteUserFromRoom(UserId user_id, RoomId room_id);
+  void DeleteUserFromRoom(UserId user_id);
 
   bool IsInSomeRoom(UserId id) const;
   RoomId GetRoomIdByUserId(UserId id) const;

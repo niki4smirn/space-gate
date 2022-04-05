@@ -43,10 +43,17 @@ UserId RoomModel::GetRandomUser() const {
 
 void RoomModel::SetUserWaitingStatus(UserId id, User::WaitingStatus status) {
   Q_ASSERT(HasUser(id));
-  users_[id].lock()->SetStatus(status);
+  auto user = users_.at(id);
+  if (!user.expired()) {
+    user.lock()->SetStatus(status);
+  }
 }
 
 User::WaitingStatus RoomModel::GetUserWaitingStatus(UserId id) const {
   Q_ASSERT(HasUser(id));
-  return users_.at(id).lock()->GetStatus();
+  auto user = users_.at(id);
+  if (user.expired()) {
+    return User::WaitingStatus::kNone;
+  }
+  return user.lock()->GetStatus();
 }

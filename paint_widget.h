@@ -23,8 +23,6 @@ class PaintWidget : public QWidget {
  private:
   std::vector<QColor> colors_ = {QColor(51, 255, 255, 200), QColor(51, 153, 255, 200)};
   std::vector<Star> stars_;
-  int coord_ = 0;
-
 };
 
 #endif //PAINT_WIDGET_H_

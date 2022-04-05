@@ -1,49 +1,53 @@
 #include "stars.h"
-Star::Star(int width) {
-  velocity_ = 5;
-  radial_distance_ = 500;
-  tangential_distance_ = QRandomGenerator::global()->bounded(width) + 40;
-  size_ = QRandomGenerator::global()->bounded(5);
+
+Star::Star(int width, int height) {
+  velocity_ = 2;
+  z_distance_ = 500;
+  x_distance_ = QRandomGenerator::global()->bounded(width * 2) - width + 40;
+  y_distance_ = QRandomGenerator::global()->bounded(height * 2) - height  + 40;
+  size_ = QRandomGenerator::global()->bounded(10);
   time_ = 1;
-  tangential_distance_view_ = tangential_distance_;
+  x_distance_view_ = x_distance_;
+  y_distance_view_ = y_distance_;
 }
-double Star::GetTangentialVeilocity() const{
-  double square_hypotenyze = tangential_distance_ * tangential_distance_ + radial_distance_ * radial_distance_;
+double Star::GetXViewVeilocity() const{
+  double square_hypotenyze = x_distance_ * x_distance_ + z_distance_ * z_distance_;
   if (square_hypotenyze > 0) {
-    return velocity_ * (tangential_distance_ / sqrt(square_hypotenyze));
+    return velocity_ * (x_distance_ / sqrt(square_hypotenyze));
+  } else{
+    return 0;
+  }
+}
+
+double Star::GetYViewVeilocity() const{
+  double square_hypotenyze = x_distance_ * x_distance_ + z_distance_ * z_distance_;
+  if (square_hypotenyze > 0) {
+    return velocity_ * (y_distance_ / sqrt(square_hypotenyze));
   } else{
     return 0;
   }
 }
 
 
-// double Star::GetLineOfSightVeilocity() {
-//   double square_hypotenyze = tangential_distance_ * tangential_distance_ + radial_distance_ * radial_distance_;
-//   if (square_hypotenyze != 0) {
-//     return velocity_ * (radial_distance_ / sqrt(square_hypotenyze));
-//   } else{
-//     return 0;
-//   }
-// }
 void Star::Move() {
-  int old_radial_distance = radial_distance_;
+  int old_distance = sqrt(x_distance_ * x_distance_ + z_distance_ * z_distance_ + y_distance_ * y_distance_);
+  z_distance_ -= velocity_ * time_;
+  x_distance_view_ += GetXViewVeilocity() * time_;
+  y_distance_view_ += GetYViewVeilocity() * time_;
 
-  radial_distance_ -= velocity_ * time_;
-  tangential_distance_view_ += GetTangentialVeilocity() * time_;
+  size_ = size_ * old_distance / sqrt(x_distance_ * x_distance_ + z_distance_ * z_distance_ + y_distance_ * y_distance_);
 
-  std::cout << old_radial_distance << " " << old_radial_distance << "\n";
-  size_ = size_ * old_radial_distance / radial_distance_;
-
-  //std::cout << size_ << "\n";
 }
-int Star::GetTangentialDistance() const{
-  //std::cout << tangential_distance_view_ << "\n";
-  return tangential_distance_view_;
-}
+
 int Star::GetSize() const{
   return size_;
 }
-int Star::GetRadialDistance() const {
-  return radial_distance_;
+double Star::GetXViewDistance() const {
+  return x_distance_view_;
 }
-
+double Star::GetYViewDistance() const {
+  return y_distance_view_;
+}
+double Star::GetZDistance() const {
+  return z_distance_;
+}

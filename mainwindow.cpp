@@ -8,7 +8,7 @@ MainWindow::MainWindow() :
   //widget_->resize(100, 100);
   resize(1000, 700);
   SetupScene();
-  animation_timer_.start(50, this);
+  animation_timer_.start(5, this);
 }
 
 

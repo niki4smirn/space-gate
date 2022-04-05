@@ -8,19 +8,25 @@
 class Star {
  public:
 
-  Star(int width);
-  double GetTangentialVeilocity() const;
-  double GetLineOfSightVeilocity();
-  int GetTangentialDistance() const;
-  int GetRadialDistance() const;
+  Star(int width, int height);
+
+  double GetXViewDistance() const;
+  double GetYViewDistance() const;
+  double GetZDistance() const;
+
   int GetSize() const;
   void Move();
 
  private:
-  int velocity_;
-  int radial_distance_;
-  int tangential_distance_view_;
-  int tangential_distance_;
+  double GetXViewVeilocity() const;
+  double GetYViewVeilocity() const;
+
+  double velocity_;
+  double z_distance_;
+  double x_distance_;
+  double y_distance_;
+  double x_distance_view_;
+  double y_distance_view_;
   double size_;
   int time_;
 };

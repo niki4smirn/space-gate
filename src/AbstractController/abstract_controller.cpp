@@ -15,7 +15,7 @@ QString GetProcessStringByType(Type type) {
       break;
     }
     case Type::kReceive: {
-      result = " receive";
+      result = " received ";
       break;
     }
   }

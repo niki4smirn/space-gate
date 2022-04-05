@@ -79,6 +79,9 @@ void ServerController::OnSocketDisconnect() {
       auto room = server_model_.GetRoomById(room_id);
       if (!room.expired()) {
         room.lock()->DeleteUser(user_id);
+        if (room.lock()->IsEmpty()) {
+          server_model_.DeleteRoom(room_id);
+        }
       }
     }
     server_model_.DeleteUser(user_id);

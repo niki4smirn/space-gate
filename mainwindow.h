@@ -21,6 +21,8 @@ class MainWindow : public QMainWindow {
   void SetupScene();
   void paintEvent(QPaintEvent*) override;
   void timerEvent(QTimerEvent* event) override;
+  void mousePressEvent(QMouseEvent*) override;
+  void mouseReleaseEvent(QMouseEvent*) override;
 
 
  private:
@@ -29,7 +31,8 @@ class MainWindow : public QMainWindow {
 
   PaintWidget* widget_;
 
-
  signals:
+  void MousePressed(bool state);
+  void MouseReleased(bool state);
 };
 #endif //MAINWINDOW_H_

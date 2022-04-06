@@ -8,6 +8,7 @@ MainWindow::MainWindow() :
   //widget_->resize(100, 100);
   resize(1000, 700);
   SetupScene();
+  Connect();
   animation_timer_.start(5, this);
 }
 
@@ -23,7 +24,9 @@ void MainWindow::paintEvent(QPaintEvent*) {
 }
 
 void MainWindow::Connect() {
-  //connect(this, &MainWindow::resize_signal, this, &MainWindow::Resize);
+  connect(this, &MainWindow::MousePressed,
+          widget_, &PaintWidget::SetState);
+  connect(this, &MainWindow::MouseReleased, widget_, &PaintWidget::SetState);
 }
 void MainWindow::timerEvent(QTimerEvent* event) {
   if (event->timerId() == animation_timer_.timerId()) {
@@ -31,4 +34,10 @@ void MainWindow::timerEvent(QTimerEvent* event) {
     widget_->Tick();
     repaint();
   }
+}
+void MainWindow::mousePressEvent(QMouseEvent*) {
+  emit MousePressed(true);
+}
+void MainWindow::mouseReleaseEvent(QMouseEvent*) {
+  emit MouseReleased(false);
 }

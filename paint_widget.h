@@ -25,6 +25,7 @@ class PaintWidget : public QWidget {
 
  private:
   std::vector<std::pair<QPoint, QPoint>> lines_;
+  int white_blur_ = 0;
   std::vector<QColor> colors_ =
     {QColor(51, 255, 255, 200), QColor(51, 153, 255, 200),
      QColor(51, 255, 53, 200), QColor(204, 255, 153, 200),

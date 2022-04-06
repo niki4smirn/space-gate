@@ -20,11 +20,19 @@ void PaintWidget::Paint(QPainter* painter) const {
   if (state_) {
     for (int i = 0; i < lines_.size(); i++){
       QPen pen(QColor(255, 255, 255, 255));
-      pen.setWidth(stars_.at(i).GetSize());
+      if (stars_.at(i).GetSize() < 10) {
+        pen.setWidth(stars_.at(i).GetSize());
+      }
+      else {
+        pen.setWidth(3);
+      }
       painter->setPen(pen);
       int shake = QRandomGenerator::global()->bounded(20) - 10;
       painter->drawLine(shake + lines_.at(i).first.x(), shake + lines_.at(i).first.y(), shake + lines_.at(i).second.x(), shake + lines_.at(i).second.y());
     }
+    brush.setColor(QColor(255, 255, 255, white_blur_));
+    painter->setBrush(brush);
+    painter->drawRect(0, 0, this->width(), this->height());
   }
 }
 
@@ -44,10 +52,18 @@ void PaintWidget::Tick() {
       lines_.clear();
     }
   }
-  if (state_ && Star::GetTime() < 5) {
-    Star::AddTime(0.01);
-  } else if (Star::GetTime() > 1) {
-    Star::AddTime(-0.01);
+  if (state_) {
+    if (white_blur_ < 255){
+      white_blur_++;
+    }
+    if (Star::GetTime() < 5) {
+      Star::AddTime(0.01);
+    }
+  } else {
+    white_blur_ = 1;
+    if (Star::GetTime() > 1) {
+      Star::AddTime(-0.01);
+    }
   }
   GenerateStars();
   RemoveStars();

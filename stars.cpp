@@ -7,7 +7,7 @@ Star::Star(int width, int height, QColor color) {
   z_distance_ = QRandomGenerator::global()->bounded(500) + 200;
   x_distance_ = 0;
   y_distance_ = 0;
-  while (y_distance_ * y_distance_view_ + x_distance_ * x_distance_ < 300 * 300){
+  while (y_distance_ * y_distance_view_ + x_distance_ * x_distance_ < 100 * 100){
     x_distance_ = QRandomGenerator::global()->bounded(width * 2) - width;
     y_distance_ = QRandomGenerator::global()->bounded(height * 2) - height;
   }

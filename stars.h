@@ -25,18 +25,23 @@ class Star {
 
 
  private:
-  double XViewVeilocity() const;
-  double YViewVeilocity() const;
+  double XViewVelocity() const;
+  double YViewVelocity() const;
 
-  double velocity_;
   double z_distance_;
-  double x_distance_;
-  double y_distance_;
+  double x_distance_ = 0;
+  double y_distance_ = 0;
   double x_distance_view_;
   double y_distance_view_;
   double size_;
   QColor color_;
   static double time_;
+
+  double velocity_ = 2;
+  int center_size_ = 100;
+  double minimum_z_distance_ = 200;
+  double max_random_z_distance_ = 200;
+  double max_size_ = 10;
 };
 
 

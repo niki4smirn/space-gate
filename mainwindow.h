@@ -1,7 +1,7 @@
 #ifndef MAINWINDOW_H_
 #define MAINWINDOW_H_
 
-#include "paint_widget.h"
+#include "background_widget.h"
 
 #include <QWidget>
 #include <QComboBox>
@@ -29,7 +29,7 @@ class MainWindow : public QMainWindow {
   void Connect();
   QBasicTimer animation_timer_;
 
-  PaintWidget* widget_;
+  BackgroundWidget* widget_;
 
  signals:
   void MousePressed(bool state);

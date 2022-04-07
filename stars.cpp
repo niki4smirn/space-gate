@@ -3,44 +3,33 @@
 double Star::time_ = 1;
 
 Star::Star(int width, int height, QColor color) {
-  velocity_ = 2;
-  z_distance_ = QRandomGenerator::global()->bounded(500) + 200;
-  x_distance_ = 0;
-  y_distance_ = 0;
-  while (y_distance_ * y_distance_view_ + x_distance_ * x_distance_ < 100 * 100){
+  z_distance_ = QRandomGenerator::global()->bounded(max_random_z_distance_) + minimum_z_distance_;
+  while (y_distance_ * y_distance_view_ + x_distance_ * x_distance_ < center_size_ * center_size_){
     x_distance_ = QRandomGenerator::global()->bounded(width * 2) - width;
     y_distance_ = QRandomGenerator::global()->bounded(height * 2) - height;
   }
-  size_ = QRandomGenerator::global()->bounded(10);
-  color_ = color;
+  size_ = QRandomGenerator::global()->bounded(max_size_);
+  color_ = std::move(color);
   x_distance_view_ = x_distance_;
   y_distance_view_ = y_distance_;
 }
-double Star::XViewVeilocity() const{
-  double square_hypotenyze = x_distance_ * x_distance_ + z_distance_ * z_distance_;
-  if (square_hypotenyze > 0) {
-    return velocity_ * (x_distance_ / sqrt(square_hypotenyze));
-  } else{
-    return 0;
-  }
+
+double Star::XViewVelocity() const{
+  double square_hypotenuse = x_distance_ * x_distance_ + z_distance_ * z_distance_;
+  return velocity_ * (x_distance_ / sqrt(square_hypotenuse));
 }
 
-double Star::YViewVeilocity() const{
-  double square_hypotenyze = x_distance_ * x_distance_ + z_distance_ * z_distance_;
-  if (square_hypotenyze > 0) {
-    return velocity_ * (y_distance_ / sqrt(square_hypotenyze));
-  } else{
-    return 0;
-  }
+double Star::YViewVelocity() const{
+  double square_hypotenuse = x_distance_ * x_distance_ + z_distance_ * z_distance_;
+  return velocity_ * (y_distance_ / sqrt(square_hypotenuse));
 }
 
 
 void Star::Move() {
-  int old_distance = sqrt(x_distance_ * x_distance_ + z_distance_ * z_distance_ + y_distance_ * y_distance_);
+  double old_distance = sqrt(x_distance_ * x_distance_ + z_distance_ * z_distance_ + y_distance_ * y_distance_);
   z_distance_ -= velocity_ * time_;
-  x_distance_view_ += XViewVeilocity() * time_;
-  y_distance_view_ += YViewVeilocity() * time_;
-
+  x_distance_view_ += XViewVelocity() * time_;
+  y_distance_view_ += YViewVelocity() * time_;
   size_ = size_ * old_distance / sqrt(x_distance_ * x_distance_ + z_distance_ * z_distance_ + y_distance_ * y_distance_);
 
 }

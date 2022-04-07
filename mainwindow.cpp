@@ -3,7 +3,7 @@
 
 MainWindow::MainWindow() :
     QMainWindow(nullptr),
-    widget_(new PaintWidget(this))
+    widget_(new BackgroundWidget(this))
     {
   //widget_->resize(100, 100);
   resize(1000, 700);
@@ -25,8 +25,8 @@ void MainWindow::paintEvent(QPaintEvent*) {
 
 void MainWindow::Connect() {
   connect(this, &MainWindow::MousePressed,
-          widget_, &PaintWidget::SetState);
-  connect(this, &MainWindow::MouseReleased, widget_, &PaintWidget::SetState);
+          widget_, &BackgroundWidget::SetState);
+  connect(this, &MainWindow::MouseReleased, widget_, &BackgroundWidget::SetState);
 }
 void MainWindow::timerEvent(QTimerEvent* event) {
   if (event->timerId() == animation_timer_.timerId()) {

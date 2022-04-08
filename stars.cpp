@@ -92,3 +92,6 @@ void Star::MoveCenter(QMouseEvent* event) {
   y_distance_view_ += tmp_.y() - event->pos().y();
   tmp_ = event->pos();
 }
+QPoint Star::GetViewPoint() const {
+  return QPoint(GetXViewDistance(), GetYViewDistance());
+}

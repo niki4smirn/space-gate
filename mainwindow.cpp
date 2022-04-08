@@ -3,8 +3,7 @@
 
 MainWindow::MainWindow() :
     QMainWindow(nullptr),
-    widget_(new BackgroundWidget(this))
-    {
+    widget_(new BackgroundWidget(this)) {
   // widget_->resize(100, 100);
   setMouseTracking(true);
   this->setMouseTracking(true);
@@ -13,8 +12,8 @@ MainWindow::MainWindow() :
   SetupScene();
   Connect();
   animation_timer_.start(5, this);
-}
 
+}
 
 void MainWindow::SetupScene() {
   setCentralWidget(widget_);

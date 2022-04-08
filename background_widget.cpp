@@ -6,45 +6,58 @@ BackgroundWidget::BackgroundWidget(QWidget* parent) : QWidget(parent) {
 
 void BackgroundWidget::Paint(QPainter* painter) const {
   PaintBackground(painter);
-  PaintStars(painter);
   if (light_speed_effect_) {
     PaintLines(painter);
+  }
+  PaintStars(painter);
+  if (light_speed_effect_) {
     PaintBlur(painter);
   }
 }
 
 void BackgroundWidget::PaintStars(QPainter* painter) const {
-  QBrush brush(QColor(0, 0, 0, 255));
+  QPen pen(QColor(0, 0, 0, 0));
+  painter->setPen(pen);
   for (const auto& star: stars_) {
-    brush.setColor(star.GetColor());
-    painter->setBrush(brush);
-    int size;
-    if (star.GetSize() > 20) {
-      size = 20;
+    QPoint size;
+    if (star.GetSize() > max_star_size_) {
+      size.setX(static_cast<int>(max_star_size_));
+      size.setY(static_cast<int>(max_star_size_));
     } else {
-      size = static_cast<int>(star.GetSize());
+      size.setX(static_cast<int>(star.GetSize()));
+      size.setY(static_cast<int>(star.GetSize()));
     }
-    painter->drawEllipse(
-      static_cast<int>(star.GetXViewDistance()) + center_.x(),
-      static_cast<int>(star.GetYViewDistance()) + center_.y(),
-      size, size);
+
+    QColor color = star.GetColor();
+    color.setAlpha(255);
+    QRadialGradient radialGrad(star.GetViewPoint() + center_,
+                               static_cast<int>(size.x() / 2));
+    radialGrad.setColorAt(0, color);
+    color.setAlpha(0);
+    radialGrad.setColorAt(1, color);
+
+    QBrush brush(radialGrad);
+    painter->setBrush(brush);
+    painter->drawEllipse(star.GetViewPoint() + center_, size.x(), size.y());
   }
 }
 void BackgroundWidget::PaintLines(QPainter* painter) const {
   for (int i = 0; i < lines_.size(); i++) {
     QPen pen(QColor(255, 255, 255, 255));
+    int width;
     if (stars_.at(i).GetSize() < max_line_size_) {
-      pen.setWidth(static_cast<int>(stars_.at(i).GetSize()));
+      width = static_cast<int>(stars_.at(i).GetSize());
     } else {
-      pen.setWidth(width_for_big_stars_);
+      width = static_cast<int>(max_line_size_);
     }
+    pen.setWidth(width);
+    pen.setCapStyle(Qt::RoundCap);
     painter->setPen(pen);
-    int
-      shake = QRandomGenerator::global()->bounded(2 * max_shake_) - max_shake_;
-    painter->drawLine(shake + lines_.at(i).first.x(),
-                      shake + lines_.at(i).first.y(),
-                      shake + lines_.at(i).second.x(),
-                      shake + lines_.at(i).second.y());
+    int shake = QRandomGenerator::global()->bounded(2 * max_shake_ + 1)
+      - max_shake_;
+    QPoint shake_pnt(shake, shake);
+    painter->drawLine(shake_pnt + lines_.at(i).first,
+                      shake_pnt + lines_.at(i).second);
   }
 }
 
@@ -69,15 +82,11 @@ void BackgroundWidget::Tick() {
   for (int i = 0; i < stars_.size(); i++) {
     stars_.at(i).Move();
     if (light_speed_effect_) {
-      int pntx =
-        static_cast<int>(stars_.at(i).GetXViewDistance()) + center_.x();
-      int pnty =
-        static_cast<int>(stars_.at(i).GetYViewDistance()) + center_.y();
+      QPoint pnt = stars_.at(i).GetViewPoint() + center_;
       while (lines_.size() <= i) {
-        lines_.push_back({QPoint(pntx, pnty), QPoint(pntx, pnty)});
+        lines_.push_back({pnt, pnt});
       }
-      lines_.at(i).second =
-        QPoint(pntx, pnty);
+      lines_.at(i).second = pnt;
     } else {
       lines_.clear();
     }
@@ -87,7 +96,7 @@ void BackgroundWidget::Tick() {
     if (white_blur_ < 255) {
       white_blur_ += blur_acceleration_;
     }
-    if (Star::GetTime() < max_star_interval_) {
+    if (Star::GetTime() < max_star_time_interval_) {
       Star::AddTime(star_time_acceleration_);
     }
   } else {

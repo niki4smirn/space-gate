@@ -17,6 +17,7 @@ class Star {
 
   double GetXViewDistance() const;
   double GetYViewDistance() const;
+  QPoint GetViewPoint() const;
   double GetZDistance() const;
   double GetSize() const;
   QColor GetColor() const;

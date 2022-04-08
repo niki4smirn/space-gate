@@ -8,9 +8,11 @@
 #include <QTimerEvent>
 #include <QMainWindow>
 #include <QBasicTimer>
+#include <QRadialGradient>
 
 class MainWindow : public QMainWindow {
- Q_OBJECT
+  Q_OBJECT
+
  public:
   MainWindow();
   void SetupScene();
@@ -19,7 +21,6 @@ class MainWindow : public QMainWindow {
   void mousePressEvent(QMouseEvent*) override;
   void mouseReleaseEvent(QMouseEvent*) override;
   void mouseMoveEvent(QMouseEvent* event) override;
-
 
  private:
   void Connect();
@@ -32,4 +33,4 @@ class MainWindow : public QMainWindow {
   void MouseReleased(bool state);
   void MouseMove(QMouseEvent* event);
 };
-#endif // MAINWINDOW_H_
+#endif //  MAINWINDOW_H_

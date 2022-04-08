@@ -4,13 +4,8 @@
 #include "background_widget.h"
 
 #include <QWidget>
-#include <QComboBox>
-#include <QVBoxLayout>
-#include <QGraphicsScene>
-#include <QGraphicsView>
 #include <QBasicTimer>
 #include <QTimerEvent>
-#include <QGraphicsPixmapItem>
 #include <QMainWindow>
 #include <QBasicTimer>
 
@@ -23,6 +18,7 @@ class MainWindow : public QMainWindow {
   void timerEvent(QTimerEvent* event) override;
   void mousePressEvent(QMouseEvent*) override;
   void mouseReleaseEvent(QMouseEvent*) override;
+  void mouseMoveEvent(QMouseEvent* event) override;
 
 
  private:
@@ -34,5 +30,6 @@ class MainWindow : public QMainWindow {
  signals:
   void MousePressed(bool state);
   void MouseReleased(bool state);
+  void MouseMove(QMouseEvent* event);
 };
-#endif //MAINWINDOW_H_
+#endif // MAINWINDOW_H_

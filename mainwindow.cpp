@@ -5,7 +5,10 @@ MainWindow::MainWindow() :
     QMainWindow(nullptr),
     widget_(new BackgroundWidget(this))
     {
-  //widget_->resize(100, 100);
+  // widget_->resize(100, 100);
+  setMouseTracking(true);
+  this->setMouseTracking(true);
+  widget_->setMouseTracking(true);
   resize(1000, 700);
   SetupScene();
   Connect();
@@ -26,7 +29,10 @@ void MainWindow::paintEvent(QPaintEvent*) {
 void MainWindow::Connect() {
   connect(this, &MainWindow::MousePressed,
           widget_, &BackgroundWidget::SetState);
-  connect(this, &MainWindow::MouseReleased, widget_, &BackgroundWidget::SetState);
+  connect(this, &MainWindow::MouseReleased,
+          widget_, &BackgroundWidget::SetState);
+  connect(this, &MainWindow::MouseMove,
+          widget_, &BackgroundWidget::SetCenterPos);
 }
 void MainWindow::timerEvent(QTimerEvent* event) {
   if (event->timerId() == animation_timer_.timerId()) {
@@ -40,4 +46,7 @@ void MainWindow::mousePressEvent(QMouseEvent*) {
 }
 void MainWindow::mouseReleaseEvent(QMouseEvent*) {
   emit MouseReleased(false);
+}
+void MainWindow::mouseMoveEvent(QMouseEvent* event) {
+  emit MouseMove(event);
 }

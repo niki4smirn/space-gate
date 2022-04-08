@@ -2,14 +2,18 @@
 #define STARS_H_
 
 #include <QRandomGenerator>
+#include <QMouseEvent>
 #include <QColor>
+#include <QSize>
+#include <QPoint>
 
 #include <iostream>
 
 class Star {
  public:
 
-  Star(int width, int height, QColor color);
+  Star(QSize size, QColor color);
+  Star(QSize size, QColor color, QPoint center);
 
   double GetXViewDistance() const;
   double GetYViewDistance() const;
@@ -22,7 +26,7 @@ class Star {
   static void SetTime(double set);
 
   void Move();
-
+  void MoveCenter(QMouseEvent* event);
 
  private:
   double XViewVelocity() const;
@@ -42,7 +46,7 @@ class Star {
   double minimum_z_distance_ = 200;
   double max_random_z_distance_ = 200;
   double max_size_ = 10;
+  QPoint tmp_;
 };
 
-
-#endif //STARS_H_
+#endif // STARS_H_

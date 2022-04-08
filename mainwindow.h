@@ -15,22 +15,11 @@ class MainWindow : public QMainWindow {
 
  public:
   MainWindow();
-  void SetupScene();
-  void paintEvent(QPaintEvent*) override;
-  void timerEvent(QTimerEvent* event) override;
-  void mousePressEvent(QMouseEvent*) override;
-  void mouseReleaseEvent(QMouseEvent*) override;
-  void mouseMoveEvent(QMouseEvent* event) override;
 
  private:
+  void SetupScene();
   void Connect();
-  QBasicTimer animation_timer_;
-
   BackgroundWidget* widget_;
 
- signals:
-  void MousePressed(bool state);
-  void MouseReleased(bool state);
-  void MouseMove(QMouseEvent* event);
 };
 #endif //  MAINWINDOW_H_

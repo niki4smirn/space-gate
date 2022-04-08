@@ -7,6 +7,8 @@
 #include <QMouseEvent>
 #include <QPen>
 #include <QRadialGradient>
+#include <QBasicTimer>
+#include <QPainter>
 
 #include <vector>
 #include <iostream>
@@ -21,6 +23,12 @@ class BackgroundWidget : public QWidget {
   void Paint(QPainter* painter) const;
   void Tick();
 
+  void timerEvent(QTimerEvent* event) override;
+  void paintEvent(QPaintEvent*) override;
+  void mousePressEvent(QMouseEvent*) override;
+  void mouseReleaseEvent(QMouseEvent*) override;
+  void mouseMoveEvent(QMouseEvent* event) override;
+
   void SetState(bool state);
   void SetCenterPos(QMouseEvent* event);
 
@@ -32,6 +40,7 @@ class BackgroundWidget : public QWidget {
  private:
   void GenerateStars();
   void RemoveStars();
+  QBasicTimer animation_timer_;
 
   std::vector<QColor> colors_ =
     {QColor(51, 255, 255, 200),
@@ -56,7 +65,7 @@ class BackgroundWidget : public QWidget {
   int max_shake_ = 10;
   QPoint center_;
   bool cursor_move_effect_1_ = false; //  enables effect
-  bool cursor_move_effect_2_ = false; //  enables effect
+  bool cursor_move_effect_2_ = true; //  enables effect
 };
 
 #endif //  BACKGROUND_WIDGET_H_

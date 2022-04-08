@@ -2,6 +2,9 @@
 
 BackgroundWidget::BackgroundWidget(QWidget* parent) : QWidget(parent) {
   default_star_interval_ = Star::GetTime();
+  animation_timer_.start(5, this);
+  setMouseTracking(true);
+  this->setMouseTracking(true);
 }
 
 void BackgroundWidget::Paint(QPainter* painter) const {
@@ -151,3 +154,26 @@ void BackgroundWidget::SetCenterPos(QMouseEvent* event) {
     }
   }
 }
+
+void BackgroundWidget::timerEvent(QTimerEvent* event) {
+  if (event->timerId() == animation_timer_.timerId()) {
+    QObject::timerEvent(event);
+    Tick();
+    repaint();
+  }
+}
+void BackgroundWidget::paintEvent(QPaintEvent*) {
+  QPainter painter(this);
+  Paint(&painter);
+}
+
+void BackgroundWidget::mousePressEvent(QMouseEvent*) {
+  SetState(true);
+}
+void BackgroundWidget::mouseReleaseEvent(QMouseEvent*) {
+  SetState(false);
+}
+void BackgroundWidget::mouseMoveEvent(QMouseEvent* event) {
+  SetCenterPos(event);
+}
+

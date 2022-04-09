@@ -8,7 +8,7 @@ int main(int argc, char* argv[]) {
 
   MainWindow window;
   window.showFullScreen();
-  //window.show();
+  // window.show();
   window.setWindowTitle("SpaceGate");
 
   return QApplication::exec();

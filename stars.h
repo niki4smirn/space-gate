@@ -44,7 +44,6 @@ class Star {
   double minimum_z_distance_ = 200;
   double max_random_z_distance_ = 200;
   double max_size_ = 10;
-
 };
 
 #endif  // STARS_H_

@@ -1,73 +1,57 @@
 #include "stars.h"
 
-double Star::time_ = 1;
+double Star::time_ = 1.5;
 
-Star::Star(QSize size, QColor color) {
+Star::Star(QSize size, QColor color, QPointF center) {
+  prev_pos_ = center;
   z_distance_ = QRandomGenerator::global()->bounded(max_random_z_distance_)
     + minimum_z_distance_;
-  while (y_distance_ * y_distance_view_ + x_distance_ * x_distance_
+  while (coords_.x() * coords_.x() + coords_.y() * coords_.y()
     < center_size_ * center_size_) {
-    x_distance_ = QRandomGenerator::global()->bounded(size.width())
-      - size.width() / 2;
-    y_distance_ = QRandomGenerator::global()->bounded(size.height())
-      - size.height() / 2;
+    coords_.setX(
+      QRandomGenerator::global()->bounded(size.width()) - center.x());
+    coords_.setY(
+      QRandomGenerator::global()->bounded(size.width()) - center.y());
   }
   size_ = QRandomGenerator::global()->bounded(max_size_);
   color_ = std::move(color);
-  x_distance_view_ = x_distance_;
-  y_distance_view_ = y_distance_;
-}
-
-Star::Star(QSize size, QColor color, QPoint center) {
-  tmp_ = center;
-  z_distance_ = QRandomGenerator::global()->bounded(max_random_z_distance_)
-    + minimum_z_distance_;
-  while (y_distance_ * y_distance_view_ + x_distance_ * x_distance_
-    < center_size_ * center_size_) {
-    x_distance_ = QRandomGenerator::global()->bounded(size.width())
-      - center.x();
-    y_distance_ = QRandomGenerator::global()->bounded(size.height())
-      - center.y();
-  }
-  size_ = QRandomGenerator::global()->bounded(max_size_);
-  color_ = std::move(color);
-  x_distance_view_ = x_distance_;
-  y_distance_view_ = y_distance_;
+  view_coords_ = coords_;
 }
 
 double Star::XViewVelocity() const {
-  double
-    square_hypotenuse = x_distance_ * x_distance_ + z_distance_ * z_distance_;
-  return velocity_ * (x_distance_ / sqrt(square_hypotenuse));
+  double square_hypotenuse =
+    coords_.x() * coords_.x() + z_distance_ * z_distance_
+      + coords_.y() * coords_.y();
+  return velocity_ * (coords_.x() / sqrt(square_hypotenuse));
 }
 
 double Star::YViewVelocity() const {
-  double
-    square_hypotenuse = x_distance_ * x_distance_ + z_distance_ * z_distance_;
-  return velocity_ * (y_distance_ / sqrt(square_hypotenuse));
+  double square_hypotenuse =
+    coords_.x() * coords_.x() + z_distance_ * z_distance_
+      + coords_.y() * coords_.y();
+  return velocity_ * (coords_.y() / sqrt(square_hypotenuse));
 }
 
 void Star::Move() {
   double old_distance = sqrt(
-    x_distance_ * x_distance_ + z_distance_ * z_distance_
-      + y_distance_ * y_distance_);
+    coords_.x() * coords_.x() + z_distance_ * z_distance_
+      + coords_.y() * coords_.y());
   z_distance_ -= velocity_ * time_;
-  x_distance_view_ += XViewVelocity() * time_;
-  y_distance_view_ += YViewVelocity() * time_;
-  size_ = size_ * old_distance / sqrt(
-    x_distance_ * x_distance_ + z_distance_ * z_distance_
-      + y_distance_ * y_distance_);
-
+  view_coords_.setX(view_coords_.x() + XViewVelocity() * time_);
+  view_coords_.setY(view_coords_.y() + YViewVelocity() * time_);
+  size_ = size_ * old_distance
+    / sqrt(coords_.x() * coords_.x() + z_distance_ * z_distance_
+             + coords_.y() * coords_.y());
 }
 
 double Star::GetSize() const {
   return size_;
 }
 double Star::GetXViewDistance() const {
-  return x_distance_view_;
+  return view_coords_.x();
 }
 double Star::GetYViewDistance() const {
-  return y_distance_view_;
+  return view_coords_.y();
 }
 double Star::GetZDistance() const {
   return z_distance_;
@@ -86,12 +70,10 @@ double Star::GetTime() {
 }
 
 void Star::MoveCenter(QMouseEvent* event) {
-  x_distance_ += tmp_.x() - event->pos().x();
-  y_distance_ += tmp_.y() - event->pos().y();
-  x_distance_view_ += tmp_.x() - event->pos().x();
-  y_distance_view_ += tmp_.y() - event->pos().y();
-  tmp_ = event->pos();
+  coords_ += prev_pos_ - event->pos();
+  view_coords_ += prev_pos_ - event->pos();
+  prev_pos_ = event->pos();
 }
-QPoint Star::GetViewPoint() const {
-  return QPoint(GetXViewDistance(), GetYViewDistance());
+QPointF Star::GetViewPoint() const {
+  return view_coords_;
 }

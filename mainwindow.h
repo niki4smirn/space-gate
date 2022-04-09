@@ -20,6 +20,5 @@ class MainWindow : public QMainWindow {
   void SetupScene();
   void Connect();
   BackgroundWidget* widget_;
-
 };
-#endif //  MAINWINDOW_H_
+#endif  // MAINWINDOW_H_

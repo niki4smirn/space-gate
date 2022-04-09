@@ -21,16 +21,15 @@ void BackgroundWidget::Paint(QPainter* painter) const {
 void BackgroundWidget::PaintStars(QPainter* painter) const {
   QPen pen(QColor(0, 0, 0, 0));
   painter->setPen(pen);
-  for (const auto& star: stars_) {
-    QPoint size;
+  for (const auto& star : stars_) {
+    QPointF size;
     if (star.GetSize() > max_star_size_) {
-      size.setX(static_cast<int>(max_star_size_));
-      size.setY(static_cast<int>(max_star_size_));
+      size.setX(max_star_size_);
+      size.setY(max_star_size_);
     } else {
-      size.setX(static_cast<int>(star.GetSize()));
-      size.setY(static_cast<int>(star.GetSize()));
+      size.setX(star.GetSize());
+      size.setY(star.GetSize());
     }
-
     QColor color = star.GetColor();
     color.setAlpha(255);
     QRadialGradient radialGrad(star.GetViewPoint() + center_,
@@ -58,7 +57,7 @@ void BackgroundWidget::PaintLines(QPainter* painter) const {
     painter->setPen(pen);
     int shake = QRandomGenerator::global()->bounded(2 * max_shake_ + 1)
       - max_shake_;
-    QPoint shake_pnt(shake, shake);
+    QPointF shake_pnt(shake, shake);
     painter->drawLine(shake_pnt + lines_.at(i).first,
                       shake_pnt + lines_.at(i).second);
   }
@@ -80,12 +79,12 @@ void BackgroundWidget::PaintBlur(QPainter* painter) const {
 
 void BackgroundWidget::Tick() {
   if (!cursor_move_effect_1_ && !cursor_move_effect_2_) {
-    center_ = QPoint(width() / 2, height() / 2);
+    center_ = QPointF(width() / 2, height() / 2);
   }
   for (int i = 0; i < stars_.size(); i++) {
     stars_.at(i).Move();
     if (light_speed_effect_) {
-      QPoint pnt = stars_.at(i).GetViewPoint() + center_;
+      QPointF pnt = stars_.at(i).GetViewPoint() + center_;
       while (lines_.size() <= i) {
         lines_.push_back({pnt, pnt});
       }
@@ -126,11 +125,11 @@ void BackgroundWidget::GenerateStars() {
 
 void BackgroundWidget::RemoveStars() {
   for (int i = 0; i < stars_.size(); i++) {
-    int pntx = static_cast<int>(stars_.at(i).GetXViewDistance());
-    int pnty = static_cast<int>(stars_.at(i).GetYViewDistance());
+    double pntx = stars_.at(i).GetXViewDistance();
+    double pnty = stars_.at(i).GetYViewDistance();
     if (pntx > width() - center_.x() || pntx < -center_.x()
       || pnty > height() - center_.y() || pnty < -center_.y()
-      || static_cast<int>(stars_.at(i).GetZDistance()) < 0) {
+      || stars_.at(i).GetZDistance() < 0) {
       stars_.erase(stars_.begin() + i);
       if (light_speed_effect_) {
         lines_.erase(lines_.begin() + i);
@@ -148,7 +147,7 @@ void BackgroundWidget::SetCenterPos(QMouseEvent* event) {
     center_ = event->pos();
   }
   if (cursor_move_effect_2_ && !light_speed_effect_) {
-    for (auto& star: stars_) {
+    for (auto& star : stars_) {
       center_ = event->pos();
       star.MoveCenter(event);
     }
@@ -162,6 +161,7 @@ void BackgroundWidget::timerEvent(QTimerEvent* event) {
     repaint();
   }
 }
+
 void BackgroundWidget::paintEvent(QPaintEvent*) {
   QPainter painter(this);
   Paint(&painter);
@@ -170,9 +170,11 @@ void BackgroundWidget::paintEvent(QPaintEvent*) {
 void BackgroundWidget::mousePressEvent(QMouseEvent*) {
   SetState(true);
 }
+
 void BackgroundWidget::mouseReleaseEvent(QMouseEvent*) {
   SetState(false);
 }
+
 void BackgroundWidget::mouseMoveEvent(QMouseEvent* event) {
   SetCenterPos(event);
 }

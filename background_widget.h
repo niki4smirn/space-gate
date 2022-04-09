@@ -16,7 +16,7 @@
 #include "stars.h"
 
 class BackgroundWidget : public QWidget {
- Q_OBJECT
+  Q_OBJECT
 
  public:
   explicit BackgroundWidget(QWidget* parent);

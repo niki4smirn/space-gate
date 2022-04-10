@@ -114,22 +114,23 @@ void BackgroundWidget::Tick() {
 void BackgroundWidget::GenerateStars() {
   if (stars_.size() < stars_number_) {
     for (int i = 0;
-         i < QRandomGenerator::global()->bounded(stars_number_ * 0.4); i++) {
+         i < 500; i++) {
       uint32_t size = colors_.size();
       stars_.emplace_back(Star(this->size(),
                                colors_.at(QRandomGenerator::global()->
                                  bounded(size)), center_));
     }
   }
+  std::cout << stars_.size() << "\n";
+
 }
 
 void BackgroundWidget::RemoveStars() {
   for (int i = 0; i < stars_.size(); i++) {
-    double pntx = stars_.at(i).GetXViewDistance();
-    double pnty = stars_.at(i).GetYViewDistance();
+    double pntx = stars_.at(i).GetViewPoint().x();
+    double pnty = stars_.at(i).GetViewPoint().y();
     if (pntx > width() - center_.x() || pntx < -center_.x()
-      || pnty > height() - center_.y() || pnty < -center_.y()
-      || stars_.at(i).GetZDistance() < 0) {
+      || pnty > height() - center_.y() || pnty < -center_.y()) {
       stars_.erase(stars_.begin() + i);
       if (light_speed_effect_) {
         lines_.erase(lines_.begin() + i);

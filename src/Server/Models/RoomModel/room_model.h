@@ -30,5 +30,5 @@ class RoomModel {
  private:
   RoomId id_;
   UserId host_id_;
-  std::unordered_map<UserId, std::weak_ptr<User>> users_;
+  std::unordered_map<UserId, std::shared_ptr<User>> users_;
 };

@@ -1,12 +1,12 @@
 #include "server_model.h"
 
-std::weak_ptr<User> ServerModel::GetUserBySocket(QWebSocket* socket) const {
+std::shared_ptr<User> ServerModel::GetUserBySocket(QWebSocket* socket) const {
   auto user_it = user_id_by_socket_.find(socket);
   Q_ASSERT(user_it != user_id_by_socket_.end());
   return users_.at(user_it->second);
 }
 
-std::weak_ptr<User> ServerModel::GetUserById(UserId id) const {
+std::shared_ptr<User> ServerModel::GetUserById(UserId id) const {
   auto user_it = users_.find(id);
   Q_ASSERT(user_it != users_.end());
   return user_it->second;
@@ -23,9 +23,7 @@ void ServerModel::AddUser(const std::shared_ptr<User>& user) {
 void ServerModel::DeleteUser(UserId id) {
   Q_ASSERT(ExistsUser(id));
   auto user = GetUserById(id);
-  if (!user.expired()) {
-    user_id_by_socket_.erase(user.lock()->GetSocket().get());
-  }
+  user_id_by_socket_.erase(user->GetSocket().get());
   room_id_for_user_id_.erase(id);
   users_.erase(id);
 }
@@ -74,7 +72,7 @@ bool ServerModel::IsInSomeRoom(UserId id) const {
   return room_id_for_user_id_.at(id).has_value();
 }
 
-std::weak_ptr<RoomController> ServerModel::GetRoomById(RoomId id) const {
+std::shared_ptr<RoomController> ServerModel::GetRoomById(RoomId id) const {
   Q_ASSERT(ExistsRoom(id));
   return rooms_.at(id);
 }

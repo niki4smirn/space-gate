@@ -11,10 +11,10 @@
 
 class ServerModel {
  public:
-  std::weak_ptr<User> GetUserBySocket(QWebSocket* socket) const;
-  std::weak_ptr<User> GetUserById(UserId id) const;
+  std::shared_ptr<User> GetUserBySocket(QWebSocket* socket) const;
+  std::shared_ptr<User> GetUserById(UserId id) const;
 
-  std::weak_ptr<RoomController> GetRoomById(RoomId id) const;
+  std::shared_ptr<RoomController> GetRoomById(RoomId id) const;
 
   void AddUser(const std::shared_ptr<User>& user);
   void DeleteUser(UserId id);

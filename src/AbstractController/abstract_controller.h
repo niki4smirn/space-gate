@@ -10,6 +10,7 @@
 #include "src/Helpers/helpers.h"
 
 namespace Log {
+
 enum class Type {
   kHandle,
   kSend,
@@ -17,6 +18,7 @@ enum class Type {
 };
 
 QString GetProcessStringByType(Type type);
+
 }
 
 class AbstractController : public QObject {

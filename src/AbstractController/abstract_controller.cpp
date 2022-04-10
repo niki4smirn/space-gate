@@ -3,6 +3,7 @@
 #include "Constants/constants.h"
 
 namespace Log {
+
 QString GetProcessStringByType(Type type) {
   QString result;
   switch (type) {
@@ -21,6 +22,7 @@ QString GetProcessStringByType(Type type) {
   }
   return result;
 }
+
 }  // namespace Log
 
 AbstractController::AbstractController() {

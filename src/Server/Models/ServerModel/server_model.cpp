@@ -62,9 +62,9 @@ void ServerModel::DeleteUserFromRoom(UserId user_id) {
   room_id_for_user_id_[user_id] = std::nullopt;
 }
 
-RoomId ServerModel::GetRoomIdByUserId(UserId id) const {
+std::shared_ptr<RoomController> ServerModel::GetRoomByUserId(UserId id) const {
   Q_ASSERT(IsInSomeRoom(id));
-  return room_id_for_user_id_.at(id).value();
+  return rooms_.at(room_id_for_user_id_.at(id).value());
 }
 
 bool ServerModel::IsInSomeRoom(UserId id) const {

@@ -22,7 +22,7 @@ void ServerController::OnByteArrayReceived(const QByteArray& message) {
   UserId user_id = user->GetId();
   received_event.set_sender_id(user_id);
 
-  LogEvent(received_event, Log::Type::kReceive);
+  LogEvent(received_event, log::Type::kReceive);
 
   switch (received_event.receiver_type()) {
     case proto::Event::kServer: {
@@ -70,11 +70,10 @@ void ServerController::OnSocketDisconnect() {
     // so, this TODO is not really relevant, because it may cause some
     // security problems
     if (server_model_.IsInSomeRoom(user_id)) {
-      RoomId room_id = server_model_.GetRoomIdByUserId(user_id);
-      auto room = server_model_.GetRoomById(room_id);
+      auto room = server_model_.GetRoomByUserId(user_id);
       room->DeleteUser(user_id);
       if (room->IsEmpty()) {
-        server_model_.DeleteRoom(room_id);
+        server_model_.DeleteRoom(room->GetId());
       }
     }
     server_model_.DeleteUser(user_id);
@@ -88,7 +87,7 @@ QString ServerController::GetControllerName() const {
 void ServerController::OnTick() {}
 
 void ServerController::Send(const proto::Event& event) {
-  LogEvent(event, Log::Type::kSend);
+  LogEvent(event, log::Type::kSend);
   switch (event.receiver_type()) {
     case proto::Event::kRoom: {
       SendEventToRoom(event);
@@ -99,7 +98,7 @@ void ServerController::Send(const proto::Event& event) {
 }
 
 void ServerController::Handle(const proto::Event& event) {
-  LogEvent(event, Log::Type::kHandle);
+  LogEvent(event, log::Type::kHandle);
   UserId user_id = event.sender_id();
   auto user = server_model_.GetUserById(user_id);
   switch (event.type()) {
@@ -113,20 +112,20 @@ void ServerController::Handle(const proto::Event& event) {
       break;
     }
     case proto::Event::kEnterRoom: {
-      if (server_model_.ExistsRoom(event.arguments(0)) &&
+      auto room_id = event.arguments(0);
+      if (server_model_.ExistsRoom(room_id) &&
           !server_model_.IsInSomeRoom(user_id)) {
-        server_model_.AddUserToRoom(user_id, event.arguments(0));
+        server_model_.AddUserToRoom(user_id, room_id);
       }
       break;
     }
     case proto::Event::kLeaveRoom: {
       if (server_model_.IsInSomeRoom(user_id)) {
-        RoomId room_id = server_model_.GetRoomIdByUserId(user_id);
         server_model_.DeleteUserFromRoom(user_id);
-        auto room = server_model_.GetRoomById(room_id);
+        auto room = server_model_.GetRoomByUserId(user_id);
         room->DeleteUser(user_id);
         if (room->IsEmpty()) {
-          server_model_.DeleteRoom(room_id);
+          server_model_.DeleteRoom(room->GetId());
         }
       }
       break;
@@ -136,6 +135,5 @@ void ServerController::Handle(const proto::Event& event) {
 }
 
 void ServerController::SendEventToRoom(const proto::Event& event) const {
-  RoomId room_id = server_model_.GetRoomIdByUserId(event.sender_id());
-  server_model_.GetRoomById(room_id)->AddEventToHandle(event);
+  server_model_.GetRoomByUserId(event.sender_id())->AddEventToHandle(event);
 }

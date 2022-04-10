@@ -1,8 +1,8 @@
 #include "room_model.h"
 
-RoomModel::RoomModel(RoomId room_id, const std::shared_ptr<User>& host)
-    : id_(room_id), host_id_(host->GetId()) {
-  users_[host_id_] = host;
+RoomModel::RoomModel(RoomId room_id, const std::shared_ptr<User>& chief)
+    : id_(room_id), chief_id_(chief->GetId()) {
+  users_[chief_id_] = chief;
 }
 
 void RoomModel::AddUser(const std::shared_ptr<User>& user) {
@@ -24,16 +24,16 @@ bool RoomModel::HasUser(UserId id) const {
   return users_.contains(id);
 }
 
-UserId RoomModel::GetHostId() const {
-  return host_id_;
+UserId RoomModel::GetChiefId() const {
+  return chief_id_;
 }
 
 bool RoomModel::IsEmpty() const {
   return users_.empty();
 }
 
-void RoomModel::SetHostId(UserId id) {
-  host_id_ = id;
+void RoomModel::SetChiefId(UserId id) {
+  chief_id_ = id;
 }
 
 UserId RoomModel::GetRandomUser() const {

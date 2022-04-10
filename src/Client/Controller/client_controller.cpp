@@ -25,7 +25,7 @@ QString ClientController::GetControllerName() const {
 void ClientController::OnTick() {}
 
 void ClientController::Send(const proto::Event& event) {
-  LogEvent(event, Log::Type::kSend);
+  LogEvent(event, log::Type::kSend);
   socket_.sendBinaryMessage(event.SerializeAsString().data());
 }
 

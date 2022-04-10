@@ -2,8 +2,8 @@
 
 RoomController::RoomController(
     RoomId room_id,
-    const std::shared_ptr<User>& host)
-    : room_model_(room_id, host) {
+    const std::shared_ptr<User>& chief)
+    : room_model_(room_id, chief) {
   StartTicking();
 }
 
@@ -21,20 +21,20 @@ RoomId RoomController::GetId() const {
 
 void RoomController::AddUser(const std::shared_ptr<User>& user) {
   if (room_model_.IsEmpty()) {
-    room_model_.SetHostId(user->GetId());
+    room_model_.SetChiefId(user->GetId());
   }
   room_model_.AddUser(user);
 }
 
 void RoomController::DeleteUser(UserId id) {
   room_model_.DeleteUser(id);
-  if (!room_model_.IsEmpty() && room_model_.GetHostId() == id) {
-    room_model_.SetHostId(room_model_.GetRandomUser());
+  if (!room_model_.IsEmpty() && room_model_.GetChiefId() == id) {
+    room_model_.SetChiefId(room_model_.GetRandomUser());
   }
 }
 
 void RoomController::Handle(const proto::Event& event) {
-  LogEvent(event, Log::Type::kHandle);
+  LogEvent(event, log::Type::kHandle);
   switch (event.type()) {
     case proto::Event::kChangeWaitingStatus: {
       UserId user_id = event.sender_id();

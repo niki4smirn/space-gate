@@ -31,7 +31,7 @@ class ServerModel {
   void DeleteUserFromRoom(UserId user_id);
 
   bool IsInSomeRoom(UserId id) const;
-  RoomId GetRoomIdByUserId(UserId id) const;
+  std::shared_ptr<RoomController> GetRoomByUserId(UserId id) const;
 
  private:
   std::map<UserId, std::shared_ptr<User>> users_;

@@ -5,7 +5,7 @@
 
 class RoomController : public AbstractController {
  public:
-  RoomController(RoomId room_id, const std::shared_ptr<User>& host);
+  RoomController(RoomId room_id, const std::shared_ptr<User>& chief);
   QString GetControllerName() const override;
 
   RoomId GetId() const;

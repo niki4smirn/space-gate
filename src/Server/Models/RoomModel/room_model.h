@@ -8,7 +8,7 @@ using RoomId = uint64_t;
 
 class RoomModel {
  public:
-  RoomModel(RoomId room_id, const std::shared_ptr<User>& host);
+  RoomModel(RoomId room_id, const std::shared_ptr<User>& chief);
 
   void AddUser(const std::shared_ptr<User>& user);
   void DeleteUser(UserId id);
@@ -17,8 +17,8 @@ class RoomModel {
 
   RoomId GetRoomId() const;
 
-  UserId GetHostId() const;
-  void SetHostId(UserId id);
+  UserId GetChiefId() const;
+  void SetChiefId(UserId id);
 
   bool IsEmpty() const;
 
@@ -29,6 +29,6 @@ class RoomModel {
 
  private:
   RoomId id_;
-  UserId host_id_;
+  UserId chief_id_;
   std::unordered_map<UserId, std::shared_ptr<User>> users_;
 };

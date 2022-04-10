@@ -25,6 +25,4 @@ class ClientController : public AbstractController {
  private:
   QUrl server_url_;
   QWebSocket socket_;
-
-  std::vector<proto::Event> events_to_send_;
 };

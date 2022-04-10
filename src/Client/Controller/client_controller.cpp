@@ -22,16 +22,11 @@ QString ClientController::GetControllerName() const {
   return "Client";
 }
 
-void ClientController::OnTick() {
-  for (const auto& event : events_to_send_) {
-    socket_.sendBinaryMessage(event.SerializeAsString().data());
-  }
-  events_to_send_.clear();
-}
+void ClientController::OnTick() {}
 
 void ClientController::Send(const proto::Event& event) {
   LogEvent(event, Log::Type::kSend);
-  events_to_send_.push_back(event);
+  socket_.sendBinaryMessage(event.SerializeAsString().data());
 }
 
 void ClientController::Handle(const proto::Event& event) {}

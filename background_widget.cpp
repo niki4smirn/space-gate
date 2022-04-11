@@ -121,8 +121,6 @@ void BackgroundWidget::GenerateStars() {
                                  bounded(size)), center_));
     }
   }
-  std::cout << stars_.size() << "\n";
-
 }
 
 void BackgroundWidget::RemoveStars() {
@@ -145,7 +143,8 @@ void BackgroundWidget::SetState(bool state) {
 
 void BackgroundWidget::SetCenterPos(QMouseEvent* event) {
   if (cursor_move_effect_1_ && !light_speed_effect_) {
-    center_ = event->pos();
+    center_ += ((event->pos() - prev_pos_) / camera_divergence_);
+    prev_pos_ = event->pos();
   }
   if (cursor_move_effect_2_ && !light_speed_effect_) {
     for (auto& star : stars_) {
@@ -179,4 +178,7 @@ void BackgroundWidget::mouseReleaseEvent(QMouseEvent*) {
 void BackgroundWidget::mouseMoveEvent(QMouseEvent* event) {
   SetCenterPos(event);
 }
-
+void BackgroundWidget::resizeEvent(QResizeEvent* event) {
+  center_ = QPointF(event->size().width() / 2, event->size().height() / 2);
+  prev_pos_ = center_;
+}

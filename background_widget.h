@@ -9,6 +9,7 @@
 #include <QRadialGradient>
 #include <QBasicTimer>
 #include <QPainter>
+#include <QResizeEvent>
 
 #include <vector>
 #include <iostream>
@@ -28,6 +29,7 @@ class BackgroundWidget : public QWidget {
   void mousePressEvent(QMouseEvent*) override;
   void mouseReleaseEvent(QMouseEvent*) override;
   void mouseMoveEvent(QMouseEvent* event) override;
+  void resizeEvent(QResizeEvent *event) override;
 
   void SetState(bool state);
   void SetCenterPos(QMouseEvent* event);
@@ -60,11 +62,13 @@ class BackgroundWidget : public QWidget {
   double default_star_interval_;
   int stars_number_ = 1000;
   double max_line_size_ = 2;
-  double max_star_size_ = 50;
+  double max_star_size_ = 150;
   int max_shake_ = 10;
+  double camera_divergence_ = 8;
   QPointF center_;
-  bool cursor_move_effect_1_ = false;  // enables effect
-  bool cursor_move_effect_2_ = true;  // enables effect
+  QPointF prev_pos_;
+  bool cursor_move_effect_1_ = true;  // enables effect
+  bool cursor_move_effect_2_ = false;  // enables effec
 };
 
 #endif  // BACKGROUND_WIDGET_H_

@@ -15,7 +15,6 @@ class Star {
   Star(QSize size, QColor color, QPointF center);
 
   QPointF GetViewPoint() const;
-  double GetZDistance() const;
   double GetSize() const;
   QColor GetColor() const;
 
@@ -39,7 +38,7 @@ class Star {
   QPointF coords_;
 
   double velocity_ = 2;
-  int center_size_ = 0;
+  int center_size_ = 20;
   double minimum_z_distance_ = 200;
   double max_random_z_distance_ = 200;
   double max_size_ = 10;

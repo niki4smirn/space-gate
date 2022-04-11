@@ -9,6 +9,7 @@
 #include <QMainWindow>
 #include <QBasicTimer>
 #include <QRadialGradient>
+#include <QCursor>
 
 class MainWindow : public QMainWindow {
   Q_OBJECT

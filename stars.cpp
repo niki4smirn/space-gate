@@ -6,7 +6,7 @@ double Star::angle_ = 180;
 Star::Star(QSize size, QColor color, QPointF center) {
   window_size_ = size;
   prev_pos_ = center;
-  z_distance_ = QRandomGenerator::global()->bounded(max_random_z_distance_)
+  z_distance_ = QRandomGenerator::global()->bounded(max_random_z_distance_ + 1)
     + minimum_z_distance_;
   coords_.setX(
     QRandomGenerator::global()->bounded(size.width()) - center.x());
@@ -19,7 +19,7 @@ Star::Star(QSize size, QColor color, QPointF center) {
     coords_.setY(
       QRandomGenerator::global()->bounded(size.width()) - center.y());
   }
-  size_ = QRandomGenerator::global()->bounded(max_size_);
+  size_ = QRandomGenerator::global()->bounded(max_size_ + 1);
   color_ = std::move(color);
 }
 
@@ -36,24 +36,25 @@ void Star::Move() {
 double Star::GetSize() const {
   return size_;
 }
-double Star::GetZDistance() const {
-  return z_distance_;
-}
+
 QColor Star::GetColor() const {
   return color_;
 }
+
 void Star::AddTime(double add) {
   time_ += add;
 }
+
 void Star::SetTime(double set) {
   time_ = set;
 }
+
 double Star::GetTime() {
   return time_;
 }
 
 void Star::MoveCenter(QMouseEvent* event) {
-  coords_ += prev_pos_ - event->pos();
+  coords_ += (prev_pos_ - event->pos());
   prev_pos_ = event->pos();
 }
 

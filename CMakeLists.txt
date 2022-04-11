@@ -33,8 +33,10 @@ add_executable(server
         src/Server/Models/User/user.cpp
         src/Server/Models/ServerModel/server_model.cpp
         src/Server/Controllers/room_controller.cpp
+        src/Server/Controllers/game_controller.cpp
         src/Server/Models/RoomModel/room_model.cpp
-        )
+        src/Server/Models/GameModel/game_model.cpp
+        src/Server/Models/Player/player.cpp)
 
 add_executable(client
         ${COMMON_SRC}

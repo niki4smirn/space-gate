@@ -99,7 +99,7 @@ void ServerController::Handle(const events::Wrapper& event) {
   const events::ServerEvent& server_event = event.server_event();
   auto user = server_model_.GetUserById(user_id);
   switch (server_event.type_case()) {
-    case events::ServerEvent::TypeCase::kCreateRoom: {
+    case events::ServerEvent::kCreateRoom: {
       RoomId new_room_id = server_model_.GetUnusedRoomId();
       server_model_.AddRoom(
           std::make_shared<RoomController>(new_room_id, user));
@@ -108,7 +108,7 @@ void ServerController::Handle(const events::Wrapper& event) {
       room->AddUser(user);
       break;
     }
-    case events::ServerEvent::TypeCase::kEnterRoom: {
+    case events::ServerEvent::kEnterRoom: {
       auto room_id = server_event.enter_room().room_id();
       if (server_model_.ExistsRoom(room_id) &&
           !server_model_.IsInSomeRoom(user_id)) {
@@ -116,7 +116,7 @@ void ServerController::Handle(const events::Wrapper& event) {
       }
       break;
     }
-    case events::ServerEvent::TypeCase::kLeaveRoom: {
+    case events::ServerEvent::kLeaveRoom: {
       if (server_model_.IsInSomeRoom(user_id)) {
         server_model_.DeleteUserFromRoom(user_id);
         auto room = server_model_.GetRoomByUserId(user_id);

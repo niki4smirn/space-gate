@@ -3,11 +3,9 @@ package events;
 
 message Wrapper {
   uint64 sender_id = 1;
-  oneof event {
-    CreateRoom create_room = 2;
-    EnterRoom enter_room = 3;
-    LeaveRoom leave_room = 4;
-    ChangeWaitingStatus change_waiting_status = 5;
+  oneof receiver {
+    ServerEvent server_event = 2;
+    RoomEvent room_event = 3;
   }
 }
 
@@ -19,4 +17,18 @@ message EnterRoom {
 
 message LeaveRoom {}
 
+message ServerEvent {
+  oneof type {
+    CreateRoom create_room = 1;
+    EnterRoom enter_room = 2;
+    LeaveRoom leave_room = 3;
+  }
+}
+
 message ChangeWaitingStatus {}
+
+message RoomEvent {
+  oneof type {
+    ChangeWaitingStatus change_waiting_status = 1;
+  }
+}

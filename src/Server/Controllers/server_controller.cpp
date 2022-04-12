@@ -25,13 +25,9 @@ void ServerController::OnByteArrayReceived(const QByteArray& message) {
   LogEvent(received_event, log::Type::kReceive);
 
   // TODO(niki4smirn): try to make this check prettier
-  if (received_event.has_create_room() ||
-      received_event.has_enter_room() ||
-      received_event.has_leave_room()) {
+  if (received_event.has_server_event()) {
     AddEventToHandle(received_event);
-  }
-
-  if (received_event.has_change_waiting_status()) {
+  } else {
     AddEventToSend(received_event);
   }
 }
@@ -88,38 +84,50 @@ void ServerController::OnTick() {}
 void ServerController::Send(const events::Wrapper& event) {
   LogEvent(event, log::Type::kSend);
 
-  // TODO(niki4smirn): try to make this check prettier
-  if (event.has_change_waiting_status()) {
-    SendEventToRoom(event);
+  switch (event.receiver_case()) {
+    case events::Wrapper::kRoomEvent: {
+      SendEventToRoom(event);
+      break;
+    }
+    default: {}
   }
 }
 
 void ServerController::Handle(const events::Wrapper& event) {
   LogEvent(event, log::Type::kHandle);
   UserId user_id = event.sender_id();
+  const events::ServerEvent& server_event = event.server_event();
   auto user = server_model_.GetUserById(user_id);
-  if (event.has_create_room()) {
-    RoomId new_room_id = server_model_.GetUnusedRoomId();
-    server_model_.AddRoom(
-        std::make_shared<RoomController>(new_room_id, user));
-    server_model_.AddUserToRoom(user_id, new_room_id);
-    auto room = server_model_.GetRoomById(new_room_id);
-    room->AddUser(user);
-  } else if (event.has_enter_room()) {
-    auto room_id = event.enter_room().room_id();
-    if (server_model_.ExistsRoom(room_id) &&
-        !server_model_.IsInSomeRoom(user_id)) {
-      server_model_.AddUserToRoom(user_id, room_id);
+  switch (server_event.type_case()) {
+    case events::ServerEvent::TypeCase::kCreateRoom: {
+      RoomId new_room_id = server_model_.GetUnusedRoomId();
+      server_model_.AddRoom(
+          std::make_shared<RoomController>(new_room_id, user));
+      server_model_.AddUserToRoom(user_id, new_room_id);
+      auto room = server_model_.GetRoomById(new_room_id);
+      room->AddUser(user);
+      break;
     }
-  } else if (event.has_leave_room()) {
-    if (server_model_.IsInSomeRoom(user_id)) {
-      server_model_.DeleteUserFromRoom(user_id);
-      auto room = server_model_.GetRoomByUserId(user_id);
-      room->DeleteUser(user_id);
-      if (room->IsEmpty()) {
-        server_model_.DeleteRoom(room->GetId());
+    case events::ServerEvent::TypeCase::kEnterRoom: {
+      auto room_id = server_event.enter_room().room_id();
+      if (server_model_.ExistsRoom(room_id) &&
+          !server_model_.IsInSomeRoom(user_id)) {
+        server_model_.AddUserToRoom(user_id, room_id);
       }
+      break;
     }
+    case events::ServerEvent::TypeCase::kLeaveRoom: {
+      if (server_model_.IsInSomeRoom(user_id)) {
+        server_model_.DeleteUserFromRoom(user_id);
+        auto room = server_model_.GetRoomByUserId(user_id);
+        room->DeleteUser(user_id);
+        if (room->IsEmpty()) {
+          server_model_.DeleteRoom(room->GetId());
+        }
+      }
+      break;
+    }
+    default: {}
   }
 }
 

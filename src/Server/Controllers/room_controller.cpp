@@ -35,7 +35,8 @@ void RoomController::DeleteUser(UserId id) {
 
 void RoomController::Handle(const events::Wrapper& event) {
   LogEvent(event, log::Type::kHandle);
-  if (event.has_change_waiting_status()) {
+  const events::RoomEvent& room_event = event.room_event();
+  if (room_event.has_change_waiting_status()) {
     UserId user_id = event.sender_id();
     auto current_status = room_model_.GetUserWaitingStatus(user_id);
     User::WaitingStatus new_status{User::WaitingStatus::kNone};

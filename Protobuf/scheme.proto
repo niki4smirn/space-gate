@@ -1,26 +1,22 @@
 syntax = "proto3";
-package proto;
+package events;
 
-message Event {
-  string name = 15;
-
-  enum Type {
-    // for server
-    kNone = 0;
-    kCreateRoom = 1;
-    kEnterRoom = 2;
-    kLeaveRoom = 3;
-
-    // for room
-    kChangeWaitingStatus = 4;
+message Wrapper {
+  uint64 sender_id = 1;
+  oneof event {
+    CreateRoom create_room = 2;
+    EnterRoom enter_room = 3;
+    LeaveRoom leave_room = 4;
+    ChangeWaitingStatus change_waiting_status = 5;
   }
-  Type type = 1;
-  repeated int32 arguments = 2;
-  uint64 sender_id = 3;
-
-  enum ReceiverType {
-    kServer = 0;
-    kRoom = 1;
-  }
-  ReceiverType receiver_type = 4;
 }
+
+message CreateRoom {}
+
+message EnterRoom {
+  uint64 room_id = 1;
+}
+
+message LeaveRoom {}
+
+message ChangeWaitingStatus {}

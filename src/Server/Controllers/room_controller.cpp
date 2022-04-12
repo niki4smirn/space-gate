@@ -13,7 +13,7 @@ QString RoomController::GetControllerName() const {
 
 void RoomController::OnTick() {}
 
-void RoomController::Send(const proto::Event& event) {}
+void RoomController::Send(const events::Wrapper& event) {}
 
 RoomId RoomController::GetId() const {
   return room_model_.GetRoomId();
@@ -33,28 +33,24 @@ void RoomController::DeleteUser(UserId id) {
   }
 }
 
-void RoomController::Handle(const proto::Event& event) {
+void RoomController::Handle(const events::Wrapper& event) {
   LogEvent(event, log::Type::kHandle);
-  switch (event.type()) {
-    case proto::Event::kChangeWaitingStatus: {
-      UserId user_id = event.sender_id();
-      auto current_status = room_model_.GetUserWaitingStatus(user_id);
-      User::WaitingStatus new_status{User::WaitingStatus::kNone};
-      switch (current_status) {
-        case User::WaitingStatus::kNotReady: {
-          new_status = User::WaitingStatus::kReady;
-          break;
-        }
-        case User::WaitingStatus::kReady: {
-          new_status = User::WaitingStatus::kNotReady;
-          break;
-        }
-        default: {}
+  if (event.has_change_waiting_status()) {
+    UserId user_id = event.sender_id();
+    auto current_status = room_model_.GetUserWaitingStatus(user_id);
+    User::WaitingStatus new_status{User::WaitingStatus::kNone};
+    switch (current_status) {
+      case User::WaitingStatus::kNotReady: {
+        new_status = User::WaitingStatus::kReady;
+        break;
       }
-      room_model_.SetUserWaitingStatus(user_id, new_status);
-      break;
+      case User::WaitingStatus::kReady: {
+        new_status = User::WaitingStatus::kNotReady;
+        break;
+      }
+      default: {}
     }
-    default: {}
+    room_model_.SetUserWaitingStatus(user_id, new_status);
   }
 }
 

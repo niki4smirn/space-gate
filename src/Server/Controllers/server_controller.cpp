@@ -14,7 +14,7 @@ ServerController::ServerController()
 }
 
 void ServerController::OnByteArrayReceived(const QByteArray& message) {
-  proto::Event received_event;
+  events::Wrapper received_event;
   received_event.ParseFromArray(message.data(), message.size());
 
   auto message_socket = qobject_cast<QWebSocket*>(sender());
@@ -24,16 +24,15 @@ void ServerController::OnByteArrayReceived(const QByteArray& message) {
 
   LogEvent(received_event, log::Type::kReceive);
 
-  switch (received_event.receiver_type()) {
-    case proto::Event::kServer: {
-      AddEventToHandle(received_event);
-      break;
-    }
-    case proto::Event::kRoom: {
-      AddEventToSend(received_event);
-      break;
-    }
-    default: {}
+  // TODO(niki4smirn): try to make this check prettier
+  if (received_event.has_create_room() ||
+      received_event.has_enter_room() ||
+      received_event.has_leave_room()) {
+    AddEventToHandle(received_event);
+  }
+
+  if (received_event.has_change_waiting_status()) {
+    AddEventToSend(received_event);
   }
 }
 
@@ -86,54 +85,44 @@ QString ServerController::GetControllerName() const {
 
 void ServerController::OnTick() {}
 
-void ServerController::Send(const proto::Event& event) {
+void ServerController::Send(const events::Wrapper& event) {
   LogEvent(event, log::Type::kSend);
-  switch (event.receiver_type()) {
-    case proto::Event::kRoom: {
-      SendEventToRoom(event);
-      break;
-    }
-    default: {}
+
+  // TODO(niki4smirn): try to make this check prettier
+  if (event.has_change_waiting_status()) {
+    SendEventToRoom(event);
   }
 }
 
-void ServerController::Handle(const proto::Event& event) {
+void ServerController::Handle(const events::Wrapper& event) {
   LogEvent(event, log::Type::kHandle);
   UserId user_id = event.sender_id();
   auto user = server_model_.GetUserById(user_id);
-  switch (event.type()) {
-    case proto::Event::kCreateRoom: {
-      RoomId new_room_id = server_model_.GetUnusedRoomId();
-      server_model_.AddRoom(
-          std::make_shared<RoomController>(new_room_id, user));
-      server_model_.AddUserToRoom(user_id, new_room_id);
-      auto room = server_model_.GetRoomById(new_room_id);
-      room->AddUser(user);
-      break;
+  if (event.has_create_room()) {
+    RoomId new_room_id = server_model_.GetUnusedRoomId();
+    server_model_.AddRoom(
+        std::make_shared<RoomController>(new_room_id, user));
+    server_model_.AddUserToRoom(user_id, new_room_id);
+    auto room = server_model_.GetRoomById(new_room_id);
+    room->AddUser(user);
+  } else if (event.has_enter_room()) {
+    auto room_id = event.enter_room().room_id();
+    if (server_model_.ExistsRoom(room_id) &&
+        !server_model_.IsInSomeRoom(user_id)) {
+      server_model_.AddUserToRoom(user_id, room_id);
     }
-    case proto::Event::kEnterRoom: {
-      auto room_id = event.arguments(0);
-      if (server_model_.ExistsRoom(room_id) &&
-          !server_model_.IsInSomeRoom(user_id)) {
-        server_model_.AddUserToRoom(user_id, room_id);
+  } else if (event.has_leave_room()) {
+    if (server_model_.IsInSomeRoom(user_id)) {
+      server_model_.DeleteUserFromRoom(user_id);
+      auto room = server_model_.GetRoomByUserId(user_id);
+      room->DeleteUser(user_id);
+      if (room->IsEmpty()) {
+        server_model_.DeleteRoom(room->GetId());
       }
-      break;
     }
-    case proto::Event::kLeaveRoom: {
-      if (server_model_.IsInSomeRoom(user_id)) {
-        server_model_.DeleteUserFromRoom(user_id);
-        auto room = server_model_.GetRoomByUserId(user_id);
-        room->DeleteUser(user_id);
-        if (room->IsEmpty()) {
-          server_model_.DeleteRoom(room->GetId());
-        }
-      }
-      break;
-    }
-    default: {}
   }
 }
 
-void ServerController::SendEventToRoom(const proto::Event& event) const {
+void ServerController::SendEventToRoom(const events::Wrapper& event) const {
   server_model_.GetRoomByUserId(event.sender_id())->AddEventToHandle(event);
 }

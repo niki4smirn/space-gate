@@ -27,18 +27,18 @@ class AbstractController : public QObject {
 
   virtual QString GetControllerName() const = 0;
 
-  void AddEventToHandle(const proto::Event& event);
-  void AddEventToSend(const proto::Event& event);
+  void AddEventToHandle(const events::Wrapper& event);
+  void AddEventToSend(const events::Wrapper& event);
 
  protected:
   AbstractController();
 
   virtual void OnTick() = 0;
 
-  virtual void Send(const proto::Event& event) = 0;
-  virtual void Handle(const proto::Event& event) = 0;
+  virtual void Send(const events::Wrapper& event) = 0;
+  virtual void Handle(const events::Wrapper& event) = 0;
 
-  void LogEvent(const proto::Event& event, log::Type log_type) const;
+  void LogEvent(const events::Wrapper& event, log::Type log_type) const;
 
   void StartTicking();
 
@@ -47,6 +47,6 @@ class AbstractController : public QObject {
 
   QTimer timer_;
 
-  std::queue<proto::Event> events_to_handle_;
-  std::queue<proto::Event> events_to_send_;
+  std::queue<events::Wrapper> events_to_handle_;
+  std::queue<events::Wrapper> events_to_send_;
 };

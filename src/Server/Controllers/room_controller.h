@@ -17,8 +17,8 @@ class RoomController : public AbstractController {
  protected:
   void OnTick() override;
 
-  void Send(const proto::Event& event) override;
-  void Handle(const proto::Event& event) override;
+  void Send(const events::Wrapper& event) override;
+  void Handle(const events::Wrapper& event) override;
 
  private:
   RoomModel room_model_;

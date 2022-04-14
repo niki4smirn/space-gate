@@ -2,7 +2,7 @@
 
 BackgroundWidget::BackgroundWidget(QWidget* parent) : QWidget(parent) {
   default_star_interval_ = Star::GetTime();
-  animation_timer_.start(5, this);
+  animation_timer_.start(15, this);
   setMouseTracking(true);
   this->setMouseTracking(true);
 }
@@ -114,7 +114,8 @@ void BackgroundWidget::Tick() {
 void BackgroundWidget::GenerateStars() {
   if (stars_.size() < stars_number_) {
     for (int i = 0;
-         i < 500; i++) {
+         i < QRandomGenerator::global()->bounded(stars_number_ * 0.2);
+         i++) {
       uint32_t size = colors_.size();
       stars_.emplace_back(Star(this->size(),
                                colors_.at(QRandomGenerator::global()->

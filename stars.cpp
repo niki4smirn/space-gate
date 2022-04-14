@@ -1,24 +1,23 @@
 #include "stars.h"
 
 double Star::time_ = 1;
-double Star::angle_ = 180;
+double Star::angle_x_ = 60;
+double Star::angle_y_ = 60;
 
-Star::Star(QSize size, QColor color, QPointF center) {
-  window_size_ = size;
+Star::Star(QSize window_size, QColor color, QPointF center) {
+  window_size_ = window_size;
   prev_pos_ = center;
   z_distance_ = QRandomGenerator::global()->bounded(max_random_z_distance_ + 1)
     + minimum_z_distance_;
+
+  double max_x = z_distance_ * std::tan(angle_x_ / 2 * std::numbers::pi / 180);
+  double max_y = z_distance_ * std::tan(angle_y_ / 2 * std::numbers::pi / 180);
+
   coords_.setX(
-    QRandomGenerator::global()->bounded(size.width()) - center.x());
+    QRandomGenerator::global()->bounded(2 * max_x) - max_x);
   coords_.setY(
-    QRandomGenerator::global()->bounded(size.width()) - center.y());
-  while (coords_.x() * coords_.x() + coords_.y() * coords_.y()
-    < center_size_ * center_size_) {
-    coords_.setX(
-      QRandomGenerator::global()->bounded(size.width()) - center.x());
-    coords_.setY(
-      QRandomGenerator::global()->bounded(size.width()) - center.y());
-  }
+    QRandomGenerator::global()->bounded(2 * max_y) - max_y);
+
   size_ = QRandomGenerator::global()->bounded(max_size_ + 1);
   color_ = std::move(color);
 }
@@ -59,21 +58,9 @@ void Star::MoveCenter(QMouseEvent* event) {
 }
 
 QPointF Star::GetViewPoint() const {
-  double distance_xz = sqrt(
-    coords_.x() * coords_.x() + z_distance_ * z_distance_);
-  double distance_yz = sqrt(
-    z_distance_ * z_distance_ + coords_.y() * coords_.y());
-  double pntx = window_size_.width() / 2 * (acos(z_distance_ / distance_xz) /  (angle_ / 180 * std::numbers::pi / 8));
-  if (coords_.x() < 0){
-    pntx *= -1;
-  }
-  double pnty = window_size_.height() / 2 * (acos(z_distance_ / distance_yz) /  (angle_ / 180 * std::numbers::pi / 8));
-  if (coords_.y() < 0){
-    pnty *= -1;
-  }
-  return QPointF(pntx, pnty);
-}
-
-double Star::GetAngle() {
-  return angle_;
+  double pntx = window_size_.width() / 2 * (atan(coords_.x() / z_distance_)
+    / (angle_x_ / 180 * std::numbers::pi / 2));
+  double pnty = window_size_.height() / 2 * (atan(coords_.y() / z_distance_)
+    / (angle_y_ / 180 * std::numbers::pi / 2));
+  return {pntx, pnty};
 }

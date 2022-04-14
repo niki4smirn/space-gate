@@ -11,6 +11,7 @@
 #include <QPainter>
 #include <QResizeEvent>
 
+#include <deque>
 #include <vector>
 #include <iostream>
 
@@ -52,23 +53,23 @@ class BackgroundWidget : public QWidget {
      QColor(249, 216, 243),
      QColor(216, 249, 230),
      QColor(51, 153, 255)};
-  std::vector<Star> stars_;
+  std::deque<Star> stars_;
   std::vector<std::pair<QPointF, QPointF>> lines_;
   bool light_speed_effect_ = false;  // enables effect
   double white_blur_ = 0;  // initial white blur
-  double blur_acceleration_ = 1;
-  double star_time_acceleration_ = 0.015;
-  double max_star_time_interval_ = 5;
+  double blur_acceleration_ = 1;  // 1 - 254, more - faster
+  double star_time_acceleration_ = 0.015;  // 0 - inf, more - faster
+  double max_star_time_interval_ = 5;  // blur_accel - inf, more - longer
   double default_star_interval_;
-  int stars_number_ = 1000;
-  double max_line_size_ = 2;
-  double max_star_size_ = 150;
-  int max_shake_ = 10;
-  double camera_divergence_ = 8;
+  int stars_number_ = 250;  // 0 - inf
+  double max_line_size_ = 4;  // 0 - inf
+  double max_star_size_ = 250;  // 1 - inf
+  int max_shake_ = 10;  // 0 - inf
+  double camera_divergence_ = 20;  // 1 - inf, more - smaller
   QPointF center_;
   QPointF prev_pos_;
   bool cursor_move_effect_1_ = true;  // enables effect
-  bool cursor_move_effect_2_ = false;  // enables effec
+  bool cursor_move_effect_2_ = false;  // enables effect
 };
 
 #endif  // BACKGROUND_WIDGET_H_

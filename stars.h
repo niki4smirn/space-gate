@@ -12,19 +12,19 @@
 
 class Star {
  public:
-  Star(QSize size, QColor color, QPointF center);
+  Star(QSize window_size, QColor color, QPointF center);
 
   QPointF GetViewPoint() const;
   double GetSize() const;
   QColor GetColor() const;
 
   static double GetTime();
-  static double GetAngle();
   static void AddTime(double add);
   static void SetTime(double set);
 
   void Move();
   void MoveCenter(QMouseEvent* event);
+  bool Remove(QPointF coords, QPointF center);
 
  private:
 
@@ -33,15 +33,15 @@ class Star {
   QSize window_size_;
   QColor color_;
   static double time_;
-  static double angle_;
+  static double angle_x_;
+  static double angle_y_;
   QPointF prev_pos_;
   QPointF coords_;
 
   double velocity_ = 2;
-  int center_size_ = 20;
   double minimum_z_distance_ = 200;
-  double max_random_z_distance_ = 200;
-  double max_size_ = 10;
+  double max_random_z_distance_ = 1000;
+  double max_size_ = 6;
 };
 
 #endif  // STARS_H_

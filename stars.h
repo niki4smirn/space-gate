@@ -27,7 +27,6 @@ class Star {
   bool Remove(QPointF coords, QPointF center);
 
  private:
-
   double z_distance_;
   double size_;
   QSize window_size_;

@@ -1,5 +1,3 @@
-#include <ostream>
-
 #include "logging.h"
 
 namespace log {

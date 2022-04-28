@@ -13,7 +13,7 @@ QString RoomController::GetControllerName() const {
 
 void RoomController::OnTick() {}
 
-void RoomController::Send(const events::Wrapper& event) {}
+void RoomController::Send(const events::EventWrapper& event) {}
 
 RoomId RoomController::GetId() const {
   return room_model_.GetRoomId();
@@ -33,11 +33,12 @@ void RoomController::DeleteUser(UserId id) {
   }
 }
 
-void RoomController::Handle(const events::Wrapper& event) {
+void RoomController::Handle(const events::EventWrapper& event) {
   LogEvent(event, log::Type::kHandle);
-  const events::RoomEvent& room_event = event.room_event();
+  const client_events::ClientEventWrapper& client_event = event.client_event();
+  const client_events::EventToRoom& room_event = client_event.event_to_room();
   if (room_event.has_change_waiting_status()) {
-    UserId user_id = event.sender_id();
+    UserId user_id = client_event.sender_id();
     auto current_status = room_model_.GetUserWaitingStatus(user_id);
     User::WaitingStatus new_status{User::WaitingStatus::kNone};
     switch (current_status) {

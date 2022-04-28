@@ -20,7 +20,7 @@ AbstractController::AbstractController() {
 }
 
 void AbstractController::LogEvent(
-    const events::Wrapper& event,
+    const events::EventWrapper& event,
     log::Type log_type) const {
   qDebug().noquote().nospace() << GetControllerName()
       << log::GetProcessStringByType(log_type) << event.ShortDebugString();
@@ -44,10 +44,10 @@ void AbstractController::Tick() {
   }
 }
 
-void AbstractController::AddEventToHandle(const events::Wrapper& event) {
+void AbstractController::AddEventToHandle(const events::EventWrapper& event) {
   events_to_handle_.push(event);
 }
 
-void AbstractController::AddEventToSend(const events::Wrapper& event) {
+void AbstractController::AddEventToSend(const events::EventWrapper& event) {
   events_to_send_.push(event);
 }

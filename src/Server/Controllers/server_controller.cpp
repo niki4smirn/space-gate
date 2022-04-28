@@ -14,18 +14,24 @@ ServerController::ServerController()
 }
 
 void ServerController::OnByteArrayReceived(const QByteArray& message) {
-  events::Wrapper received_event;
-  received_event.ParseFromArray(message.data(), message.size());
+  events::EventWrapper received_event;
+  if (!received_event.ParseFromArray(message.data(), message.size())) {
+    // fail
+    return;
+  }
+
+  client_events::ClientEventWrapper client_event =
+      received_event.client_event();
 
   auto message_socket = qobject_cast<QWebSocket*>(sender());
   auto user = server_model_.GetUserBySocket(message_socket);
   UserId user_id = user->GetId();
-  received_event.set_sender_id(user_id);
+  client_event.set_sender_id(user_id);
 
   LogEvent(received_event, log::Type::kReceive);
 
   // TODO(niki4smirn): try to make this check prettier
-  if (received_event.has_server_event()) {
+  if (client_event.has_event_to_server()) {
     AddEventToHandle(received_event);
   } else {
     AddEventToSend(received_event);
@@ -81,11 +87,12 @@ QString ServerController::GetControllerName() const {
 
 void ServerController::OnTick() {}
 
-void ServerController::Send(const events::Wrapper& event) {
+void ServerController::Send(const events::EventWrapper& event) {
   LogEvent(event, log::Type::kSend);
+  const client_events::ClientEventWrapper& client_event = event.client_event();
 
-  switch (event.receiver_case()) {
-    case events::Wrapper::kRoomEvent: {
+  switch (client_event.receiver_case()) {
+    case client_events::ClientEventWrapper::kEventToRoom: {
       SendEventToRoom(event);
       break;
     }
@@ -93,13 +100,15 @@ void ServerController::Send(const events::Wrapper& event) {
   }
 }
 
-void ServerController::Handle(const events::Wrapper& event) {
+void ServerController::Handle(const events::EventWrapper& event) {
   LogEvent(event, log::Type::kHandle);
-  UserId user_id = event.sender_id();
-  const events::ServerEvent& server_event = event.server_event();
+  const client_events::ClientEventWrapper& client_event = event.client_event();
+  UserId user_id = client_event.sender_id();
+  const client_events::EventToServer& event_to_server =
+      client_event.event_to_server();
   auto user = server_model_.GetUserById(user_id);
-  switch (server_event.type_case()) {
-    case events::ServerEvent::kCreateRoom: {
+  switch (event_to_server.type_case()) {
+    case client_events::EventToServer::kCreateRoom: {
       RoomId new_room_id = server_model_.GetUnusedRoomId();
       server_model_.AddRoom(
           std::make_shared<RoomController>(new_room_id, user));
@@ -108,15 +117,15 @@ void ServerController::Handle(const events::Wrapper& event) {
       room->AddUser(user);
       break;
     }
-    case events::ServerEvent::kEnterRoom: {
-      auto room_id = server_event.enter_room().room_id();
+    case client_events::EventToServer::kEnterRoom: {
+      auto room_id = event_to_server.enter_room().room_id();
       if (server_model_.ExistsRoom(room_id) &&
           !server_model_.IsInSomeRoom(user_id)) {
         server_model_.AddUserToRoom(user_id, room_id);
       }
       break;
     }
-    case events::ServerEvent::kLeaveRoom: {
+    case client_events::EventToServer::kLeaveRoom: {
       if (server_model_.IsInSomeRoom(user_id)) {
         server_model_.DeleteUserFromRoom(user_id);
         auto room = server_model_.GetRoomByUserId(user_id);
@@ -131,6 +140,8 @@ void ServerController::Handle(const events::Wrapper& event) {
   }
 }
 
-void ServerController::SendEventToRoom(const events::Wrapper& event) const {
-  server_model_.GetRoomByUserId(event.sender_id())->AddEventToHandle(event);
+void ServerController::SendEventToRoom(
+    const events::EventWrapper& event) const {
+  server_model_.GetRoomByUserId(
+      event.client_event().sender_id())->AddEventToHandle(event);
 }

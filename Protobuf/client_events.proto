@@ -1,11 +1,11 @@
 syntax = "proto3";
-package events;
+package client_events;
 
-message Wrapper {
+message ClientEventWrapper {
   uint64 sender_id = 1;
   oneof receiver {
-    ServerEvent server_event = 2;
-    RoomEvent room_event = 3;
+    EventToServer event_to_server = 2;
+    EventToRoom event_to_room = 3;
   }
 }
 
@@ -17,7 +17,7 @@ message EnterRoom {
 
 message LeaveRoom {}
 
-message ServerEvent {
+message EventToServer {
   oneof type {
     CreateRoom create_room = 1;
     EnterRoom enter_room = 2;
@@ -27,7 +27,7 @@ message ServerEvent {
 
 message ChangeWaitingStatus {}
 
-message RoomEvent {
+message EventToRoom {
   oneof type {
     ChangeWaitingStatus change_waiting_status = 1;
   }

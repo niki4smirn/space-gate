@@ -17,7 +17,11 @@ find_package(Qt5 COMPONENTS
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 find_package(Protobuf REQUIRED)
-set(scheme_PROTOS Protobuf/scheme.proto)
+set(scheme_PROTOS
+        Protobuf/events.proto
+        Protobuf/client_events.proto
+        Protobuf/server_events.proto
+        )
 include_directories(${Protobuf_INCLUDE_DIRS})
 
 set(COMMON_SRC

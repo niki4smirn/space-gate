@@ -24,9 +24,11 @@ QString ClientController::GetControllerName() const {
 
 void ClientController::OnTick() {}
 
-void ClientController::Send(const events::Wrapper& event) {
+void ClientController::Send(const events::EventWrapper& event) {
   LogEvent(event, log::Type::kSend);
-  socket_.sendBinaryMessage(event.SerializeAsString().data());
+  auto serialized = event.SerializeAsString();
+  QByteArray byte_array(serialized.data(), serialized.size());
+  socket_.sendBinaryMessage(byte_array);
 }
 
-void ClientController::Handle(const events::Wrapper& event) {}
+void ClientController::Handle(const events::EventWrapper& event) {}

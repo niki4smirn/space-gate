@@ -6,8 +6,7 @@
 #define ERROR_LOG(msg) qFatal("%s", \
                                 (std::string(__FILE__) + ':' + \
                                 std::to_string(__LINE__) + ' ' + \
-                                std::string(msg)                 \
-                                ).c_str())
+                                std::string(msg)).c_str())
 #define ASSERT(condition, msg) \
     ((condition) ? \
     static_cast<void>(0) : \

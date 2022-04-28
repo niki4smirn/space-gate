@@ -40,6 +40,10 @@ add_executable(client
         ${COMMON_SRC}
         src/Client/client_main.cpp
         src/Client/Controller/client_controller.cpp
+        src/Client/client_view.cpp
+        src/Client/client_view.h
+        src/Client/client_main_menu.cpp
+        src/Client/client_main_menu.h
         )
 
 set(REQUIRED_QT_PARTS

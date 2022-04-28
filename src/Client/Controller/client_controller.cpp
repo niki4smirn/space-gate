@@ -6,6 +6,8 @@ ClientController::ClientController(const QUrl& url) : server_url_(url) {
           &ClientController::OnConnect);
   connect(&socket_, &QWebSocket::disconnected, this,
           &ClientController::OnDisconnect);
+  connect(&socket_, &QWebSocket::binaryMessageReceived, this,
+          &ClientController::OnByteArrayReceived);
   socket_.open(url);
   StartTicking();
 }
@@ -32,3 +34,13 @@ void ClientController::Send(const events::EventWrapper& event) {
 }
 
 void ClientController::Handle(const events::EventWrapper& event) {}
+
+void ClientController::OnByteArrayReceived(const QByteArray& message) {
+  events::EventWrapper received_event;
+  if (!received_event.ParseFromArray(message.data(), message.size())) {
+    // fail
+    return;
+  }
+
+  LogEvent(received_event, log::Type::kReceive);
+}

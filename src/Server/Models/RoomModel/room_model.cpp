@@ -52,3 +52,7 @@ User::WaitingStatus RoomModel::GetUserWaitingStatus(UserId id) const {
   auto user = users_.at(id);
   return user->GetStatus();
 }
+
+std::unordered_map<UserId, std::shared_ptr<User>> RoomModel::GetUsers() const {
+  return users_;
+}

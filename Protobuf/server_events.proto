@@ -1,4 +1,22 @@
 syntax = "proto3";
 package server_events;
 
-message ServerEventWrapper {}
+message ServerEventWrapper {
+  oneof type {
+    RoomInfo room_info = 1;
+  }
+}
+
+message RoomUser {
+  enum Status {
+    kNone = 0;
+    kNotReady = 1;
+    kReady = 2;
+  }
+  string nickname = 1;
+  Status is_ready = 2;
+}
+
+message RoomInfo {
+  repeated RoomUser users = 1;
+}

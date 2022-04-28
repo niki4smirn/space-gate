@@ -1,5 +1,7 @@
 #include "room_controller.h"
 
+#include "src/Server/Models/User/user.h"
+
 RoomController::RoomController(
     RoomId room_id,
     const std::shared_ptr<User>& chief)
@@ -11,9 +13,46 @@ QString RoomController::GetControllerName() const {
   return "Room";
 }
 
-void RoomController::OnTick() {}
+void RoomController::OnTick() {
+  events::EventWrapper event;
+  auto* server_event = new server_events::ServerEventWrapper;
+  auto* room_info = new server_events::RoomInfo;
+  auto temp = room_model_.GetUsers();
+  for (auto [user_id, user_ptr] : temp) {
+    server_events::RoomUser* user = room_info->add_users();
+    auto* str = new std::string{std::to_string(user_id)};
+    user->set_allocated_nickname(str);
+    switch (user_ptr->GetStatus()) {
+      case User::WaitingStatus::kNotReady: {
+        user->set_is_ready(server_events::RoomUser::kNotReady);
+        break;
+      }
+      case User::WaitingStatus::kReady: {
+        user->set_is_ready(server_events::RoomUser::kReady);
+        break;
+      }
+      default: {}
+    }
+  }
+  server_event->set_allocated_room_info(room_info);
+  event.set_allocated_server_event(server_event);
+  AddEventToSend(event);
+}
 
-void RoomController::Send(const events::EventWrapper& event) {}
+void RoomController::Send(const events::EventWrapper& event) {
+  switch (event.type_case()) {
+    case events::EventWrapper::kServerEvent: {
+      for (auto [_, user_ptr] : room_model_.GetUsers()) {
+        LogEvent(event, log::Type::kSend);
+        auto serialized = event.SerializeAsString();
+        QByteArray byte_array(serialized.data(), serialized.size());
+        user_ptr->GetSocket()->sendBinaryMessage(byte_array);
+      }
+      break;
+    }
+    default: {};
+  }
+}
 
 RoomId RoomController::GetId() const {
   return room_model_.GetRoomId();

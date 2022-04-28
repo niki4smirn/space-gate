@@ -20,18 +20,18 @@ void ServerController::OnByteArrayReceived(const QByteArray& message) {
     return;
   }
 
-  client_events::ClientEventWrapper client_event =
-      received_event.client_event();
+  client_events::ClientEventWrapper* client_event =
+      received_event.mutable_client_event();
 
   auto message_socket = qobject_cast<QWebSocket*>(sender());
   auto user = server_model_.GetUserBySocket(message_socket);
   UserId user_id = user->GetId();
-  client_event.set_sender_id(user_id);
+  client_event->set_sender_id(user_id);
 
   LogEvent(received_event, log::Type::kReceive);
 
   // TODO(niki4smirn): try to make this check prettier
-  if (client_event.has_event_to_server()) {
+  if (client_event->has_event_to_server()) {
     AddEventToHandle(received_event);
   } else {
     AddEventToSend(received_event);

@@ -35,8 +35,8 @@ void RoomController::DeleteUser(UserId id) {
 
 void RoomController::Handle(const events::EventWrapper& event) {
   LogEvent(event, log::Type::kHandle);
-  const client_events::ClientEventWrapper& client_event = event.client_event();
-  const client_events::EventToRoom& room_event = client_event.event_to_room();
+  const auto& client_event = event.client_event();
+  const auto& room_event = client_event.event_to_room();
   switch (room_event.type_case()) {
     case client_events::EventToRoom::kChangeWaitingStatus: {
       UserId user_id = client_event.sender_id();

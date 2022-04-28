@@ -16,7 +16,7 @@ ServerController::ServerController()
 void ServerController::OnByteArrayReceived(const QByteArray& message) {
   events::EventWrapper received_event;
   if (!received_event.ParseFromArray(message.data(), message.size())) {
-    // fail
+    // TODO(niki4smirn): handle parse fail
     return;
   }
 

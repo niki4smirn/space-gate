@@ -5,7 +5,7 @@
 #include <QObject>
 #include <QTimer>
 
-#include "Protobuf/scheme.pb.h"
+//#include "Protobuf/scheme.pb.h"
 
 #include "src/Helpers/helpers.h"
 

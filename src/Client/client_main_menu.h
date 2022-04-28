@@ -1,6 +1,8 @@
 #ifndef CLIENT_MAIN_MENU_H_
 #define CLIENT_MAIN_MENU_H_
 
+#include "background_widget.h"
+
 #include <QGridLayout>
 #include <QPushButton>
 #include <QListWidget>

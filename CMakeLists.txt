@@ -13,7 +13,7 @@ find_package(Qt5 COMPONENTS
         Widgets
         REQUIRED)
 
-add_executable(SpaceGate main.cpp mainwindow.cpp mainwindow.h background_widget.cpp background_widget.h stars.cpp stars.h)
+add_executable(SpaceGate main.cpp mainwindow.cpp mainwindow.h src/Client/background_widget.cpp src/Client/background_widget.h src/Client/stars.cpp src/Client/stars.h)
 target_link_libraries(SpaceGate
         Qt::Core
         Qt::Gui

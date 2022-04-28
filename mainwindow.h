@@ -1,7 +1,7 @@
 #ifndef MAINWINDOW_H_
 #define MAINWINDOW_H_
 
-#include "background_widget.h"
+#include "src/Client/background_widget.h"
 
 #include <QWidget>
 #include <QBasicTimer>

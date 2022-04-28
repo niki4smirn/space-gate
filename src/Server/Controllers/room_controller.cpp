@@ -37,22 +37,26 @@ void RoomController::Handle(const events::EventWrapper& event) {
   LogEvent(event, log::Type::kHandle);
   const client_events::ClientEventWrapper& client_event = event.client_event();
   const client_events::EventToRoom& room_event = client_event.event_to_room();
-  if (room_event.has_change_waiting_status()) {
-    UserId user_id = client_event.sender_id();
-    auto current_status = room_model_.GetUserWaitingStatus(user_id);
-    User::WaitingStatus new_status{User::WaitingStatus::kNone};
-    switch (current_status) {
-      case User::WaitingStatus::kNotReady: {
-        new_status = User::WaitingStatus::kReady;
-        break;
+  switch (room_event.type_case()) {
+    case client_events::EventToRoom::kChangeWaitingStatus: {
+      UserId user_id = client_event.sender_id();
+      auto current_status = room_model_.GetUserWaitingStatus(user_id);
+      User::WaitingStatus new_status{User::WaitingStatus::kNone};
+      switch (current_status) {
+        case User::WaitingStatus::kNotReady: {
+          new_status = User::WaitingStatus::kReady;
+          break;
+        }
+        case User::WaitingStatus::kReady: {
+          new_status = User::WaitingStatus::kNotReady;
+          break;
+        }
+        default: {}
       }
-      case User::WaitingStatus::kReady: {
-        new_status = User::WaitingStatus::kNotReady;
-        break;
-      }
-      default: {}
+      room_model_.SetUserWaitingStatus(user_id, new_status);
+      break;
     }
-    room_model_.SetUserWaitingStatus(user_id, new_status);
+    default: {}
   }
 }
 

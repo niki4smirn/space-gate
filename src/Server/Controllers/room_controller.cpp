@@ -19,16 +19,16 @@ void RoomController::OnTick() {
   room_info->set_chief_id(room_model_.GetChiefId());
 
   for (auto [user_id, user_ptr] : room_model_.GetUsers()) {
-    auto* user = room_info->add_users();
+    auto* proto_user = room_info->add_users();
     auto* str = new std::string{std::to_string(user_id)};
-    user->set_allocated_nickname(str);
+    proto_user->set_allocated_nickname(str);
     switch (user_ptr->GetStatus()) {
       case User::WaitingStatus::kNotReady: {
-        user->set_is_ready(server_events::RoomUser::kNotReady);
+        proto_user->set_is_ready(server_events::RoomUser::kNotReady);
         break;
       }
       case User::WaitingStatus::kReady: {
-        user->set_is_ready(server_events::RoomUser::kReady);
+        proto_user->set_is_ready(server_events::RoomUser::kReady);
         break;
       }
       default: {}

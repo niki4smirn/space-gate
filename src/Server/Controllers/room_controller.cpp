@@ -43,8 +43,8 @@ void RoomController::OnTick() {
 void RoomController::Send(const events::EventWrapper& event) {
   switch (event.type_case()) {
     case events::EventWrapper::kServerEvent: {
+      LogEvent(event, log::Type::kSend);
       for (auto [_, user_ptr] : room_model_.GetUsers()) {
-        LogEvent(event, log::Type::kSend);
         auto serialized = event.SerializeAsString();
         QByteArray byte_array(serialized.data(), serialized.size());
         user_ptr->GetSocket()->sendBinaryMessage(byte_array);

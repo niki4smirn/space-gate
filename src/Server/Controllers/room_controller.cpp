@@ -14,6 +14,7 @@ QString RoomController::GetControllerName() const {
 }
 
 void RoomController::OnTick() {
+  // TODO(everyone): cache room state and send new RoomInfo in case of changes
   auto* room_info = new server_events::RoomInfo;
   room_info->set_room_id(room_model_.GetRoomId());
   room_info->set_chief_id(room_model_.GetChiefId());

@@ -34,12 +34,16 @@ void AbstractController::Tick() {
   this->OnTick();
 
   while (!events_to_handle_.empty()) {
-    this->Handle(events_to_handle_.front());
+    auto& cur_event = events_to_handle_.front();
+    this->Handle(cur_event);
+    cur_event.Clear();
     events_to_handle_.pop();
   }
 
   while (!events_to_send_.empty()) {
-    this->Send(events_to_send_.front());
+    auto cur_event = events_to_send_.front();
+    this->Send(cur_event);
+    cur_event.Clear();
     events_to_send_.pop();
   }
 }

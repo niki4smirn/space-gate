@@ -11,6 +11,7 @@ class ClientView : public QMainWindow {
   Q_OBJECT
  public:
   ClientView();
+  void CloseWindow();
 
  private:
   ClientMainMenu* main_menu_;

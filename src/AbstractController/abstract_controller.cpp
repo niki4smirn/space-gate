@@ -41,7 +41,7 @@ void AbstractController::Tick() {
   }
 
   while (!events_to_send_.empty()) {
-    auto cur_event = events_to_send_.front();
+    auto& cur_event = events_to_send_.front();
     this->Send(cur_event);
     cur_event.Clear();
     events_to_send_.pop();

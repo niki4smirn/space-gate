@@ -14,13 +14,12 @@ QString RoomController::GetControllerName() const {
 }
 
 void RoomController::OnTick() {
-  events::EventWrapper event;
-  auto* server_event = new server_events::ServerEventWrapper;
   auto* room_info = new server_events::RoomInfo;
   room_info->set_room_id(room_model_.GetRoomId());
   room_info->set_chief_id(room_model_.GetChiefId());
+
   for (auto [user_id, user_ptr] : room_model_.GetUsers()) {
-    server_events::RoomUser* user = room_info->add_users();
+    auto* user = room_info->add_users();
     auto* str = new std::string{std::to_string(user_id)};
     user->set_allocated_nickname(str);
     switch (user_ptr->GetStatus()) {
@@ -35,7 +34,11 @@ void RoomController::OnTick() {
       default: {}
     }
   }
+
+  auto* server_event = new server_events::ServerEventWrapper;
   server_event->set_allocated_room_info(room_info);
+
+  events::EventWrapper event;
   event.set_allocated_server_event(server_event);
   AddEventToSend(event);
 }

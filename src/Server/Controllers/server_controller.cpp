@@ -20,8 +20,7 @@ void ServerController::OnByteArrayReceived(const QByteArray& message) {
     return;
   }
 
-  client_events::ClientEventWrapper* client_event =
-      received_event.mutable_client_event();
+  auto* client_event = received_event.mutable_client_event();
 
   auto message_socket = qobject_cast<QWebSocket*>(sender());
   auto user = server_model_.GetUserBySocket(message_socket);
@@ -89,7 +88,7 @@ void ServerController::OnTick() {}
 
 void ServerController::Send(const events::EventWrapper& event) {
   LogEvent(event, log::Type::kSend);
-  const client_events::ClientEventWrapper& client_event = event.client_event();
+  const auto& client_event = event.client_event();
 
   switch (client_event.receiver_case()) {
     case client_events::ClientEventWrapper::kEventToRoom: {
@@ -102,10 +101,9 @@ void ServerController::Send(const events::EventWrapper& event) {
 
 void ServerController::Handle(const events::EventWrapper& event) {
   LogEvent(event, log::Type::kHandle);
-  const client_events::ClientEventWrapper& client_event = event.client_event();
+  const auto& client_event = event.client_event();
   UserId user_id = client_event.sender_id();
-  const client_events::EventToServer& event_to_server =
-      client_event.event_to_server();
+  const auto& event_to_server = client_event.event_to_server();
   auto user = server_model_.GetUserById(user_id);
   switch (event_to_server.type_case()) {
     case client_events::EventToServer::kCreateRoom: {

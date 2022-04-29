@@ -19,5 +19,6 @@ message RoomUser {
 
 message RoomInfo {
   repeated RoomUser users = 1;
-  // TODO(niki4smirn): Add room_id and chief_id
+  uint64 room_id = 2;
+  uint64 chief_id = 3;
 }

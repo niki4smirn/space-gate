@@ -27,7 +27,7 @@ class RoomModel {
   User::WaitingStatus GetUserWaitingStatus(UserId id) const;
   void SetUserWaitingStatus(UserId id, User::WaitingStatus status);
 
-  std::unordered_map<UserId, std::shared_ptr<User>> GetUsers() const;
+  const std::unordered_map<UserId, std::shared_ptr<User>>& GetUsers() const;
 
  private:
   RoomId id_;

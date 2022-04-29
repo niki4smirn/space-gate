@@ -53,6 +53,7 @@ User::WaitingStatus RoomModel::GetUserWaitingStatus(UserId id) const {
   return user->GetStatus();
 }
 
-std::unordered_map<UserId, std::shared_ptr<User>> RoomModel::GetUsers() const {
+const std::unordered_map<UserId, std::shared_ptr<User>>&
+    RoomModel::GetUsers() const {
   return users_;
 }

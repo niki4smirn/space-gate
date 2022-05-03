@@ -9,6 +9,8 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_CXX_STANDARD 20)
 
+set(CMAKE_PREFIX_PATH "~/Qt/5.15.2/gcc_64/lib/cmake")
+
 find_package(Qt5 COMPONENTS
         Core
         Gui
@@ -48,6 +50,14 @@ add_executable(client
         ${COMMON_SRC}
         src/Client/client_main.cpp
         src/Client/Controller/client_controller.cpp
+        src/Client/background_widget.cpp
+        src/Client/background_widget.h
+        src/Client/client_main_menu.cpp
+        src/Client/client_main_menu.h
+        src/Client/client_view.cpp
+        src/Client/client_view.h
+        src/Client/stars.cpp
+        src/Client/stars.h
         )
 
 set(REQUIRED_QT_PARTS

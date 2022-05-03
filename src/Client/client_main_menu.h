@@ -17,7 +17,7 @@ class ClientMainMenu : public QWidget {
  Q_OBJECT
  public:
   ClientMainMenu();
-  void Start();
+  void StartGame();
   void ChooseRoomOption();
   void BackToStart();
   void BackToGameOption();
@@ -29,11 +29,14 @@ class ClientMainMenu : public QWidget {
   void CreateRoom();
   void JoinRoom();
   void RemoveAllWidgets();
+  void Settings();
+  
  private:
   BackgroundWidget* background_;
   QGridLayout* interface_layout_;
   QGridLayout* background_layout_;
   QListWidget* player_list_;
+  QListWidget* room_list_;
   QPushButton* settings_;
   QPushButton* exit_;
   QPushButton* back_to_start_;
@@ -44,8 +47,10 @@ class ClientMainMenu : public QWidget {
   QPushButton* join_room_;
   QPushButton* ready_status_;
   QLabel* game_name_;
+  QLabel* nothing_here_;
   QWidget* interface_;
   QFont font_;
+
  signals:
   void StartEffect(bool state);
   void Close();

@@ -8,10 +8,12 @@
 #include <QMainWindow>
 
 class ClientView : public QMainWindow {
-  Q_OBJECT
+ Q_OBJECT
  public:
   ClientView();
   void CloseWindow();
+  void AddWidgets();
+  void Connect();
 
  private:
   ClientMainMenu* main_menu_;

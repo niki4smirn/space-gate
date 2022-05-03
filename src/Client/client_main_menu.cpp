@@ -18,10 +18,13 @@ ClientMainMenu::ClientMainMenu() :
     back_to_start_(new QPushButton),
     ready_status_(new QPushButton),
     player_list_(new QListWidget),
+    room_list_(new QListWidget),
+    nothing_here_(new QLabel),
     interface_(new QWidget) {
 
-  int id = QFontDatabase::addApplicationFont("Paladins.otf");
-  QString family = QFontDatabase::applicationFontFamilies(id).at(0);
+  QString family =
+      QFontDatabase::applicationFontFamilies(QFontDatabase::addApplicationFont(
+          "Paladins.otf")).at(0);
   font_ = QFont(family);
 
   ButtonsConfigure();
@@ -45,18 +48,11 @@ void ClientMainMenu::SetStartWidgetsPos() {
   settings_->setVisible(true);
   exit_->setVisible(true);
 
-
   interface_layout_->addWidget(game_name_, 0, 0, 1, 2, Qt::AlignHCenter);
   interface_layout_->addWidget(play_, 1, 0, Qt::AlignRight | Qt::AlignVCenter);
-  interface_layout_->addWidget(settings_,
-                               1,
-                               1,
+  interface_layout_->addWidget(settings_, 1, 1,
                                Qt::AlignLeft | Qt::AlignVCenter);
-  interface_layout_->addWidget(exit_,
-                               2,
-                               0,
-                               1,
-                               2,
+  interface_layout_->addWidget(exit_, 2, 0, 1, 2,
                                Qt::AlignHCenter | Qt::AlignVCenter);
 }
 
@@ -82,24 +78,24 @@ void ClientMainMenu::ButtonsConfigure() {
   settings_->setStyleSheet(
       "background-color: rgb(136, 247, 255); font-size: 40px;");
 
-  exit_->setFixedSize(300, 150);
+  exit_->setFixedSize(200, 75);
   exit_->setText("EXIT");
   exit_->setFont(font_);
   exit_->setStyleSheet("background-color: rgb(136, 247, 255); font-size: 40px;");
 
-  create_room_->setFixedSize(350, 250);
+  create_room_->setFixedSize(250, 150);
   create_room_->setText("CREATE");
   create_room_->setFont(font_);
   create_room_->setStyleSheet(
       "background-color: rgb(136, 247, 255); font-size: 40px;");
 
-  join_room_->setFixedSize(350, 250);
+  join_room_->setFixedSize(250, 150);
   join_room_->setText("JOIN");
   join_room_->setFont(font_);
   join_room_->setStyleSheet(
       "background-color: rgb(136, 247, 255); font-size: 40px;");
 
-  back_to_start_->setFixedSize(300, 150);
+  back_to_start_->setFixedSize(200, 75);
   back_to_start_->setText("BACK");
   back_to_start_->setFont(font_);
   back_to_start_->setStyleSheet(
@@ -124,40 +120,58 @@ void ClientMainMenu::ButtonsConfigure() {
       "background-color: rgb(136, 247, 255); font-size: 40px;");
 }
 
-void ClientMainMenu::Start() {
-  RemoveAllWidgets();
-  emit StartEffect(true);
-}
 void ClientMainMenu::Connect() {
   connect(play_,
           &QPushButton::clicked,
           this,
           &ClientMainMenu::ChooseRoomOption);
-  connect(create_room_, &QPushButton::clicked, this, &ClientMainMenu::CreateRoom);
-  connect(start_game_, &QPushButton::clicked, this, &ClientMainMenu::Start);
+  connect(create_room_,
+          &QPushButton::clicked,
+          this,
+          &ClientMainMenu::CreateRoom);
+  connect(start_game_, &QPushButton::clicked, this, &ClientMainMenu::StartGame);
   connect(join_room_, &QPushButton::clicked, this, &ClientMainMenu::JoinRoom);
-  connect(back_to_game_option_, &QPushButton::clicked, this, &ClientMainMenu::BackToGameOption);
+  connect(back_to_game_option_,
+          &QPushButton::clicked,
+          this,
+          &ClientMainMenu::BackToGameOption);
+  connect(exit_,
+          &QPushButton::clicked,
+          this,
+          &ClientMainMenu::CloseButtonPressed);
   connect(back_to_start_,
           &QPushButton::clicked,
           this,
           &ClientMainMenu::BackToStart);
-  //connect(settings_, &QPushButton::clicked, this, &ClientMainMenu::Settings);
+  connect(settings_, &QPushButton::clicked, this, &ClientMainMenu::Settings);
   connect(this,
           &ClientMainMenu::StartEffect,
           background_,
           &BackgroundWidget::SetState);
 }
+
+void ClientMainMenu::StartGame() {
+  RemoveAllWidgets();
+  emit StartEffect(true);
+}
+
 void ClientMainMenu::ChooseRoomOption() {
   RemoveAllWidgets();
 
   create_room_->setVisible(true);
   join_room_->setVisible(true);
   back_to_start_->setVisible(true);
+  room_list_->setVisible(true);
 
-  interface_layout_->addWidget(create_room_, 1, 0, Qt::AlignRight | Qt::AlignVCenter);
-  interface_layout_->addWidget(join_room_, 1, 1,
+  interface_layout_->addWidget(room_list_, 1, 0, 1, 2,
+                               Qt::AlignHCenter | Qt::AlignVCenter);
+  interface_layout_->addWidget(create_room_,
+                               2,
+                               0,
+                               Qt::AlignRight | Qt::AlignVCenter);
+  interface_layout_->addWidget(join_room_, 2, 1,
                                Qt::AlignLeft | Qt::AlignVCenter);
-  interface_layout_->addWidget(back_to_start_, 2, 0, 1, 2,
+  interface_layout_->addWidget(back_to_start_, 3, 0, 1, 2,
                                Qt::AlignHCenter | Qt::AlignVCenter);
 }
 
@@ -172,6 +186,7 @@ void ClientMainMenu::BackToStart() {
 void ClientMainMenu::CloseButtonPressed() {
   emit Close();
 }
+
 void ClientMainMenu::RemoveAllWidgets() {
   play_->setVisible(false);
   settings_->setVisible(false);
@@ -183,6 +198,8 @@ void ClientMainMenu::RemoveAllWidgets() {
   start_game_->setVisible(false);
   back_to_game_option_->setVisible(false);
   ready_status_->setVisible(false);
+  room_list_->setVisible(false);
+  nothing_here_->setVisible(false);
 
   interface_layout_->removeWidget(create_room_);
   interface_layout_->removeWidget(join_room_);
@@ -194,7 +211,10 @@ void ClientMainMenu::RemoveAllWidgets() {
   interface_layout_->removeWidget(start_game_);
   interface_layout_->removeWidget(back_to_game_option_);
   interface_layout_->removeWidget(ready_status_);
+  interface_layout_->removeWidget(room_list_);
+  interface_layout_->removeWidget(nothing_here_);
 }
+
 void ClientMainMenu::CreateRoom() {
   RemoveAllWidgets();
 
@@ -202,8 +222,6 @@ void ClientMainMenu::CreateRoom() {
   start_game_->setVisible(true);
   ready_status_->setVisible(true);
   back_to_game_option_->setVisible(true);
-
-
 
   interface_layout_->addWidget(player_list_, 1, 0, 1, 2,
                                Qt::AlignHCenter | Qt::AlignVCenter);
@@ -213,22 +231,35 @@ void ClientMainMenu::CreateRoom() {
                                Qt::AlignLeft | Qt::AlignVCenter);
   interface_layout_->addWidget(back_to_game_option_, 3, 0, 1, 2,
                                Qt::AlignHCenter | Qt::AlignVCenter);
-
-
 }
+
 void ClientMainMenu::JoinRoom() {
   RemoveAllWidgets();
   player_list_->setVisible(true);
   ready_status_->setVisible(true);
   back_to_game_option_->setVisible(true);
 
-
-
   interface_layout_->addWidget(player_list_, 1, 0, 1, 2,
                                Qt::AlignHCenter | Qt::AlignVCenter);
   interface_layout_->addWidget(ready_status_, 2, 0, 1, 2,
                                Qt::AlignHCenter | Qt::AlignVCenter);
   interface_layout_->addWidget(back_to_game_option_, 3, 0, 1, 2,
+                               Qt::AlignHCenter | Qt::AlignVCenter);
+}
+
+void ClientMainMenu::Settings() {
+  RemoveAllWidgets();
+
+  nothing_here_->setVisible(true);
+  back_to_start_->setVisible(true);
+
+  nothing_here_->setText("Nothing Here");
+  nothing_here_->setFont(font_);
+  nothing_here_->setStyleSheet("QLabel {color : #88bcff; font-size: 40px;}");
+
+  interface_layout_->addWidget(nothing_here_, 1, 0, 1, 2,
+                               Qt::AlignHCenter | Qt::AlignVCenter);
+  interface_layout_->addWidget(back_to_start_, 3, 0, 1, 2,
                                Qt::AlignHCenter | Qt::AlignVCenter);
 
 }

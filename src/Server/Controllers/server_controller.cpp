@@ -14,26 +14,26 @@ ServerController::ServerController()
 }
 
 void ServerController::OnByteArrayReceived(const QByteArray& message) {
-  proto::Event received_event;
-  received_event.ParseFromArray(message.data(), message.size());
+  events::EventWrapper received_event;
+  if (!received_event.ParseFromArray(message.data(), message.size())) {
+    // TODO(niki4smirn): handle parse fail
+    return;
+  }
+
+  auto* client_event = received_event.mutable_client_event();
 
   auto message_socket = qobject_cast<QWebSocket*>(sender());
   auto user = server_model_.GetUserBySocket(message_socket);
   UserId user_id = user->GetId();
-  received_event.set_sender_id(user_id);
+  client_event->set_sender_id(user_id);
 
   LogEvent(received_event, log::Type::kReceive);
 
-  switch (received_event.receiver_type()) {
-    case proto::Event::kServer: {
-      AddEventToHandle(received_event);
-      break;
-    }
-    case proto::Event::kRoom: {
-      AddEventToSend(received_event);
-      break;
-    }
-    default: {}
+  // TODO(niki4smirn): try to make this check prettier
+  if (client_event->has_event_to_server()) {
+    AddEventToHandle(received_event);
+  } else {
+    AddEventToSend(received_event);
   }
 }
 
@@ -86,10 +86,12 @@ QString ServerController::GetControllerName() const {
 
 void ServerController::OnTick() {}
 
-void ServerController::Send(const proto::Event& event) {
+void ServerController::Send(const events::EventWrapper& event) {
   LogEvent(event, log::Type::kSend);
-  switch (event.receiver_type()) {
-    case proto::Event::kRoom: {
+  const auto& client_event = event.client_event();
+
+  switch (client_event.receiver_case()) {
+    case client_events::ClientEventWrapper::kEventToRoom: {
       SendEventToRoom(event);
       break;
     }
@@ -97,36 +99,31 @@ void ServerController::Send(const proto::Event& event) {
   }
 }
 
-void ServerController::Handle(const proto::Event& event) {
+void ServerController::Handle(const events::EventWrapper& event) {
   LogEvent(event, log::Type::kHandle);
-  UserId user_id = event.sender_id();
+  const auto& client_event = event.client_event();
+  UserId user_id = client_event.sender_id();
+  const auto& event_to_server = client_event.event_to_server();
   auto user = server_model_.GetUserById(user_id);
-  switch (event.type()) {
-    case proto::Event::kCreateRoom: {
+  switch (event_to_server.type_case()) {
+    case client_events::EventToServer::kCreateRoom: {
       RoomId new_room_id = server_model_.GetUnusedRoomId();
       server_model_.AddRoom(
           std::make_shared<RoomController>(new_room_id, user));
       server_model_.AddUserToRoom(user_id, new_room_id);
-      auto room = server_model_.GetRoomById(new_room_id);
-      room->AddUser(user);
       break;
     }
-    case proto::Event::kEnterRoom: {
-      auto room_id = event.arguments(0);
+    case client_events::EventToServer::kEnterRoom: {
+      auto room_id = event_to_server.enter_room().room_id();
       if (server_model_.ExistsRoom(room_id) &&
           !server_model_.IsInSomeRoom(user_id)) {
         server_model_.AddUserToRoom(user_id, room_id);
       }
       break;
     }
-    case proto::Event::kLeaveRoom: {
+    case client_events::EventToServer::kLeaveRoom: {
       if (server_model_.IsInSomeRoom(user_id)) {
         server_model_.DeleteUserFromRoom(user_id);
-        auto room = server_model_.GetRoomByUserId(user_id);
-        room->DeleteUser(user_id);
-        if (room->IsEmpty()) {
-          server_model_.DeleteRoom(room->GetId());
-        }
       }
       break;
     }
@@ -134,6 +131,8 @@ void ServerController::Handle(const proto::Event& event) {
   }
 }
 
-void ServerController::SendEventToRoom(const proto::Event& event) const {
-  server_model_.GetRoomByUserId(event.sender_id())->AddEventToHandle(event);
+void ServerController::SendEventToRoom(
+    const events::EventWrapper& event) const {
+  server_model_.GetRoomByUserId(
+      event.client_event().sender_id())->AddEventToHandle(event);
 }

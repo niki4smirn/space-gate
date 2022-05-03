@@ -17,14 +17,18 @@ class ClientMainMenu : public QWidget {
  Q_OBJECT
  public:
   ClientMainMenu();
-  void Play();
+  void Start();
   void ChooseRoomOption();
   void BackToStart();
   void BackToGameOption();
   void Connect();
   void ButtonsConfigure();
-  void SetWidgetsPos();
+  void SetStartWidgetsPos();
+  void SetLayots();
   void CloseButtonPressed();
+  void CreateRoom();
+  void JoinRoom();
+  void RemoveAllWidgets();
  private:
   BackgroundWidget* background_;
   QGridLayout* interface_layout_;
@@ -38,11 +42,12 @@ class ClientMainMenu : public QWidget {
   QPushButton* start_game_;
   QPushButton* create_room_;
   QPushButton* join_room_;
+  QPushButton* ready_status_;
   QLabel* game_name_;
   QWidget* interface_;
   QFont font_;
  signals:
-  void Start(bool state);
+  void StartEffect(bool state);
   void Close();
 };
 

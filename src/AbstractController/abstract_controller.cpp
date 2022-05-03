@@ -2,7 +2,7 @@
 
 #include "Constants/constants.h"
 
-namespace log {
+namespace game_log {
 
 QString GetProcessStringByType(Type type) {
   static const std::unordered_map<Type, QString> type_to_str = {
@@ -13,17 +13,17 @@ QString GetProcessStringByType(Type type) {
   return type_to_str.at(type);
 }
 
-}  // namespace log
+}  // namespace game_log
 
 AbstractController::AbstractController() {
   connect(&timer_, &QTimer::timeout, this, &AbstractController::Tick);
 }
 
 void AbstractController::LogEvent(
-    const events::EventWrapper& event,
-    log::Type log_type) const {
+        const events::EventWrapper& event,
+        game_log::Type log_type) const {
   qDebug().noquote().nospace() << GetControllerName()
-      << log::GetProcessStringByType(log_type) << event.ShortDebugString();
+                               << game_log::GetProcessStringByType(log_type) << event.ShortDebugString();
 }
 
 void AbstractController::StartTicking() {

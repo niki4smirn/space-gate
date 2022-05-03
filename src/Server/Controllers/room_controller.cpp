@@ -47,7 +47,7 @@ void RoomController::OnTick() {
 void RoomController::Send(const events::EventWrapper& event) {
   switch (event.type_case()) {
     case events::EventWrapper::kServerEvent: {
-      LogEvent(event, log::Type::kSend);
+      LogEvent(event, game_log::Type::kSend);
       for (auto [_, user_ptr] : room_model_.GetUsers()) {
         auto serialized = event.SerializeAsString();
         QByteArray byte_array(serialized.data(), serialized.size());
@@ -78,7 +78,7 @@ void RoomController::DeleteUser(UserId id) {
 }
 
 void RoomController::Handle(const events::EventWrapper& event) {
-  LogEvent(event, log::Type::kHandle);
+  LogEvent(event, game_log::Type::kHandle);
   const auto& client_event = event.client_event();
   const auto& room_event = client_event.event_to_room();
   switch (room_event.type_case()) {

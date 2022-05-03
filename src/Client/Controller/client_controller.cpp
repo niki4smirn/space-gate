@@ -27,7 +27,7 @@ QString ClientController::GetControllerName() const {
 void ClientController::OnTick() {}
 
 void ClientController::Send(const events::EventWrapper& event) {
-  LogEvent(event, log::Type::kSend);
+  LogEvent(event, game_log::Type::kSend);
   auto serialized = event.SerializeAsString();
   QByteArray byte_array(serialized.data(), serialized.size());
   socket_.sendBinaryMessage(byte_array);
@@ -42,5 +42,5 @@ void ClientController::OnByteArrayReceived(const QByteArray& message) {
     return;
   }
 
-  LogEvent(received_event, log::Type::kReceive);
+  LogEvent(received_event, game_log::Type::kReceive);
 }

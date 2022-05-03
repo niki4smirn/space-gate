@@ -7,9 +7,9 @@ ClientView::ClientView() :
   stacked_widget_->setCurrentWidget(main_menu_);
   setCentralWidget(stacked_widget_);
   showFullScreen();
-  //connect(main_menu_, &ClientMainMenu::Close, background_, &BackgroundWidget::SetState);
+  connect(main_menu_, &ClientMainMenu::Close, this, &ClientView::CloseWindow);
 
 }
 void ClientView::CloseWindow() {
-
+    close();
 }

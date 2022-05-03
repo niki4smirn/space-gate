@@ -27,7 +27,7 @@ void ServerController::OnByteArrayReceived(const QByteArray& message) {
   UserId user_id = user->GetId();
   client_event->set_sender_id(user_id);
 
-  LogEvent(received_event, log::Type::kReceive);
+  LogEvent(received_event, game_log::Type::kReceive);
 
   // TODO(niki4smirn): try to make this check prettier
   if (client_event->has_event_to_server()) {
@@ -87,7 +87,7 @@ QString ServerController::GetControllerName() const {
 void ServerController::OnTick() {}
 
 void ServerController::Send(const events::EventWrapper& event) {
-  LogEvent(event, log::Type::kSend);
+  LogEvent(event, game_log::Type::kSend);
   const auto& client_event = event.client_event();
 
   switch (client_event.receiver_case()) {
@@ -100,7 +100,7 @@ void ServerController::Send(const events::EventWrapper& event) {
 }
 
 void ServerController::Handle(const events::EventWrapper& event) {
-  LogEvent(event, log::Type::kHandle);
+  LogEvent(event, game_log::Type::kHandle);
   const auto& client_event = event.client_event();
   UserId user_id = client_event.sender_id();
   const auto& event_to_server = client_event.event_to_server();

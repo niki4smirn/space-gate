@@ -1,5 +1,5 @@
-#ifndef CLIENT_VIEW_H_
-#define CLIENT_VIEW_H_
+#ifndef SRC_CLIENT_CLIENT_VIEW_H_
+#define SRC_CLIENT_CLIENT_VIEW_H_
 
 #include "client_main_menu.h"
 
@@ -8,7 +8,7 @@
 #include <QMainWindow>
 
 class ClientView : public QMainWindow {
- Q_OBJECT
+  Q_OBJECT
  public:
   ClientView();
   void CloseWindow();
@@ -20,4 +20,4 @@ class ClientView : public QMainWindow {
   QStackedWidget* stacked_widget_;
 };
 
-#endif // CLIENT_VIEW_H_
+#endif //  SRC_CLIENT_CLIENT_VIEW_H_

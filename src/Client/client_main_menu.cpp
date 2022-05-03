@@ -21,7 +21,6 @@ ClientMainMenu::ClientMainMenu() :
     room_list_(new QListWidget),
     nothing_here_(new QLabel),
     interface_(new QWidget) {
-
   QString family =
       QFontDatabase::applicationFontFamilies(QFontDatabase::addApplicationFont(
           "Paladins.otf")).at(0);
@@ -37,7 +36,6 @@ ClientMainMenu::ClientMainMenu() :
   SetLayots();
   SetStartWidgetsPos();
   Connect();
-
 }
 
 void ClientMainMenu::SetStartWidgetsPos() {
@@ -66,11 +64,10 @@ void ClientMainMenu::SetLayots() {
 }
 
 void ClientMainMenu::ButtonsConfigure() {
-
   play_->setFixedSize(350, 250);
   play_->setText("PLAY");
   play_->setFont(font_);
-  play_->setStyleSheet("background-color: rgb(136, 247, 255); font-size: 40px;");
+  play_->setStyleSheet("background-color: rgb(136, 247, 255);font-size: 40px;");
 
   settings_->setFixedSize(350, 250);
   settings_->setText("SETTINGS");
@@ -81,7 +78,7 @@ void ClientMainMenu::ButtonsConfigure() {
   exit_->setFixedSize(200, 75);
   exit_->setText("EXIT");
   exit_->setFont(font_);
-  exit_->setStyleSheet("background-color: rgb(136, 247, 255); font-size: 40px;");
+  exit_->setStyleSheet("background-color: rgb(136, 247, 255);font-size: 40px;");
 
   create_room_->setFixedSize(250, 150);
   create_room_->setText("CREATE");

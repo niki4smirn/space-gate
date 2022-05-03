@@ -1,5 +1,5 @@
-#ifndef STARS_H_
-#define STARS_H_
+#ifndef SRC_CLIENT_STARS_H_
+#define SRC_CLIENT_STARS_H_
 
 #include <QRandomGenerator>
 #include <QMouseEvent>
@@ -43,4 +43,4 @@ class Star {
   double max_size_ = 6;
 };
 
-#endif  // STARS_H_
+#endif  // SRC_CLIENT_STARS_H_

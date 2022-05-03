@@ -21,7 +21,7 @@ class BackgroundWidget : public QWidget {
   Q_OBJECT
 
  public:
-  explicit BackgroundWidget();
+  BackgroundWidget();
   void Paint(QPainter* painter) const;
   void Tick();
 

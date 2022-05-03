@@ -1,5 +1,5 @@
-#ifndef CLIENT_MAIN_MENU_H_
-#define CLIENT_MAIN_MENU_H_
+#ifndef SRC_CLIENT_CLIENT_MAIN_MENU_H_
+#define SRC_CLIENT_CLIENT_MAIN_MENU_H_
 
 #include "background_widget.h"
 
@@ -14,7 +14,8 @@
 #include <QFont>
 
 class ClientMainMenu : public QWidget {
- Q_OBJECT
+  Q_OBJECT
+
  public:
   ClientMainMenu();
   void StartGame();
@@ -30,7 +31,7 @@ class ClientMainMenu : public QWidget {
   void JoinRoom();
   void RemoveAllWidgets();
   void Settings();
-  
+
  private:
   BackgroundWidget* background_;
   QGridLayout* interface_layout_;
@@ -56,4 +57,4 @@ class ClientMainMenu : public QWidget {
   void Close();
 };
 
-#endif // CLIENT_MAIN_MENU_H_
+#endif //  SRC_CLIENT_CLIENT_MAIN_MENU_H_

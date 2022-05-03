@@ -2,7 +2,6 @@
 ClientView::ClientView() :
     main_menu_(new ClientMainMenu),
     stacked_widget_(new QStackedWidget) {
-
   AddWidgets();
   stacked_widget_->setCurrentWidget(main_menu_);
   setCentralWidget(stacked_widget_);

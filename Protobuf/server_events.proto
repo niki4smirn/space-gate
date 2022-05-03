@@ -1,0 +1,24 @@
+syntax = "proto3";
+package server_events;
+
+message ServerEventWrapper {
+  oneof type {
+    RoomInfo room_info = 1;
+  }
+}
+
+message RoomUser {
+  enum Status {
+    kNone = 0;
+    kNotReady = 1;
+    kReady = 2;
+  }
+  string nickname = 1;
+  Status is_ready = 2;
+}
+
+message RoomInfo {
+  repeated RoomUser users = 1;
+  uint64 room_id = 2;
+  uint64 chief_id = 3;
+}

@@ -14,13 +14,14 @@ class ClientController : public AbstractController {
   QString GetControllerName() const override;
 
   public Q_SLOTS:
+  void OnByteArrayReceived(const QByteArray& message);
   void OnConnect();
   void OnDisconnect();
 
  protected:
   void OnTick() override;
-  void Send(const proto::Event& event) override;
-  void Handle(const proto::Event& event) override;
+  void Send(const events::EventWrapper& event) override;
+  void Handle(const events::EventWrapper& event) override;
 
  private:
   QUrl server_url_;

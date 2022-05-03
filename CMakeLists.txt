@@ -2,7 +2,11 @@ cmake_minimum_required(VERSION 3.19)
 project(space-gate)
 
 set(CMAKE_CXX_FLAGS"{$CMAKE_CXX_FLAGS} -Wall")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=address,leak,undefined")
 
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTORCC ON)
+set(CMAKE_AUTOUIC ON)
 set(CMAKE_CXX_STANDARD 20)
 
 find_package(Qt5 COMPONENTS
@@ -17,7 +21,11 @@ find_package(Qt5 COMPONENTS
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 find_package(Protobuf REQUIRED)
-set(scheme_PROTOS Protobuf/scheme.proto)
+set(scheme_PROTOS
+        Protobuf/events.proto
+        Protobuf/client_events.proto
+        Protobuf/server_events.proto
+        )
 include_directories(${Protobuf_INCLUDE_DIRS})
 
 set(COMMON_SRC

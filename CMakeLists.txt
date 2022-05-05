@@ -58,7 +58,7 @@ add_executable(client
         src/Client/client_view.h
         src/Client/stars.cpp
         src/Client/stars.h
-        )
+        src/Client/client_view_controller.cpp src/Client/client_view_controller.h)
 
 set(REQUIRED_QT_PARTS
         Qt::Core

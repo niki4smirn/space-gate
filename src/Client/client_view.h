@@ -10,7 +10,9 @@
 class ClientView : public QMainWindow {
   Q_OBJECT
  public:
-  ClientView();
+  ClientView(ClientMainMenu* main_menu);
+
+ private:
   void CloseWindow();
   void AddWidgets();
   void Connect();

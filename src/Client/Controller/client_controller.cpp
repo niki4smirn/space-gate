@@ -1,6 +1,8 @@
 #include "client_controller.h"
 
-ClientController::ClientController(const QUrl& url) : server_url_(url) {
+ClientController::ClientController(const QUrl& url) :
+  server_url_(url),
+  view_controller_(new ClientViewController){
   qInfo().noquote() << "Connecting to" << url.host();
   connect(&socket_, &QWebSocket::connected, this,
           &ClientController::OnConnect);
@@ -24,7 +26,9 @@ QString ClientController::GetControllerName() const {
   return "Client";
 }
 
-void ClientController::OnTick() {}
+void ClientController::OnTick() {
+
+}
 
 void ClientController::Send(const events::EventWrapper& event) {
   LogEvent(event, game_log::Type::kSend);
@@ -41,6 +45,7 @@ void ClientController::OnByteArrayReceived(const QByteArray& message) {
     // fail
     return;
   }
+  view_controller_->RecieveData(message);
 
   LogEvent(received_event, game_log::Type::kReceive);
 }

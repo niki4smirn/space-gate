@@ -3,7 +3,7 @@
 
 #include "Constants/constants.h"
 #include "Controller/client_controller.h"
-#include "client_view.h"
+#include "client_view_controller.h"
 
 int main(int argc, char* argv[]) {
   QApplication app(argc, argv);
@@ -16,6 +16,6 @@ int main(int argc, char* argv[]) {
   url_str += ":" + QString::number(constants::kDefaultPort);
   QUrl server_url(url_str);
   auto* client_controller = new ClientController(server_url);
-  ClientView window;
+  //ClientController window;
   return QApplication::exec();
 }

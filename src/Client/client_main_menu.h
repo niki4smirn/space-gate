@@ -2,6 +2,10 @@
 #define SRC_CLIENT_CLIENT_MAIN_MENU_H_
 
 #include "background_widget.h"
+#include "Protobuf/client_events.pb.h"
+#include "Protobuf/server_events.pb.h"
+
+#include <string>
 
 #include <QGridLayout>
 #include <QVBoxLayout>
@@ -18,18 +22,25 @@ class ClientMainMenu : public QWidget {
 
  public:
   ClientMainMenu();
-  void StartGame();
-  void ChooseRoomOption();
-  void BackToStart();
-  void BackToGameOption();
+  void UpdateRoomList();
+  void UpdatePlayerList(const server_events::RoomInfo room_info);
+
+ private:
+  void RemoveAllWidgets();
   void Connect();
   void ButtonsConfigure();
   void SetStartWidgetsPos();
   void SetLayots();
+
+
+ private Q_SLOTS:
+  void StartGame();
+  void ChooseRoomOption();
+  void BackToStart();
+  void BackToGameOption();
   void CloseButtonPressed();
   void CreateRoom();
   void JoinRoom();
-  void RemoveAllWidgets();
   void Settings();
 
  private:

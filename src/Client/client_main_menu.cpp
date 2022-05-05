@@ -260,3 +260,31 @@ void ClientMainMenu::Settings() {
                                Qt::AlignHCenter | Qt::AlignVCenter);
 
 }
+
+void ClientMainMenu::UpdateRoomList() {
+
+}
+
+void ClientMainMenu::UpdatePlayerList(const server_events::RoomInfo room_info) {
+  int i = 0; // лютый кринж мб, но зато foreach
+  for(auto user: room_info.users()){
+    player_list_->addItem(QString::fromStdString(user.nickname()));
+    switch (user.is_ready()) {
+      case server_events::RoomUser::Status::RoomUser_Status_kNotReady:{
+        player_list_->item(i)->setBackground(QColorConstants::Red);
+        i += 1;
+        break;
+      }
+      case server_events::RoomUser::Status::RoomUser_Status_kReady:{
+        player_list_->item(i)->setBackground(QColorConstants::Green);
+        i += 1;
+        break;
+      }
+      case server_events::RoomUser::Status::RoomUser_Status_kNone :{
+        player_list_->item(i)->setBackground(QColorConstants::Gray);
+        i += 1;
+        break;
+      }
+    }
+  }
+}

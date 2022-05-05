@@ -1,7 +1,7 @@
 #include "client_view.h"
-ClientView::ClientView() :
-    main_menu_(new ClientMainMenu),
+ClientView::ClientView(ClientMainMenu* main_menu) :
     stacked_widget_(new QStackedWidget) {
+  main_menu_ = main_menu;
   AddWidgets();
   stacked_widget_->setCurrentWidget(main_menu_);
   setCentralWidget(stacked_widget_);

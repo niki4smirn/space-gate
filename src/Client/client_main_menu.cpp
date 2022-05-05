@@ -23,7 +23,7 @@ ClientMainMenu::ClientMainMenu() :
     interface_(new QWidget) {
   QString family =
       QFontDatabase::applicationFontFamilies(QFontDatabase::addApplicationFont(
-          "Paladins.otf")).at(0);
+          "../Resources/Fonts/Paladins.otf")).at(0);
   font_ = QFont(family);
 
   ButtonsConfigure();

@@ -40,6 +40,7 @@ class ClientMainMenu : public QWidget {
   void CreateRoom();
   void JoinRoom();
   void Settings();
+  void ReadyButtonPressEvent();
 
  private:
   BackgroundWidget* background_;

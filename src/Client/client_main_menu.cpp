@@ -145,8 +145,7 @@ void ClientMainMenu::Connect() {
           background_,
           &BackgroundWidget::SetState);
   connect(exit_,
-          &QPushButton::clicked,
-          [this](){emit ReadyButtonPressed();});
+          &QPushButton::clicked, this, &ClientMainMenu::ReadyButtonPressEvent);
 }
 
 void ClientMainMenu::StartGame() {
@@ -283,5 +282,14 @@ void ClientMainMenu::UpdatePlayerList(const server_events::RoomInfo& room_info) 
       default: {}
     }
   }
+}
+void ClientMainMenu::ReadyButtonPressEvent() {
+  if (ready_status_->text() == "READY"){
+    ready_status_->setText("NOT READY");
+  }
+  else {
+    ready_status_->setText("READY");
+  }
+  emit ReadyButtonPressed();
 }
 

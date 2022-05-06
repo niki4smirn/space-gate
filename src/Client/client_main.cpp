@@ -15,6 +15,5 @@ int main(int argc, char* argv[]) {
   url_str += ":" + QString::number(constants::kDefaultPort);
   QUrl server_url(url_str);
   auto* client_controller = new ClientController(server_url);
-  //ClientController window;
   return QApplication::exec();
 }

@@ -18,6 +18,9 @@ void ClientView::Connect() {
   connect(main_menu_,
           &ClientMainMenu::ReadyButtonPressed,
           [this](){emit ReadyButtonPressed();});
+  connect(main_menu_,
+          &ClientMainMenu::CreateRoomSignal,
+          [this](){emit CreateRoom();});
 }
 
 void ClientView::AddWidgets() {

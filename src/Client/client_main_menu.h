@@ -42,6 +42,7 @@ class ClientMainMenu : public QWidget {
   void Settings();
   void ReadyButtonPressEvent();
 
+
  private:
   BackgroundWidget* background_;
   QGridLayout* interface_layout_;
@@ -66,5 +67,6 @@ class ClientMainMenu : public QWidget {
   void StartEffect(bool state);
   void Close();
   void ReadyButtonPressed();
+  void CreateRoomSignal();
 };
 

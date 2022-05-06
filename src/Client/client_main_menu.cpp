@@ -102,7 +102,7 @@ void ClientMainMenu::ButtonsConfigure() {
   ready_status_->setText("READY");
   ready_status_->setFont(font_);
   ready_status_->setStyleSheet(
-      "background-color: rgb(136, 247, 255); font-size: 40px;");
+      "background-color: rgb(136, 247, 255); font-size: 25px;");
 
   start_game_->setFixedSize(250, 150);
   start_game_->setText("START");
@@ -144,7 +144,7 @@ void ClientMainMenu::Connect() {
           &ClientMainMenu::StartEffect,
           background_,
           &BackgroundWidget::SetState);
-  connect(exit_,
+  connect(ready_status_,
           &QPushButton::clicked, this, &ClientMainMenu::ReadyButtonPressEvent);
 }
 
@@ -225,6 +225,7 @@ void ClientMainMenu::CreateRoom() {
                                Qt::AlignLeft | Qt::AlignVCenter);
   interface_layout_->addWidget(back_to_game_option_, 3, 0, 1, 2,
                                Qt::AlignHCenter | Qt::AlignVCenter);
+  emit CreateRoomSignal();
 }
 
 void ClientMainMenu::JoinRoom() {
@@ -276,13 +277,14 @@ void ClientMainMenu::UpdatePlayerList(const server_events::RoomInfo& room_info) 
         break;
       }
       case server_events::RoomUser::kNone: {
-        player_list_->item(i)->setBackground(QColorConstants::Gray);
+        player_list_->item(i)->setBackground(QColorConstants::Blue);
         break;
       }
       default: {}
     }
   }
 }
+
 void ClientMainMenu::ReadyButtonPressEvent() {
   if (ready_status_->text() == "READY"){
     ready_status_->setText("NOT READY");

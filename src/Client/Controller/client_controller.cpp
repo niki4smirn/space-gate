@@ -52,11 +52,14 @@ void ClientController::OnByteArrayReceived(const QByteArray& message) {
 }
 void ClientController::Connect() {
   connect(view_, &ClientView::ReadyButtonPressed, this, &ClientController::SendReadyStatus);
+  connect(view_, &ClientView::CreateRoom, this, &ClientController::SendCreateRoomEvent);
 }
 void ClientController::SendReadyStatus() {
   events::EventWrapper ready_event;
-  client_events::EventToRoom* event_to_room;
-  client_events::ClientEventWrapper* event_wrapper;
+  auto* event_to_room = new client_events::EventToRoom;
+  auto* event_wrapper = new client_events::ClientEventWrapper;
+  auto* wait_status_event = new client_events::ChangeWaitingStatus;
+  event_to_room->set_allocated_change_waiting_status(wait_status_event);
   event_wrapper->set_allocated_event_to_room(event_to_room);
   ready_event.set_allocated_client_event(event_wrapper);
   Send(ready_event);
@@ -72,4 +75,15 @@ void ClientController::ParseMessage(const QByteArray& message) {
     }
     default: {}
   }
+}
+
+void ClientController::SendCreateRoomEvent() {
+  events::EventWrapper create_room_event;
+  auto* event_to_server = new client_events::EventToServer;
+  auto* event_wrapper = new client_events::ClientEventWrapper;
+  auto* create_event = new client_events::CreateRoom;
+  event_to_server->set_allocated_create_room(create_event);
+  event_wrapper->set_allocated_event_to_server(event_to_server);
+  create_room_event.set_allocated_client_event(event_wrapper);
+  Send(create_room_event);
 }

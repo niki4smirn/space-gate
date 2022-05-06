@@ -211,6 +211,7 @@ void ClientMainMenu::RemoveAllWidgets() {
 }
 
 void ClientMainMenu::CreateRoom() {
+  player_list_->clear();
   RemoveAllWidgets();
 
   player_list_->setVisible(true);
@@ -230,6 +231,7 @@ void ClientMainMenu::CreateRoom() {
 }
 
 void ClientMainMenu::JoinRoom() {
+  player_list_->clear();
   RemoveAllWidgets();
   player_list_->setVisible(true);
   ready_status_->setVisible(true);

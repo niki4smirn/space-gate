@@ -63,7 +63,7 @@ void ClientController::SendReadyStatus() {
   event_to_room->set_allocated_change_waiting_status(wait_status_event);
   event_wrapper->set_allocated_event_to_room(event_to_room);
   ready_event.set_allocated_client_event(event_wrapper);
-  Send(ready_event);
+  AddEventToSend(ready_event);
 }
 
 void ClientController::ParseMessage(const QByteArray& message) {
@@ -86,7 +86,7 @@ void ClientController::SendCreateRoomEvent() {
   event_to_server->set_allocated_create_room(create_event);
   event_wrapper->set_allocated_event_to_server(event_to_server);
   create_room_event.set_allocated_client_event(event_wrapper);
-  Send(create_room_event);
+  AddEventToSend(create_room_event);
 }
 
 void ClientController::SendLeaveRoomEvent() {
@@ -97,5 +97,5 @@ void ClientController::SendLeaveRoomEvent() {
   event_to_server->set_allocated_leave_room(leave_event);
   event_wrapper->set_allocated_event_to_server(event_to_server);
   leave_room_event.set_allocated_client_event(event_wrapper);
-  Send(leave_room_event);
+  AddEventToSend(leave_room_event);
 }

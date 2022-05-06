@@ -28,6 +28,7 @@ class ClientController : public AbstractController {
   void Send(const events::EventWrapper& event) override;
   void Handle(const events::EventWrapper& event) override;
   void Connect();
+  void ParseMessage(const QByteArray& message);
 
  private:
   QUrl server_url_;

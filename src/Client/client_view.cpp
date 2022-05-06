@@ -17,13 +17,13 @@ void ClientView::Connect() {
   connect(main_menu_, &ClientMainMenu::Close, this, &ClientView::CloseWindow);
   connect(main_menu_,
           &ClientMainMenu::ReadyButtonPressed,
-          [=](){emit ReadyButtonPressed();});
+          [this](){emit ReadyButtonPressed();});
 }
 
 void ClientView::AddWidgets() {
   stacked_widget_->addWidget(main_menu_);
 }
 
-void ClientView::MenuUpdatePlayerList() {
-
+void ClientView::MenuUpdatePlayerList(const server_events::RoomInfo& room_info) {
+  main_menu_->UpdatePlayerList(room_info);
 }

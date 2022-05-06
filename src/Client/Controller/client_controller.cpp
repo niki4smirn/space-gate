@@ -46,7 +46,7 @@ void ClientController::OnByteArrayReceived(const QByteArray& message) {
     // fail
     return;
   }
-  //view_->MenuUpdatePlayerList(message);
+  ParseMessage(message);
 
   LogEvent(received_event, game_log::Type::kReceive);
 }
@@ -60,4 +60,16 @@ void ClientController::SendReadyStatus() {
   event_wrapper->set_allocated_event_to_room(event_to_room);
   ready_event.set_allocated_client_event(event_wrapper);
   Send(ready_event);
+}
+
+void ClientController::ParseMessage(const QByteArray& message) {
+  server_events::ServerEventWrapper data;
+  data.ParseFromArray(message, message.size());
+  switch (data.type_case()) {
+    case server_events::ServerEventWrapper::kRoomInfo:{
+      view_->MenuUpdatePlayerList(data.room_info());
+      break;
+    }
+    default: {}
+  }
 }

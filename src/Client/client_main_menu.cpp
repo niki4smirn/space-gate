@@ -134,7 +134,7 @@ void ClientMainMenu::Connect() {
           &ClientMainMenu::BackToGameOption);
   connect(exit_,
           &QPushButton::clicked,
-          [=](){emit Close();});
+          [this](){emit Close();});
   connect(back_to_start_,
           &QPushButton::clicked,
           this,
@@ -146,7 +146,7 @@ void ClientMainMenu::Connect() {
           &BackgroundWidget::SetState);
   connect(exit_,
           &QPushButton::clicked,
-          [=](){emit ReadyButtonPressed();});
+          [this](){emit ReadyButtonPressed();});
 }
 
 void ClientMainMenu::StartGame() {

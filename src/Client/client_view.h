@@ -10,7 +10,7 @@ class ClientView : public QMainWindow {
   Q_OBJECT
  public:
   ClientView();
-  void MenuUpdatePlayerList();
+  void MenuUpdatePlayerList(const server_events::RoomInfo& room_info);
 
  private:
   void CloseWindow();

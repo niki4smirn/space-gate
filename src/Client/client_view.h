@@ -1,5 +1,4 @@
-#ifndef SRC_CLIENT_CLIENT_VIEW_H_
-#define SRC_CLIENT_CLIENT_VIEW_H_
+#pragma once
 
 #include "client_main_menu.h"
 
@@ -10,7 +9,8 @@
 class ClientView : public QMainWindow {
   Q_OBJECT
  public:
-  ClientView(ClientMainMenu* main_menu);
+  ClientView();
+  void MenuUpdatePlayerList();
 
  private:
   void CloseWindow();
@@ -20,6 +20,7 @@ class ClientView : public QMainWindow {
  private:
   ClientMainMenu* main_menu_;
   QStackedWidget* stacked_widget_;
-};
 
-#endif //  SRC_CLIENT_CLIENT_VIEW_H_
+  signals:
+  void ReadyButtonPressed();
+};

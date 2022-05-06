@@ -5,7 +5,8 @@
 #include <QWebSocket>
 
 #include "src/AbstractController/abstract_controller.h"
-#include "src/Client/client_view_controller.h"
+#include "src/Client/client_view.h"
+
 
 class ClientController : public AbstractController {
  public:
@@ -19,13 +20,17 @@ class ClientController : public AbstractController {
   void OnConnect();
   void OnDisconnect();
 
+ public Q_SLOTS:
+  void SendReadyStatus();
+
  protected:
   void OnTick() override;
   void Send(const events::EventWrapper& event) override;
   void Handle(const events::EventWrapper& event) override;
+  void Connect();
 
  private:
   QUrl server_url_;
   QWebSocket socket_;
-  ClientViewController* view_controller_;
+  ClientView* view_;
 };

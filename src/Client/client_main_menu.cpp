@@ -134,8 +134,7 @@ void ClientMainMenu::Connect() {
           &ClientMainMenu::BackToGameOption);
   connect(exit_,
           &QPushButton::clicked,
-          this,
-          &ClientMainMenu::CloseButtonPressed);
+          [=](){emit Close();});
   connect(back_to_start_,
           &QPushButton::clicked,
           this,
@@ -145,6 +144,9 @@ void ClientMainMenu::Connect() {
           &ClientMainMenu::StartEffect,
           background_,
           &BackgroundWidget::SetState);
+  connect(exit_,
+          &QPushButton::clicked,
+          [=](){emit ReadyButtonPressed();});
 }
 
 void ClientMainMenu::StartGame() {
@@ -178,10 +180,6 @@ void ClientMainMenu::BackToGameOption() {
 
 void ClientMainMenu::BackToStart() {
   SetStartWidgetsPos();
-}
-
-void ClientMainMenu::CloseButtonPressed() {
-  emit Close();
 }
 
 void ClientMainMenu::RemoveAllWidgets() {
@@ -265,26 +263,25 @@ void ClientMainMenu::UpdateRoomList() {
 
 }
 
-void ClientMainMenu::UpdatePlayerList(const server_events::RoomInfo room_info) {
-  int i = 0; // лютый кринж мб, но зато foreach
-  for(auto user: room_info.users()){
-    player_list_->addItem(QString::fromStdString(user.nickname()));
-    switch (user.is_ready()) {
-      case server_events::RoomUser::Status::RoomUser_Status_kNotReady:{
+void ClientMainMenu::UpdatePlayerList(const server_events::RoomInfo& room_info) {
+  player_list_->clear();
+  for (int i = 0; i < room_info.users().size(); i++) {
+    player_list_->addItem(QString::fromStdString(room_info.users().at(i).nickname()));
+    switch (room_info.users().at(i).is_ready()) {
+      case server_events::RoomUser::kNotReady: {
         player_list_->item(i)->setBackground(QColorConstants::Red);
-        i += 1;
         break;
       }
-      case server_events::RoomUser::Status::RoomUser_Status_kReady:{
+      case server_events::RoomUser::kReady: {
         player_list_->item(i)->setBackground(QColorConstants::Green);
-        i += 1;
         break;
       }
-      case server_events::RoomUser::Status::RoomUser_Status_kNone :{
+      case server_events::RoomUser::kNone: {
         player_list_->item(i)->setBackground(QColorConstants::Gray);
-        i += 1;
         break;
       }
+      default: {}
     }
   }
 }
+

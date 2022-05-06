@@ -2,7 +2,7 @@
 
 ClientController::ClientController(const QUrl& url) :
   server_url_(url),
-  view_controller_(new ClientViewController){
+  view_(new ClientView){
   qInfo().noquote() << "Connecting to" << url.host();
   connect(&socket_, &QWebSocket::connected, this,
           &ClientController::OnConnect);
@@ -12,6 +12,7 @@ ClientController::ClientController(const QUrl& url) :
           &ClientController::OnByteArrayReceived);
   socket_.open(url);
   StartTicking();
+  Connect();
 }
 
 void ClientController::OnConnect() {
@@ -45,7 +46,18 @@ void ClientController::OnByteArrayReceived(const QByteArray& message) {
     // fail
     return;
   }
-  view_controller_->RecieveData(message);
+  //view_->MenuUpdatePlayerList(message);
 
   LogEvent(received_event, game_log::Type::kReceive);
+}
+void ClientController::Connect() {
+  connect(view_, &ClientView::ReadyButtonPressed, this, &ClientController::SendReadyStatus);
+}
+void ClientController::SendReadyStatus() {
+  events::EventWrapper ready_event;
+  client_events::EventToRoom* event_to_room;
+  client_events::ClientEventWrapper* event_wrapper;
+  event_wrapper->set_allocated_event_to_room(event_to_room);
+  ready_event.set_allocated_client_event(event_wrapper);
+  Send(ready_event);
 }

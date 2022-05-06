@@ -3,7 +3,6 @@
 
 #include "Constants/constants.h"
 #include "Controller/client_controller.h"
-#include "client_view_controller.h"
 
 int main(int argc, char* argv[]) {
   QApplication app(argc, argv);

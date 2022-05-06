@@ -1,5 +1,4 @@
-#ifndef SRC_CLIENT_CLIENT_MAIN_MENU_H_
-#define SRC_CLIENT_CLIENT_MAIN_MENU_H_
+#pragma once
 
 #include "background_widget.h"
 #include "Protobuf/client_events.pb.h"
@@ -23,7 +22,8 @@ class ClientMainMenu : public QWidget {
  public:
   ClientMainMenu();
   void UpdateRoomList();
-  void UpdatePlayerList(const server_events::RoomInfo room_info);
+  void UpdatePlayerList(const server_events::RoomInfo& room_info);
+
 
  private:
   void RemoveAllWidgets();
@@ -32,13 +32,11 @@ class ClientMainMenu : public QWidget {
   void SetStartWidgetsPos();
   void SetLayots();
 
-
  private Q_SLOTS:
   void StartGame();
   void ChooseRoomOption();
   void BackToStart();
   void BackToGameOption();
-  void CloseButtonPressed();
   void CreateRoom();
   void JoinRoom();
   void Settings();
@@ -66,6 +64,6 @@ class ClientMainMenu : public QWidget {
  signals:
   void StartEffect(bool state);
   void Close();
+  void ReadyButtonPressed();
 };
 
-#endif //  SRC_CLIENT_CLIENT_MAIN_MENU_H_

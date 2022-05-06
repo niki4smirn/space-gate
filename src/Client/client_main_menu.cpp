@@ -175,6 +175,7 @@ void ClientMainMenu::ChooseRoomOption() {
 
 void ClientMainMenu::BackToGameOption() {
   ChooseRoomOption();
+  emit LeaveRoom();
 }
 
 void ClientMainMenu::BackToStart() {

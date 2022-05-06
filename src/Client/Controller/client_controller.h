@@ -23,6 +23,7 @@ class ClientController : public AbstractController {
  public Q_SLOTS:
   void SendReadyStatus();
   void SendCreateRoomEvent();
+  void SendLeaveRoomEvent();
 
  protected:
   void OnTick() override;

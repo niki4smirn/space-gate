@@ -24,4 +24,5 @@ class ClientView : public QMainWindow {
   signals:
   void ReadyButtonPressed();
   void CreateRoom();
+  void LeaveRoom();
 };

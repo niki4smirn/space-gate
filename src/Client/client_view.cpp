@@ -21,6 +21,9 @@ void ClientView::Connect() {
   connect(main_menu_,
           &ClientMainMenu::CreateRoomSignal,
           [this](){emit CreateRoom();});
+  connect(main_menu_,
+          &ClientMainMenu::LeaveRoom,
+          [this](){emit LeaveRoom();});
 }
 
 void ClientView::AddWidgets() {

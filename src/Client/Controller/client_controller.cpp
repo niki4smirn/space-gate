@@ -53,6 +53,7 @@ void ClientController::OnByteArrayReceived(const QByteArray& message) {
 void ClientController::Connect() {
   connect(view_, &ClientView::ReadyButtonPressed, this, &ClientController::SendReadyStatus);
   connect(view_, &ClientView::CreateRoom, this, &ClientController::SendCreateRoomEvent);
+  connect(view_, &ClientView::LeaveRoom, this, &ClientController::SendLeaveRoomEvent);
 }
 void ClientController::SendReadyStatus() {
   events::EventWrapper ready_event;
@@ -86,4 +87,15 @@ void ClientController::SendCreateRoomEvent() {
   event_wrapper->set_allocated_event_to_server(event_to_server);
   create_room_event.set_allocated_client_event(event_wrapper);
   Send(create_room_event);
+}
+
+void ClientController::SendLeaveRoomEvent() {
+  events::EventWrapper leave_room_event;
+  auto* event_to_server = new client_events::EventToServer;
+  auto* event_wrapper = new client_events::ClientEventWrapper;
+  auto* leave_event = new client_events::LeaveRoom;
+  event_to_server->set_allocated_leave_room(leave_event);
+  event_wrapper->set_allocated_event_to_server(event_to_server);
+  leave_room_event.set_allocated_client_event(event_wrapper);
+  Send(leave_room_event);
 }

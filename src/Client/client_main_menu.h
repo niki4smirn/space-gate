@@ -68,5 +68,6 @@ class ClientMainMenu : public QWidget {
   void Close();
   void ReadyButtonPressed();
   void CreateRoomSignal();
+  void LeaveRoom();
 };
 

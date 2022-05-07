@@ -1,8 +1,8 @@
 #include "client_controller.h"
 
 ClientController::ClientController(const QUrl& url) :
-  server_url_(url),
-  view_(new ClientView){
+    server_url_(url),
+    view_(new ClientView) {
   qInfo().noquote() << "Connecting to" << url.host();
   connect(&socket_, &QWebSocket::connected, this,
           &ClientController::OnConnect);
@@ -51,10 +51,22 @@ void ClientController::OnByteArrayReceived(const QByteArray& message) {
   LogEvent(received_event, game_log::Type::kReceive);
 }
 void ClientController::Connect() {
-  connect(view_, &ClientView::ReadyButtonPressed, this, &ClientController::SendReadyStatus);
-  connect(view_, &ClientView::CreateRoom, this, &ClientController::SendCreateRoomEvent);
-  connect(view_, &ClientView::LeaveRoom, this, &ClientController::SendLeaveRoomEvent);
-  connect(view_, &ClientView::JoinRoom, this, &ClientController::SendJoinRoomEvent);
+  connect(view_,
+          &ClientView::ReadyButtonPressed,
+          this,
+          &ClientController::SendReadyStatus);
+  connect(view_,
+          &ClientView::CreateRoom,
+          this,
+          &ClientController::SendCreateRoomEvent);
+  connect(view_,
+          &ClientView::LeaveRoom,
+          this,
+          &ClientController::SendLeaveRoomEvent);
+  connect(view_,
+          &ClientView::JoinRoom,
+          this,
+          &ClientController::SendJoinRoomEvent);
 }
 void ClientController::SendReadyStatus() {
   events::EventWrapper ready_event;

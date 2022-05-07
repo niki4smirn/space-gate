@@ -7,7 +7,6 @@
 #include "src/AbstractController/abstract_controller.h"
 #include "src/Client/client_view.h"
 
-
 class ClientController : public AbstractController {
  public:
   explicit ClientController(const QUrl& url);
@@ -15,7 +14,7 @@ class ClientController : public AbstractController {
 
   QString GetControllerName() const override;
 
-  public Q_SLOTS:
+ public Q_SLOTS:
   void OnByteArrayReceived(const QByteArray& message);
   void OnConnect();
   void OnDisconnect();

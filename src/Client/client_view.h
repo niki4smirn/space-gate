@@ -7,7 +7,7 @@
 #include <QMainWindow>
 
 class ClientView : public QMainWindow {
-  Q_OBJECT
+ Q_OBJECT
  public:
   ClientView();
   void MenuUpdatePlayerList(const server_events::RoomInfo& room_info);
@@ -22,7 +22,7 @@ class ClientView : public QMainWindow {
   ClientMainMenu* main_menu_;
   QStackedWidget* stacked_widget_;
 
-  signals:
+ signals:
   void ReadyButtonPressed();
   void CreateRoom();
   void LeaveRoom();

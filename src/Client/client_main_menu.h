@@ -17,20 +17,19 @@
 #include <QFont>
 
 class ClientMainMenu : public QWidget {
-  Q_OBJECT
+ Q_OBJECT
 
  public:
-  ClientMainMenu(QWidget* parent = nullptr);
+  explicit ClientMainMenu(QWidget* parent = nullptr);
   void UpdateRoomList(const server_events::RoomsList& room_list);
   void UpdatePlayerList(const server_events::RoomInfo& room_info);
-
 
  private:
   void RemoveAllWidgets();
   void Connect();
   void ButtonsConfigure();
   void SetStartWidgetsPos();
-  void SetLayots();
+  void SetLayouts();
 
  private Q_SLOTS:
   void StartGame();
@@ -41,7 +40,6 @@ class ClientMainMenu : public QWidget {
   void JoinRoom();
   void Settings();
   void ReadyButtonPressEvent();
-
 
  private:
   BackgroundWidget* background_;

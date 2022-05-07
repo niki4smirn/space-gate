@@ -1,19 +1,16 @@
-#ifndef BACKGROUND_WIDGET_H_
-#define BACKGROUND_WIDGET_H_
+#pragma once
 
-#include <QWidget>
-#include <QPainter>
 #include <QCursor>
 #include <QMouseEvent>
+#include <QPainter>
 #include <QPen>
 #include <QRadialGradient>
 #include <QBasicTimer>
-#include <QPainter>
 #include <QResizeEvent>
+#include <QWidget>
 
 #include <deque>
 #include <vector>
-#include <iostream>
 
 #include "stars.h"
 
@@ -25,6 +22,17 @@ class BackgroundWidget : public QWidget {
   void Paint(QPainter* painter) const;
   void Tick();
 
+  void SetLightEffect(bool state);
+  void SetCenterPos(QMouseEvent* event);
+
+ private:
+  void GenerateStars();
+  void RemoveStars();
+  void PaintStars(QPainter* painter) const;
+  void PaintLines(QPainter* painter) const;
+  void PaintBackground(QPainter* painter) const;
+  void PaintBlur(QPainter* painter) const;
+
   void timerEvent(QTimerEvent* event) override;
   void paintEvent(QPaintEvent*) override;
   void mousePressEvent(QMouseEvent*) override;
@@ -32,17 +40,6 @@ class BackgroundWidget : public QWidget {
   void mouseMoveEvent(QMouseEvent* event) override;
   void resizeEvent(QResizeEvent *event) override;
 
-  void SetState(bool state);
-  void SetCenterPos(QMouseEvent* event);
-
-  void PaintStars(QPainter* painter) const;
-  void PaintLines(QPainter* painter) const;
-  void PaintBackground(QPainter* painter) const;
-  void PaintBlur(QPainter* painter) const;
-
- private:
-  void GenerateStars();
-  void RemoveStars();
   QBasicTimer animation_timer_;
 
   std::vector<QColor> colors_ =
@@ -72,4 +69,3 @@ class BackgroundWidget : public QWidget {
   bool cursor_move_effect_2_ = false;  // enables effect
 };
 
-#endif  // BACKGROUND_WIDGET_H_

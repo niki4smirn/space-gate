@@ -80,14 +80,14 @@ void BackgroundWidget::PaintBlur(QPainter* painter) const {
 
 void BackgroundWidget::Tick() {
   if (!cursor_move_effect_1_ && !cursor_move_effect_2_) {
-    center_ = QPointF(width() / 2, height() / 2);
+    center_ = QPointF(width() / 2., height() / 2.);
   }
   for (int i = 0; i < stars_.size(); i++) {
     stars_.at(i).Move();
     if (light_speed_effect_) {
       QPointF pnt = stars_.at(i).GetViewPoint() + center_;
       while (lines_.size() <= i) {
-        lines_.push_back({pnt, pnt});
+        lines_.emplace_back(pnt, pnt);
       }
       lines_.at(i).second = pnt;
     } else {
@@ -139,7 +139,7 @@ void BackgroundWidget::RemoveStars() {
   }
 }
 
-void BackgroundWidget::SetState(bool state) {
+void BackgroundWidget::SetLightEffect(bool state) {
   light_speed_effect_ = state;
 }
 
@@ -170,17 +170,17 @@ void BackgroundWidget::paintEvent(QPaintEvent*) {
 }
 
 void BackgroundWidget::mousePressEvent(QMouseEvent*) {
-  SetState(true);
+  SetLightEffect(true);
 }
 
 void BackgroundWidget::mouseReleaseEvent(QMouseEvent*) {
-  SetState(false);
+  SetLightEffect(false);
 }
 
 void BackgroundWidget::mouseMoveEvent(QMouseEvent* event) {
   SetCenterPos(event);
 }
 void BackgroundWidget::resizeEvent(QResizeEvent* event) {
-  center_ = QPointF(event->size().width() / 2, event->size().height() / 2);
+  center_ = QPointF(event->size().width() / 2., event->size().height() / 2.);
   prev_pos_ = center_;
 }

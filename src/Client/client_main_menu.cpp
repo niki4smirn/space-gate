@@ -36,7 +36,7 @@ ClientMainMenu::ClientMainMenu(QWidget* parent) :
   font_.setBold(true);
   game_name_->setFont(font_);
 
-  SetLayots();
+  SetLayouts();
   SetStartWidgetsPos();
   Connect();
 }
@@ -57,7 +57,7 @@ void ClientMainMenu::SetStartWidgetsPos() {
                                Qt::AlignHCenter | Qt::AlignVCenter);
 }
 
-void ClientMainMenu::SetLayots() {
+void ClientMainMenu::SetLayouts() {
   background_layout_->addWidget(background_, 0, 0);
   background_layout_->setContentsMargins(0, 0, 0, 0);
   interface_layout_->setSpacing(50);
@@ -137,7 +137,7 @@ void ClientMainMenu::Connect() {
           &ClientMainMenu::BackToGameOption);
   connect(exit_,
           &QPushButton::clicked,
-          [this](){emit Close();});
+          [this]() { emit Close(); });
   connect(back_to_start_,
           &QPushButton::clicked,
           this,
@@ -146,7 +146,7 @@ void ClientMainMenu::Connect() {
   connect(this,
           &ClientMainMenu::StartEffect,
           background_,
-          &BackgroundWidget::SetState);
+          &BackgroundWidget::SetLightEffect);
   connect(ready_status_,
           &QPushButton::clicked, this, &ClientMainMenu::ReadyButtonPressEvent);
 }
@@ -234,7 +234,7 @@ void ClientMainMenu::CreateRoom() {
 }
 
 void ClientMainMenu::JoinRoom() {
-  if (room_list_->count() != 0) {
+  if (room_list_->currentRow() != -1) {
     uint64_t room_id = room_list_->currentItem()->text().toInt();
     emit JoinRoomSignal(room_id);
 
@@ -271,7 +271,8 @@ void ClientMainMenu::Settings() {
 }
 
 void ClientMainMenu::UpdateRoomList(const server_events::RoomsList& room_list) {
-  for (auto room: room_list.id()){
+  room_list_->clear();
+  for (auto room: room_list.id()) {
     room_list_->addItem(QString::number(room));
   }
 }
@@ -299,10 +300,9 @@ void ClientMainMenu::UpdatePlayerList(const server_events::RoomInfo& room_info) 
 }
 
 void ClientMainMenu::ReadyButtonPressEvent() {
-  if (ready_status_->text() == "READY"){
+  if (ready_status_->text() == "READY") {
     ready_status_->setText("NOT READY");
-  }
-  else {
+  } else {
     ready_status_->setText("READY");
   }
   emit ReadyButtonPressed();

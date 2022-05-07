@@ -267,20 +267,21 @@ void ClientMainMenu::Settings() {
                                Qt::AlignHCenter | Qt::AlignVCenter);
   interface_layout_->addWidget(back_to_start_, 3, 0, 1, 2,
                                Qt::AlignHCenter | Qt::AlignVCenter);
-
 }
 
 void ClientMainMenu::UpdateRoomList(const server_events::RoomsList& room_list) {
   room_list_->clear();
-  for (auto room: room_list.id()) {
+  for (auto room : room_list.id()) {
     room_list_->addItem(QString::number(room));
   }
 }
 
-void ClientMainMenu::UpdatePlayerList(const server_events::RoomInfo& room_info) {
+void ClientMainMenu::UpdatePlayerList(
+    const server_events::RoomInfo& room_info) {
   player_list_->clear();
   for (int i = 0; i < room_info.users().size(); i++) {
-    player_list_->addItem(QString::fromStdString(room_info.users().at(i).nickname()));
+    player_list_->addItem(
+        QString::fromStdString(room_info.users().at(i).nickname()));
     switch (room_info.users().at(i).is_ready()) {
       case server_events::RoomUser::kNotReady: {
         player_list_->item(i)->setBackground(QColorConstants::Red);

@@ -28,7 +28,6 @@ QString ClientController::GetControllerName() const {
 }
 
 void ClientController::OnTick() {
-
 }
 
 void ClientController::Send(const events::EventWrapper& event) {

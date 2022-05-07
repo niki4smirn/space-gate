@@ -17,7 +17,7 @@
 #include <QFont>
 
 class ClientMainMenu : public QWidget {
- Q_OBJECT
+  Q_OBJECT
 
  public:
   explicit ClientMainMenu(QWidget* parent = nullptr);
@@ -31,7 +31,7 @@ class ClientMainMenu : public QWidget {
   void SetStartWidgetsPos();
   void SetLayouts();
 
- private Q_SLOTS:
+  private Q_SLOTS:
   void StartGame();
   void ChooseRoomOption();
   void BackToStart();

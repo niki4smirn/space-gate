@@ -20,10 +20,11 @@ AbstractController::AbstractController() {
 }
 
 void AbstractController::LogEvent(
-        const events::EventWrapper& event,
-        game_log::Type log_type) const {
+    const events::EventWrapper& event,
+    game_log::Type log_type) const {
   qDebug().noquote().nospace() << GetControllerName()
-                               << game_log::GetProcessStringByType(log_type) << event.ShortDebugString();
+                               << game_log::GetProcessStringByType(log_type)
+                               << event.ShortDebugString();
 }
 
 void AbstractController::StartTicking() {

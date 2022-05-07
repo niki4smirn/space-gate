@@ -1,7 +1,7 @@
 #include "client_view.h"
 ClientView::ClientView() :
     stacked_widget_(new QStackedWidget(this)),
-    main_menu_(new ClientMainMenu(this)){
+    main_menu_(new ClientMainMenu(this)) {
   AddWidgets();
   stacked_widget_->setCurrentWidget(main_menu_);
   setCentralWidget(stacked_widget_);
@@ -33,7 +33,8 @@ void ClientView::AddWidgets() {
   stacked_widget_->addWidget(main_menu_);
 }
 
-void ClientView::MenuUpdatePlayerList(const server_events::RoomInfo& room_info) {
+void ClientView::MenuUpdatePlayerList(
+    const server_events::RoomInfo& room_info) {
   main_menu_->UpdatePlayerList(room_info);
 }
 

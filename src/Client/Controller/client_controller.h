@@ -14,12 +14,12 @@ class ClientController : public AbstractController {
 
   QString GetControllerName() const override;
 
- public Q_SLOTS:
+  public Q_SLOTS:
   void OnByteArrayReceived(const QByteArray& message);
   void OnConnect();
   void OnDisconnect();
 
- private Q_SLOTS:
+  private Q_SLOTS:
   void SendReadyStatus();
   void SendCreateRoomEvent();
   void SendLeaveRoomEvent();

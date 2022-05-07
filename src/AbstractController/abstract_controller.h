@@ -38,7 +38,8 @@ class AbstractController : public QObject {
   virtual void Send(const events::EventWrapper& event) = 0;
   virtual void Handle(const events::EventWrapper& event) = 0;
 
-  void LogEvent(const events::EventWrapper& event, game_log::Type log_type) const;
+  void LogEvent(const events::EventWrapper& event,
+                game_log::Type log_type) const;
 
   void StartTicking();
 

@@ -11,6 +11,7 @@ class ClientView : public QMainWindow {
  public:
   ClientView();
   void MenuUpdatePlayerList(const server_events::RoomInfo& room_info);
+  void MenuUpdateRoomList(const server_events::RoomsList& room_list);
 
  private:
   void CloseWindow();

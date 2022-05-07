@@ -8,9 +8,9 @@
 ClientMainMenu::ClientMainMenu(QWidget* parent) :
     QWidget(parent),
     background_(new BackgroundWidget(this)),
-    background_layout_(new QGridLayout(this)),
+    background_layout_(new QGridLayout),
     game_name_(new QLabel("SpaceGate", this)),
-    interface_layout_(new QGridLayout(this)),
+    interface_layout_(new QGridLayout),
     play_(new QPushButton(this)),
     start_game_(new QPushButton(this)),
     settings_(new QPushButton(this)),
@@ -234,21 +234,23 @@ void ClientMainMenu::CreateRoom() {
 }
 
 void ClientMainMenu::JoinRoom() {
-  player_list_->clear();
-  RemoveAllWidgets();
-  player_list_->setVisible(true);
-  ready_status_->setVisible(true);
-  back_to_game_option_->setVisible(true);
+  if (room_list_->count() != 0) {
+    uint64_t room_id = room_list_->currentItem()->text().toInt();
+    emit JoinRoomSignal(room_id);
 
-  interface_layout_->addWidget(player_list_, 1, 0, 1, 2,
-                               Qt::AlignHCenter | Qt::AlignVCenter);
-  interface_layout_->addWidget(ready_status_, 2, 0, 1, 2,
-                               Qt::AlignHCenter | Qt::AlignVCenter);
-  interface_layout_->addWidget(back_to_game_option_, 3, 0, 1, 2,
-                               Qt::AlignHCenter | Qt::AlignVCenter);
+    player_list_->clear();
+    RemoveAllWidgets();
+    player_list_->setVisible(true);
+    ready_status_->setVisible(true);
+    back_to_game_option_->setVisible(true);
 
-  uint64_t room_id = 0;
-  emit JoinRoomSignal(room_id);
+    interface_layout_->addWidget(player_list_, 1, 0, 1, 2,
+                                 Qt::AlignHCenter | Qt::AlignVCenter);
+    interface_layout_->addWidget(ready_status_, 2, 0, 1, 2,
+                                 Qt::AlignHCenter | Qt::AlignVCenter);
+    interface_layout_->addWidget(back_to_game_option_, 3, 0, 1, 2,
+                                 Qt::AlignHCenter | Qt::AlignVCenter);
+  }
 }
 
 void ClientMainMenu::Settings() {
@@ -268,8 +270,10 @@ void ClientMainMenu::Settings() {
 
 }
 
-void ClientMainMenu::UpdateRoomList() {
-
+void ClientMainMenu::UpdateRoomList(const server_events::RoomsList& room_list) {
+  for (auto room: room_list.id()){
+    room_list_->addItem(QString::number(room));
+  }
 }
 
 void ClientMainMenu::UpdatePlayerList(const server_events::RoomInfo& room_info) {

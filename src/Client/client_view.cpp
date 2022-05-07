@@ -36,3 +36,7 @@ void ClientView::AddWidgets() {
 void ClientView::MenuUpdatePlayerList(const server_events::RoomInfo& room_info) {
   main_menu_->UpdatePlayerList(room_info);
 }
+
+void ClientView::MenuUpdateRoomList(const server_events::RoomsList& room_list) {
+  main_menu_->UpdateRoomList(room_list);
+}

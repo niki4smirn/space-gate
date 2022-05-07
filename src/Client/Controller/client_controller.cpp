@@ -74,6 +74,10 @@ void ClientController::ParseMessage(const events::EventWrapper& data) {
         view_->MenuUpdatePlayerList(data.server_event().room_info());
         break;
       }
+      case server_events::ServerEventWrapper::kRoomsList: {
+        view_->MenuUpdateRoomList(data.server_event().rooms_list());
+        break;
+      }
       default: {}
     }
   }

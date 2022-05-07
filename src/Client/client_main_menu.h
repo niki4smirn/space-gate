@@ -21,7 +21,7 @@ class ClientMainMenu : public QWidget {
 
  public:
   ClientMainMenu(QWidget* parent = nullptr);
-  void UpdateRoomList();
+  void UpdateRoomList(const server_events::RoomsList& room_list);
   void UpdatePlayerList(const server_events::RoomInfo& room_info);
 
 

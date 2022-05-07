@@ -1,6 +1,7 @@
 #include "background_widget.h"
 
-BackgroundWidget::BackgroundWidget(){
+BackgroundWidget::BackgroundWidget(QWidget* parent):
+  QWidget(parent){
   default_star_interval_ = Star::GetTime();
   animation_timer_.start(15, this);
   setMouseTracking(true);

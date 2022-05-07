@@ -84,16 +84,41 @@ QString ServerController::GetControllerName() const {
   return "Server";
 }
 
-void ServerController::OnTick() {}
+void ServerController::OnTick() {
+  auto* rooms_list = new server_events::RoomsList;
+  for (const auto& [room_id, room_ptr] : server_model_.GetRooms()) {
+    rooms_list->add_id(room_id);
+  }
+  auto* server_event = new server_events::ServerEventWrapper;
+  server_event->set_allocated_rooms_list(rooms_list);
+  events::EventWrapper event_wrapper;
+  event_wrapper.set_allocated_server_event(server_event);
+  AddEventToSend(event_wrapper);
+}
 
 void ServerController::Send(const events::EventWrapper& event) {
-  LogEvent(event, game_log::Type::kSend);
-  const auto& client_event = event.client_event();
-
-  switch (client_event.receiver_case()) {
-    case client_events::ClientEventWrapper::kEventToRoom: {
-      SendEventToRoom(event);
+  switch (event.type_case()) {
+    case events::EventWrapper::kServerEvent: {
+      const auto& users = server_model_.GetUsers();
+      if (!users.empty()) {
+        LogEvent(event, game_log::Type::kSend);
+      }
+      for (const auto& [user_id, user_ptr] : users) {
+        auto serialized = event.SerializeAsString();
+        QByteArray byte_array(serialized.data(), serialized.size());
+        user_ptr->GetSocket()->sendBinaryMessage(byte_array);
+      }
       break;
+    }
+    case events::EventWrapper::kClientEvent: {
+      LogEvent(event, game_log::Type::kSend);
+      switch (event.client_event().receiver_case()) {
+        case client_events::ClientEventWrapper::kEventToRoom: {
+          SendEventToRoom(event);
+          break;
+        }
+        default: {}
+      }
     }
     default: {}
   }

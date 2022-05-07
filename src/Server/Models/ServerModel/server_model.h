@@ -33,6 +33,9 @@ class ServerModel {
   bool IsInSomeRoom(UserId id) const;
   std::shared_ptr<RoomController> GetRoomByUserId(UserId id) const;
 
+  std::map<RoomId, std::shared_ptr<RoomController>> GetRooms() const;
+  std::map<UserId, std::shared_ptr<User>> GetUsers() const;
+
  private:
   std::map<UserId, std::shared_ptr<User>> users_;
   std::map<RoomId, std::shared_ptr<RoomController>> rooms_;

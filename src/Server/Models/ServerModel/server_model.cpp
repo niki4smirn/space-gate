@@ -83,3 +83,11 @@ std::shared_ptr<RoomController> ServerModel::GetRoomById(RoomId id) const {
   Q_ASSERT(ExistsRoom(id));
   return rooms_.at(id);
 }
+
+std::map<RoomId, std::shared_ptr<RoomController>> ServerModel::GetRooms() const {
+  return rooms_;
+}
+
+std::map<UserId, std::shared_ptr<User>> ServerModel::GetUsers() const {
+  return users_;
+}

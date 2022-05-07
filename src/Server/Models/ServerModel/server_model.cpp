@@ -61,9 +61,9 @@ void ServerModel::AddUserToRoom(UserId user_id, RoomId room_id) {
 }
 
 void ServerModel::DeleteUserFromRoom(UserId user_id) {
-  room_id_for_user_id_[user_id] = std::nullopt;
   auto room = GetRoomByUserId(user_id);
   room->DeleteUser(user_id);
+  room_id_for_user_id_[user_id] = std::nullopt;
   if (room->IsEmpty()) {
     DeleteRoom(room->GetId());
   }

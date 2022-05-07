@@ -3,6 +3,8 @@
 #include <QFont>
 #include <QFontDatabase>
 
+#include <iostream>
+
 ClientMainMenu::ClientMainMenu() :
     background_(new BackgroundWidget),
     background_layout_(new QGridLayout),
@@ -280,7 +282,7 @@ void ClientMainMenu::UpdatePlayerList(const server_events::RoomInfo& room_info) 
         break;
       }
       case server_events::RoomUser::kNone: {
-        player_list_->item(i)->setBackground(QColorConstants::Blue);
+        player_list_->item(i)->setBackground(QColorConstants::Gray);
         break;
       }
       default: {}

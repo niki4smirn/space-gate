@@ -24,6 +24,9 @@ void ClientView::Connect() {
   connect(main_menu_,
           &ClientMainMenu::LeaveRoom,
           [this](){emit LeaveRoom();});
+  connect(main_menu_,
+          &ClientMainMenu::JoinRoomSignal,
+          [this](uint64_t room_id){emit JoinRoom(room_id);});
 }
 
 void ClientView::AddWidgets() {

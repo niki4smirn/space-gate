@@ -54,6 +54,7 @@ void ClientController::Connect() {
   connect(view_, &ClientView::ReadyButtonPressed, this, &ClientController::SendReadyStatus);
   connect(view_, &ClientView::CreateRoom, this, &ClientController::SendCreateRoomEvent);
   connect(view_, &ClientView::LeaveRoom, this, &ClientController::SendLeaveRoomEvent);
+  connect(view_, &ClientView::JoinRoom, this, &ClientController::SendJoinRoomEvent);
 }
 void ClientController::SendReadyStatus() {
   events::EventWrapper ready_event;
@@ -79,23 +80,35 @@ void ClientController::ParseMessage(const events::EventWrapper& data) {
 }
 
 void ClientController::SendCreateRoomEvent() {
-  events::EventWrapper create_room_event;
+  auto* create_room_event = new client_events::CreateRoom;
   auto* event_to_server = new client_events::EventToServer;
-  auto* event_wrapper = new client_events::ClientEventWrapper;
-  auto* create_event = new client_events::CreateRoom;
-  event_to_server->set_allocated_create_room(create_event);
-  event_wrapper->set_allocated_event_to_server(event_to_server);
-  create_room_event.set_allocated_client_event(event_wrapper);
-  AddEventToSend(create_room_event);
+  event_to_server->set_allocated_create_room(create_room_event);
+  auto* client_event_wrapper = new client_events::ClientEventWrapper;
+  client_event_wrapper->set_allocated_event_to_server(event_to_server);
+  events::EventWrapper event_to_send;
+  event_to_send.set_allocated_client_event(client_event_wrapper);
+  AddEventToSend(event_to_send);
 }
 
 void ClientController::SendLeaveRoomEvent() {
-  events::EventWrapper leave_room_event;
+  auto* leave_room_event = new client_events::LeaveRoom;
   auto* event_to_server = new client_events::EventToServer;
-  auto* event_wrapper = new client_events::ClientEventWrapper;
-  auto* leave_event = new client_events::LeaveRoom;
-  event_to_server->set_allocated_leave_room(leave_event);
-  event_wrapper->set_allocated_event_to_server(event_to_server);
-  leave_room_event.set_allocated_client_event(event_wrapper);
-  AddEventToSend(leave_room_event);
+  event_to_server->set_allocated_leave_room(leave_room_event);
+  auto* client_event_wrapper = new client_events::ClientEventWrapper;
+  client_event_wrapper->set_allocated_event_to_server(event_to_server);
+  events::EventWrapper event_to_send;
+  event_to_send.set_allocated_client_event(client_event_wrapper);
+  AddEventToSend(event_to_send);
+}
+
+void ClientController::SendJoinRoomEvent(uint64_t room_id) {
+  auto* join_room_event = new client_events::EnterRoom;
+  join_room_event->set_room_id(room_id);
+  auto* event_to_server = new client_events::EventToServer;
+  event_to_server->set_allocated_enter_room(join_room_event);
+  auto* client_event_wrapper = new client_events::ClientEventWrapper;
+  client_event_wrapper->set_allocated_event_to_server(event_to_server);
+  events::EventWrapper event_to_send;
+  event_to_send.set_allocated_client_event(client_event_wrapper);
+  AddEventToSend(event_to_send);
 }

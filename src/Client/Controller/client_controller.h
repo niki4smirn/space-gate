@@ -20,10 +20,11 @@ class ClientController : public AbstractController {
   void OnConnect();
   void OnDisconnect();
 
- public Q_SLOTS:
+ private Q_SLOTS:
   void SendReadyStatus();
   void SendCreateRoomEvent();
   void SendLeaveRoomEvent();
+  void SendJoinRoomEvent(uint64_t room_id);
 
  protected:
   void OnTick() override;

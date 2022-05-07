@@ -25,4 +25,5 @@ class ClientView : public QMainWindow {
   void ReadyButtonPressed();
   void CreateRoom();
   void LeaveRoom();
+  void JoinRoom(uint64_t room_id);
 };

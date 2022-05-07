@@ -245,6 +245,9 @@ void ClientMainMenu::JoinRoom() {
                                Qt::AlignHCenter | Qt::AlignVCenter);
   interface_layout_->addWidget(back_to_game_option_, 3, 0, 1, 2,
                                Qt::AlignHCenter | Qt::AlignVCenter);
+
+  uint64_t room_id = 0;
+  emit JoinRoomSignal(room_id);
 }
 
 void ClientMainMenu::Settings() {

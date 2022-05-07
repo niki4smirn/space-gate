@@ -1,6 +1,6 @@
 #pragma once
 
-#include "client_main_menu.h"
+#include "src/Client/View/MainMenu/client_main_menu.h"
 
 #include <QWidget>
 #include <QStackedWidget>

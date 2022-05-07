@@ -1,6 +1,6 @@
 #pragma once
 
-#include "background_widget.h"
+#include "src/Client/View/MainMenu/BackGround/background_widget.h"
 #include "Protobuf/client_events.pb.h"
 #include "Protobuf/server_events.pb.h"
 

@@ -40,3 +40,4 @@ void ClientView::MenuUpdatePlayerList(const server_events::RoomInfo& room_info) 
 void ClientView::MenuUpdateRoomList(const server_events::RoomsList& room_list) {
   main_menu_->UpdateRoomList(room_list);
 }
+

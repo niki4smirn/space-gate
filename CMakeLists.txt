@@ -48,14 +48,14 @@ add_executable(client
         ${COMMON_SRC}
         src/Client/client_main.cpp
         src/Client/Controller/client_controller.cpp
-        src/Client/background_widget.cpp
-        src/Client/background_widget.h
-        src/Client/client_main_menu.cpp
-        src/Client/client_main_menu.h
-        src/Client/client_view.cpp
-        src/Client/client_view.h
-        src/Client/stars.cpp
-        src/Client/stars.h
+        src/Client/View/MainMenu/BackGround/background_widget.cpp
+        src/Client/View/MainMenu/BackGround/background_widget.h
+        src/Client/View/MainMenu/client_main_menu.cpp
+        src/Client/View/MainMenu/client_main_menu.h
+        src/Client/View/client_view.cpp
+        src/Client/View/client_view.h
+        src/Client/View/MainMenu/BackGround/stars.cpp
+        src/Client/View/MainMenu/BackGround/stars.h
         )
 
 set(REQUIRED_QT_PARTS

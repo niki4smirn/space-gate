@@ -5,7 +5,7 @@
 #include <QWebSocket>
 
 #include "src/AbstractController/abstract_controller.h"
-#include "src/Client/client_view.h"
+#include "src/Client/View/client_view.h"
 
 class ClientController : public AbstractController {
  public:

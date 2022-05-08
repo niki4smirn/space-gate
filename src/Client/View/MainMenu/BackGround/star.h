@@ -6,8 +6,7 @@
 #include <QSize>
 #include <QPoint>
 
-#include <iostream>
-#include <math.h>
+#include <cmath>
 
 class Star {
  public:
@@ -22,8 +21,9 @@ class Star {
   static void SetTime(double set);
 
   void Move();
-  void MoveCenter(QMouseEvent* event);
-  bool Remove(QPointF coords, QPointF center);
+  void MoveCenter(QPointF& pos);
+  double ToDeg(double angle) const;
+  double Length() const;
 
  private:
   double z_distance_;
@@ -37,7 +37,7 @@ class Star {
   QPointF coords_;
 
   double velocity_ = 2;
-  double minimum_z_distance_ = 200;
-  double max_random_z_distance_ = 1000;
-  double max_size_ = 6;
+  const double minimum_z_distance_ = 200;
+  const double max_random_z_distance_ = 1000;
+  const double max_size_ = 6;
 };

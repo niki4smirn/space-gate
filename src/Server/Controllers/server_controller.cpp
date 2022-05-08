@@ -27,7 +27,7 @@ void ServerController::OnByteArrayReceived(const QByteArray& message) {
   UserId user_id = user->GetId();
   client_event->set_sender_id(user_id);
 
-  LogEvent(received_event, game_log::Type::kReceive);
+  LogEvent(received_event, logging::Type::kReceive);
 
   // TODO(niki4smirn): try to make this check prettier
   if (client_event->has_event_to_server()) {
@@ -87,7 +87,7 @@ QString ServerController::GetControllerName() const {
 void ServerController::OnTick() {
   auto* rooms_list = new server_events::RoomsList;
   for (const auto& [room_id, room_ptr] : server_model_.GetRooms()) {
-    rooms_list->add_id(room_id);
+    rooms_list->add_ids(room_id);
   }
   auto* server_event = new server_events::ServerEventWrapper;
   server_event->set_allocated_rooms_list(rooms_list);
@@ -101,7 +101,7 @@ void ServerController::Send(const events::EventWrapper& event) {
     case events::EventWrapper::kServerEvent: {
       const auto& users = server_model_.GetUsers();
       if (!users.empty()) {
-        LogEvent(event, game_log::Type::kSend);
+        LogEvent(event, logging::Type::kSend);
       }
       for (const auto& [user_id, user_ptr] : users) {
         auto serialized = event.SerializeAsString();
@@ -111,7 +111,7 @@ void ServerController::Send(const events::EventWrapper& event) {
       break;
     }
     case events::EventWrapper::kClientEvent: {
-      LogEvent(event, game_log::Type::kSend);
+      LogEvent(event, logging::Type::kSend);
       switch (event.client_event().receiver_case()) {
         case client_events::ClientEventWrapper::kEventToRoom: {
           SendEventToRoom(event);
@@ -125,7 +125,7 @@ void ServerController::Send(const events::EventWrapper& event) {
 }
 
 void ServerController::Handle(const events::EventWrapper& event) {
-  LogEvent(event, game_log::Type::kHandle);
+  LogEvent(event, logging::Type::kHandle);
   const auto& client_event = event.client_event();
   UserId user_id = client_event.sender_id();
   const auto& event_to_server = client_event.event_to_server();

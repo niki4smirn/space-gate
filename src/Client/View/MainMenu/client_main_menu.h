@@ -1,13 +1,11 @@
 #pragma once
 
 #include "src/Client/View/MainMenu/BackGround/background_widget.h"
+#include "src/Server/Models/RoomModel/room_model.h"
 #include "Protobuf/client_events.pb.h"
 #include "Protobuf/server_events.pb.h"
 
-#include <string>
-
 #include <QGridLayout>
-#include <QVBoxLayout>
 #include <QPushButton>
 #include <QLabel>
 #include <QWidget>
@@ -67,6 +65,6 @@ class ClientMainMenu : public QWidget {
   void ReadyButtonPressed();
   void CreateRoomSignal();
   void LeaveRoom();
-  void JoinRoomSignal(uint64_t room_id);
+  void JoinRoomSignal(RoomId room_id);
 };
 

@@ -9,7 +9,7 @@
 
 #include "src/Helpers/helpers.h"
 
-namespace game_log {
+namespace logging {
 
 enum class Type {
   kHandle,
@@ -19,7 +19,7 @@ enum class Type {
 
 QString GetProcessStringByType(Type type);
 
-}  // namespace game_log
+}  // namespace logging
 
 class AbstractController : public QObject {
  public:
@@ -39,7 +39,7 @@ class AbstractController : public QObject {
   virtual void Handle(const events::EventWrapper& event) = 0;
 
   void LogEvent(const events::EventWrapper& event,
-                game_log::Type log_type) const;
+                logging::Type log_type) const;
 
   void StartTicking();
 

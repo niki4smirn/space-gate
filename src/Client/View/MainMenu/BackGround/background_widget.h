@@ -9,10 +9,10 @@
 #include <QResizeEvent>
 #include <QWidget>
 
-#include <deque>
 #include <vector>
+#include <list>
 
-#include "stars.h"
+#include "star.h"
 
 class BackgroundWidget : public QWidget {
   Q_OBJECT
@@ -23,11 +23,11 @@ class BackgroundWidget : public QWidget {
   void Tick();
 
   void SetLightEffect(bool state);
-  void SetCenterPos(QMouseEvent* event);
+  void SetCenterPos(const QPoint& pos);
 
  private:
   void GenerateStars();
-  void RemoveStars();
+  void RemoveOutOfBoundsStars();
   void PaintStars(QPainter* painter) const;
   void PaintLines(QPainter* painter) const;
   void PaintBackground(QPainter* painter) const;
@@ -42,7 +42,7 @@ class BackgroundWidget : public QWidget {
 
   QBasicTimer animation_timer_;
 
-  std::vector<QColor> colors_ =
+  const std::vector<QColor> colors_ =
     {QColor(51, 255, 255),
      QColor(154, 244, 255),
      QColor(250, 218, 254),
@@ -50,22 +50,23 @@ class BackgroundWidget : public QWidget {
      QColor(249, 216, 243),
      QColor(216, 249, 230),
      QColor(51, 153, 255)};
-  std::deque<Star> stars_;
-  std::vector<std::pair<QPointF, QPointF>> lines_;
+  std::list<Star> stars_;
+  std::vector<QLineF> lines_;
   bool light_speed_effect_ = false;  // enables effect
   double white_blur_ = 0;  // initial white blur
-  double blur_acceleration_ = 1;  // 1 - 254, more - faster
-  double star_time_acceleration_ = 0.015;  // 0 - inf, more - faster
-  double max_star_time_interval_ = 5;  // blur_accel - inf, more - longer
+  const double blur_acceleration_ = 1;  // 1 - 254, more - faster
+  const double star_time_acceleration_ = 0.015;  // 0 - inf, more - faster
+  const double max_star_time_interval_ = 5;  // blur_accel - inf, more - longer
   double default_star_interval_;
-  int stars_number_ = 250;  // 0 - inf
-  double max_line_size_ = 4;  // 0 - inf
-  double max_star_size_ = 250;  // 1 - inf
-  int max_shake_ = 10;  // 0 - inf
-  double camera_divergence_ = 20;  // 1 - inf, more - smaller
+  const int stars_number_ = 250;  // 0 - inf
+  const int generate_stars_number_ = static_cast<int>(stars_number_ * 0.2);
+  const double max_line_size_ = 4;  // 0 - inf
+  const double max_star_size_ = 250;  // 1 - inf
+  const int max_shake_ = 10;  // 0 - inf
+  const double camera_divergence_ = 20;  // 1 - inf, more - smaller
   QPointF center_;
   QPointF prev_pos_;
-  bool cursor_move_effect_1_ = true;  // enables effect
-  bool cursor_move_effect_2_ = false;  // enables effect
+  const bool cursor_move_effect_1_ = true;  // enables effect
+  const bool cursor_move_effect_2_ = false;  // enables effect
 };
 

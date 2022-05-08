@@ -3,8 +3,6 @@
 #include <QFont>
 #include <QFontDatabase>
 
-#include <iostream>
-
 ClientMainMenu::ClientMainMenu(QWidget* parent) :
     QWidget(parent),
     background_(new BackgroundWidget(this)),
@@ -234,23 +232,24 @@ void ClientMainMenu::CreateRoom() {
 }
 
 void ClientMainMenu::JoinRoom() {
-  if (room_list_->currentRow() != -1) {
-    uint64_t room_id = room_list_->currentItem()->text().toInt();
-    emit JoinRoomSignal(room_id);
-
-    player_list_->clear();
-    RemoveAllWidgets();
-    player_list_->setVisible(true);
-    ready_status_->setVisible(true);
-    back_to_game_option_->setVisible(true);
-
-    interface_layout_->addWidget(player_list_, 1, 0, 1, 2,
-                                 Qt::AlignHCenter | Qt::AlignVCenter);
-    interface_layout_->addWidget(ready_status_, 2, 0, 1, 2,
-                                 Qt::AlignHCenter | Qt::AlignVCenter);
-    interface_layout_->addWidget(back_to_game_option_, 3, 0, 1, 2,
-                                 Qt::AlignHCenter | Qt::AlignVCenter);
+  if (room_list_->currentRow() == -1) {
+    return;
   }
+  RoomId room_id = room_list_->currentItem()->text().toInt();
+  emit JoinRoomSignal(room_id);
+
+  player_list_->clear();
+  RemoveAllWidgets();
+  player_list_->setVisible(true);
+  ready_status_->setVisible(true);
+  back_to_game_option_->setVisible(true);
+
+  interface_layout_->addWidget(player_list_, 1, 0, 1, 2,
+                               Qt::AlignHCenter | Qt::AlignVCenter);
+  interface_layout_->addWidget(ready_status_, 2, 0, 1, 2,
+                               Qt::AlignHCenter | Qt::AlignVCenter);
+  interface_layout_->addWidget(back_to_game_option_, 3, 0, 1, 2,
+                               Qt::AlignHCenter | Qt::AlignVCenter);
 }
 
 void ClientMainMenu::Settings() {
@@ -271,7 +270,7 @@ void ClientMainMenu::Settings() {
 
 void ClientMainMenu::UpdateRoomList(const server_events::RoomsList& room_list) {
   room_list_->clear();
-  for (auto room : room_list.id()) {
+  for (auto room : room_list.ids()) {
     room_list_->addItem(QString::number(room));
   }
 }

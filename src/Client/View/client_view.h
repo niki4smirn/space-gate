@@ -1,6 +1,7 @@
 #pragma once
 
 #include "src/Client/View/MainMenu/client_main_menu.h"
+#include "src/Server/Models/RoomModel/room_model.h"
 
 #include <QWidget>
 #include <QStackedWidget>

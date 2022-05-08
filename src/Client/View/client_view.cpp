@@ -1,4 +1,5 @@
 #include "client_view.h"
+
 ClientView::ClientView() :
     stacked_widget_(new QStackedWidget(this)),
     main_menu_(new ClientMainMenu(this)) {

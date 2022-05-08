@@ -23,14 +23,13 @@ class ClientController : public AbstractController {
   void SendReadyStatus();
   void SendCreateRoomEvent();
   void SendLeaveRoomEvent();
-  void SendJoinRoomEvent(uint64_t room_id);
+  void SendJoinRoomEvent(RoomId room_id);
 
  protected:
   void OnTick() override;
   void Send(const events::EventWrapper& event) override;
   void Handle(const events::EventWrapper& event) override;
-  void Connect();
-  void ParseMessage(const events::EventWrapper& date);
+  void ConnectView();
 
  private:
   QUrl server_url_;

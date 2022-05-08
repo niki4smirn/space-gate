@@ -12,7 +12,7 @@ ClientController::ClientController(const QUrl& url) :
           &ClientController::OnByteArrayReceived);
   socket_.open(url);
   StartTicking();
-  Connect();
+  ConnectView();
 }
 
 void ClientController::OnConnect() {
@@ -31,13 +31,27 @@ void ClientController::OnTick() {
 }
 
 void ClientController::Send(const events::EventWrapper& event) {
-  LogEvent(event, game_log::Type::kSend);
+  LogEvent(event, logging::Type::kSend);
   auto serialized = event.SerializeAsString();
   QByteArray byte_array(serialized.data(), serialized.size());
   socket_.sendBinaryMessage(byte_array);
 }
 
-void ClientController::Handle(const events::EventWrapper& event) {}
+void ClientController::Handle(const events::EventWrapper& event) {
+  if (event.type_case() == events::EventWrapper::kServerEvent) {
+    switch (event.server_event().type_case()) {
+      case server_events::ServerEventWrapper::kRoomInfo: {
+        view_->MenuUpdatePlayerList(event.server_event().room_info());
+        break;
+      }
+      case server_events::ServerEventWrapper::kRoomsList: {
+        view_->MenuUpdateRoomList(event.server_event().rooms_list());
+        break;
+      }
+      default: {}
+    }
+  }
+}
 
 void ClientController::OnByteArrayReceived(const QByteArray& message) {
   events::EventWrapper received_event;
@@ -45,11 +59,10 @@ void ClientController::OnByteArrayReceived(const QByteArray& message) {
     // fail
     return;
   }
-  ParseMessage(received_event);
-
-  LogEvent(received_event, game_log::Type::kReceive);
+  AddEventToHandle(received_event);
+  LogEvent(received_event, logging::Type::kReceive);
 }
-void ClientController::Connect() {
+void ClientController::ConnectView() {
   connect(view_,
           &ClientView::ReadyButtonPressed,
           this,
@@ -78,22 +91,6 @@ void ClientController::SendReadyStatus() {
   AddEventToSend(ready_event);
 }
 
-void ClientController::ParseMessage(const events::EventWrapper& data) {
-  if (data.type_case() == events::EventWrapper::kServerEvent) {
-    switch (data.server_event().type_case()) {
-      case server_events::ServerEventWrapper::kRoomInfo: {
-        view_->MenuUpdatePlayerList(data.server_event().room_info());
-        break;
-      }
-      case server_events::ServerEventWrapper::kRoomsList: {
-        view_->MenuUpdateRoomList(data.server_event().rooms_list());
-        break;
-      }
-      default: {}
-    }
-  }
-}
-
 void ClientController::SendCreateRoomEvent() {
   auto* create_room_event = new client_events::CreateRoom;
   auto* event_to_server = new client_events::EventToServer;
@@ -116,7 +113,7 @@ void ClientController::SendLeaveRoomEvent() {
   AddEventToSend(event_to_send);
 }
 
-void ClientController::SendJoinRoomEvent(uint64_t room_id) {
+void ClientController::SendJoinRoomEvent(RoomId room_id) {
   auto* join_room_event = new client_events::EnterRoom;
   join_room_event->set_room_id(room_id);
   auto* event_to_server = new client_events::EventToServer;

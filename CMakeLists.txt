@@ -32,6 +32,7 @@ set(COMMON_SRC
         src/AbstractController/abstract_controller.cpp
         src/Helpers/helpers.cpp
         Constants/constants.cpp
+        src/Helpers/logging.cpp
         )
 
 add_executable(server
@@ -41,7 +42,10 @@ add_executable(server
         src/Server/Models/User/user.cpp
         src/Server/Models/ServerModel/server_model.cpp
         src/Server/Controllers/room_controller.cpp
+        src/Server/Controllers/game_controller.cpp
         src/Server/Models/RoomModel/room_model.cpp
+        src/Server/Models/GameModel/game_model.cpp
+        src/Server/Models/Player/player.cpp
         )
 
 add_executable(client

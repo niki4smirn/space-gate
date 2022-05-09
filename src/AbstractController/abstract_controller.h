@@ -8,18 +8,7 @@
 #include "Protobuf/events.pb.h"
 
 #include "src/Helpers/helpers.h"
-
-namespace log {
-
-enum class Type {
-  kHandle,
-  kSend,
-  kReceive
-};
-
-QString GetProcessStringByType(Type type);
-
-}  // namespace log
+#include "src/Helpers/logging.h"
 
 class AbstractController : public QObject {
  public:

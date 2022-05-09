@@ -1,5 +1,7 @@
 #include "room_controller.h"
 
+#include "src/Server/Models/User/user.h"
+
 RoomController::RoomController(
     RoomId room_id,
     const std::shared_ptr<User>& chief)
@@ -11,9 +13,51 @@ QString RoomController::GetControllerName() const {
   return "Room";
 }
 
-void RoomController::OnTick() {}
+void RoomController::OnTick() {
+  // TODO(everyone): cache room state and send new RoomInfo in case of changes
+  auto* room_info = new server_events::RoomInfo;
+  room_info->set_room_id(room_model_.GetRoomId());
+  room_info->set_chief_id(room_model_.GetChiefId());
 
-void RoomController::Send(const proto::Event& event) {}
+  for (auto [user_id, user_ptr] : room_model_.GetUsers()) {
+    auto* proto_user = room_info->add_users();
+    auto* str = new std::string{std::to_string(user_id)};
+    proto_user->set_allocated_nickname(str);
+    switch (user_ptr->GetStatus()) {
+      case User::WaitingStatus::kNotReady: {
+        proto_user->set_is_ready(server_events::RoomUser::kNotReady);
+        break;
+      }
+      case User::WaitingStatus::kReady: {
+        proto_user->set_is_ready(server_events::RoomUser::kReady);
+        break;
+      }
+      default: {}
+    }
+  }
+
+  auto* server_event = new server_events::ServerEventWrapper;
+  server_event->set_allocated_room_info(room_info);
+
+  events::EventWrapper event;
+  event.set_allocated_server_event(server_event);
+  AddEventToSend(event);
+}
+
+void RoomController::Send(const events::EventWrapper& event) {
+  switch (event.type_case()) {
+    case events::EventWrapper::kServerEvent: {
+      LogEvent(event, log::Type::kSend);
+      for (auto [_, user_ptr] : room_model_.GetUsers()) {
+        auto serialized = event.SerializeAsString();
+        QByteArray byte_array(serialized.data(), serialized.size());
+        user_ptr->GetSocket()->sendBinaryMessage(byte_array);
+      }
+      break;
+    }
+    default: {};
+  }
+}
 
 RoomId RoomController::GetId() const {
   return room_model_.GetRoomId();
@@ -33,11 +77,13 @@ void RoomController::DeleteUser(UserId id) {
   }
 }
 
-void RoomController::Handle(const proto::Event& event) {
+void RoomController::Handle(const events::EventWrapper& event) {
   LogEvent(event, log::Type::kHandle);
-  switch (event.type()) {
-    case proto::Event::kChangeWaitingStatus: {
-      UserId user_id = event.sender_id();
+  const auto& client_event = event.client_event();
+  const auto& room_event = client_event.event_to_room();
+  switch (room_event.type_case()) {
+    case client_events::EventToRoom::kChangeWaitingStatus: {
+      UserId user_id = client_event.sender_id();
       auto current_status = room_model_.GetUserWaitingStatus(user_id);
       User::WaitingStatus new_status{User::WaitingStatus::kNone};
       switch (current_status) {

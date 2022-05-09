@@ -1,0 +1,34 @@
+syntax = "proto3";
+package client_events;
+
+message ClientEventWrapper {
+  uint64 sender_id = 1;
+  oneof receiver {
+    EventToServer event_to_server = 2;
+    EventToRoom event_to_room = 3;
+  }
+}
+
+message CreateRoom {}
+
+message EnterRoom {
+  uint64 room_id = 1;
+}
+
+message LeaveRoom {}
+
+message EventToServer {
+  oneof type {
+    CreateRoom create_room = 1;
+    EnterRoom enter_room = 2;
+    LeaveRoom leave_room = 3;
+  }
+}
+
+message ChangeWaitingStatus {}
+
+message EventToRoom {
+  oneof type {
+    ChangeWaitingStatus change_waiting_status = 1;
+  }
+}

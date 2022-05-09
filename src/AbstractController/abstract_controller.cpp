@@ -7,7 +7,7 @@ AbstractController::AbstractController() {
 }
 
 void AbstractController::LogEvent(
-    const proto::Event& event,
+    const events::EventWrapper& event,
     log::Type log_type) const {
   LOG << GetControllerName()
       << log::GetProcessStringByType(log_type) << event.ShortDebugString();
@@ -21,20 +21,24 @@ void AbstractController::Tick() {
   this->OnTick();
 
   while (!events_to_handle_.empty()) {
-    this->Handle(events_to_handle_.front());
+    auto& cur_event = events_to_handle_.front();
+    this->Handle(cur_event);
+    cur_event.Clear();
     events_to_handle_.pop();
   }
 
   while (!events_to_send_.empty()) {
-    this->Send(events_to_send_.front());
+    auto& cur_event = events_to_send_.front();
+    this->Send(cur_event);
+    cur_event.Clear();
     events_to_send_.pop();
   }
 }
 
-void AbstractController::AddEventToHandle(const proto::Event& event) {
+void AbstractController::AddEventToHandle(const events::EventWrapper& event) {
   events_to_handle_.push(event);
 }
 
-void AbstractController::AddEventToSend(const proto::Event& event) {
+void AbstractController::AddEventToSend(const events::EventWrapper& event) {
   events_to_send_.push(event);
 }

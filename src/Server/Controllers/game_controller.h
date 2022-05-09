@@ -14,8 +14,8 @@ class GameController : public AbstractController {
  private:
   void OnTick() override;
 
-  void Send(const proto::Event& event) override;
-  void Handle(const proto::Event& event) override;
+  void Send(const events::EventWrapper& event) override;
+  void Handle(const events::EventWrapper& event) override;
 
   GameModel model_;
 };

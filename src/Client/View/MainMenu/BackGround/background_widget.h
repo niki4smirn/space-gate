@@ -58,7 +58,6 @@ class BackgroundWidget : public QWidget {
      QColor(216, 249, 230),
      QColor(51, 153, 255)};
   std::list<StarAndLine> stars_;
-  //std::vector<QLineF> lines_;
   bool light_speed_effect_ = false;  // enables effect
   double white_blur_ = 0;  // initial white blur
   const double blur_acceleration_ = 1;  // 1 - 254, more - faster

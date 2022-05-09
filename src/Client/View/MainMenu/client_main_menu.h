@@ -21,6 +21,7 @@ class ClientMainMenu : public QWidget {
   explicit ClientMainMenu(QWidget* parent = nullptr);
   void UpdateRoomList(const server_events::RoomsList& room_list);
   void UpdatePlayerList(const server_events::RoomInfo& room_info);
+  void SetCenterPos(QPoint pos);
 
  private:
   void RemoveAllWidgets();

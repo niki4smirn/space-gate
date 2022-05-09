@@ -22,7 +22,7 @@ class Star {
   static void SetTime(double set);
 
   void Move();
-  void MoveCenter(QPointF& pos);
+  void MoveCenter(const QPointF& pos);
   double ToDeg(double angle) const;
   double Length() const;
 

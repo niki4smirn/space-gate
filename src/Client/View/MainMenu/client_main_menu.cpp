@@ -39,6 +39,9 @@ ClientMainMenu::ClientMainMenu(QWidget* parent) :
   SetStartWidgetsPos();
   Connect();
 }
+void ClientMainMenu::SetCenterPos(QPoint pos) {
+  background_->SetCenterPos(pos);
+}
 
 void ClientMainMenu::SetStartWidgetsPos() {
   RemoveAllWidgets();

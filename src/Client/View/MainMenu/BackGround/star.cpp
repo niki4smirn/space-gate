@@ -6,7 +6,7 @@ double Star::angle_y_ = 60;
 
 Star::Star(QSize window_size, QColor color, QPointF center) :
     window_size_(window_size),
-    prev_pos_(center){
+    prev_pos_(center) {
   z_distance_ = QRandomGenerator::global()->bounded(max_random_z_distance_ + 1)
     + minimum_z_distance_;
 
@@ -46,7 +46,7 @@ double Star::GetTime() {
   return time_;
 }
 
-void Star::MoveCenter(QPointF& pos) {
+void Star::MoveCenter(const QPointF& pos) {
   coords_ += (prev_pos_ - pos);
   prev_pos_ = pos;
 }
@@ -58,7 +58,7 @@ QPointF Star::GetViewPoint() const {
     / (ToDeg(angle_y_ / 2)));
   return {pntx, pnty};
 }
-double Star::ToDeg(double angle) const{
+double Star::ToDeg(double angle) const {
   return angle * std::numbers::pi / 180;
 }
 double Star::Length() const {

@@ -15,7 +15,7 @@ ClientView::ClientView() :
 }
 
 void ClientView::mouseMoveEvent(QMouseEvent* event) {
-  LOG << event->pos();
+  main_menu_->SetCenterPos(event->pos());
 }
 
 void ClientView::CloseWindow() {

@@ -144,7 +144,7 @@ void BackgroundWidget::SetCenterPos(const QPoint& pos) {
   }
   if (cursor_move_effect_2_ && !light_speed_effect_) {
     center_ = posf;
-    for (auto& item: stars_) {
+    for (auto& item : stars_) {
       item.star.MoveCenter(posf);
     }
   }
@@ -184,7 +184,7 @@ void BackgroundWidget::AddLines() {
   QPointF cmp(0, 0);
   for (auto& item : stars_) {
     QPointF pnt = item.star.GetViewPoint() + center_;
-    if (item.line.p1() == cmp){
+    if (item.line.p1() == cmp) {
       item.line.setP1(pnt);
     }
     item.line.setP2(pnt);
@@ -192,5 +192,5 @@ void BackgroundWidget::AddLines() {
 }
 
 StarAndLine::StarAndLine(QSize window_size, QColor color, QPointF center) :
- star(Star(window_size, color, center)),
- line(QLineF(0, 0, 0, 0)){}
+  star(Star(window_size, color, center)),
+  line(QLineF(0, 0, 0, 0)) {}

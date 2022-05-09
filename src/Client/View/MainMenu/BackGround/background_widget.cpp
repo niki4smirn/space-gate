@@ -4,7 +4,7 @@
 BackgroundWidget::BackgroundWidget(QWidget* parent) :
     QWidget(parent) {
   default_star_interval_ = Star::GetTime();
-  animation_timer_.start(155, this);
+  animation_timer_.start(15, this);
   setMouseTracking(true);
   this->setMouseTracking(true);
 }
@@ -23,18 +23,18 @@ void BackgroundWidget::Paint(QPainter* painter) const {
 void BackgroundWidget::PaintStars(QPainter* painter) const {
   QPen pen(QColor(0, 0, 0, 0));
   painter->setPen(pen);
-  for (const auto& star : stars_) {
+  for (const auto& item : stars_) {
     QSize size;
-    if (star.GetSize() > max_star_size_) {
+    if (item.star.GetSize() > max_star_size_) {
       size.setWidth(static_cast<int>(max_star_size_));
       size.setHeight(static_cast<int>(max_star_size_));
     } else {
-      size.setWidth(static_cast<int>(star.GetSize()));
-      size.setHeight(static_cast<int>(star.GetSize()));
+      size.setWidth(static_cast<int>(item.star.GetSize()));
+      size.setHeight(static_cast<int>(item.star.GetSize()));
     }
-    QColor color = star.GetColor();
+    QColor color = item.star.GetColor();
     color.setAlpha(255);
-    QRadialGradient radialGrad(star.GetViewPoint() + center_,
+    QRadialGradient radialGrad(item.star.GetViewPoint() + center_,
                                static_cast<int>(size.width() / 2));
     radialGrad.setColorAt(0, color);
     color.setAlpha(0);
@@ -42,16 +42,15 @@ void BackgroundWidget::PaintStars(QPainter* painter) const {
 
     QBrush brush(radialGrad);
     painter->setBrush(brush);
-    painter->drawEllipse(star.GetViewPoint() + center_,
+    painter->drawEllipse(item.star.GetViewPoint() + center_,
                          size.width(),
                          size.height());
   }
 }
 void BackgroundWidget::PaintLines(QPainter* painter) const {
-  auto star = stars_.begin();
-  for (int i = 0; i < lines_.size(); i++) {
+  for (const auto& item : stars_) {
     QPen pen(Qt::white);
-    int width = static_cast<int>(std::min(star->GetSize(),
+    int width = static_cast<int>(std::min(item.star.GetSize(),
                                           max_line_size_));
     pen.setWidth(width);
     pen.setCapStyle(Qt::RoundCap);
@@ -59,9 +58,8 @@ void BackgroundWidget::PaintLines(QPainter* painter) const {
     int shake = QRandomGenerator::global()->bounded(2 * max_shake_ + 1)
         - max_shake_;
     QPointF shake_pnt(shake, shake);
-    painter->drawLine(shake_pnt + lines_.at(i).p1(),
-                      shake_pnt + lines_.at(i).p2());
-    ++star;
+    painter->drawLine(shake_pnt + item.line.p1(),
+                      shake_pnt + item.line.p2());
   }
 }
 
@@ -82,26 +80,12 @@ void BackgroundWidget::Tick() {
   if (!cursor_move_effect_1_ && !cursor_move_effect_2_) {
     center_ = QPointF(width() / 2., height() / 2.);
   }
-  for (auto& star: stars_) {
-    star.Move();
+  for (auto& item : stars_) {
+    item.star.Move();
   }
 
   if (light_speed_effect_) {
-    if (lines_.size() > stars_.size()) {
-      lines_.erase(lines_.begin() + stars_.size(), lines_.end());
-    }
-    int i = 0;
-    for (auto star = stars_.begin(); star != stars_.end(); ++star) {
-      QPointF pnt = star->GetViewPoint() + center_;
-      //std::cout << lines_.size() << " " << i << "\n";
-      if (lines_.size() <= i) {
-        lines_.emplace_back(pnt, pnt);
-      } else {
-        //lines_.at(i).setP1(QPointF(0, 0));
-        lines_.at(i).setP2(pnt);
-      }
-      i++;
-    }
+    AddLines();
     white_blur_ += blur_acceleration_;
     if (white_blur_ > 255) {
       white_blur_ = 255;
@@ -110,7 +94,6 @@ void BackgroundWidget::Tick() {
       Star::AddTime(star_time_acceleration_);
     }
   } else {
-    lines_.clear();
     white_blur_ = 1;
     if (Star::GetTime() > default_star_interval_) {
       Star::AddTime(-star_time_acceleration_);
@@ -135,27 +118,17 @@ void BackgroundWidget::GenerateStars() {
 }
 
 void BackgroundWidget::RemoveOutOfBoundsStars() {
-  auto line = lines_.begin();
-  std::vector<std::list<Star>::iterator> stars_to_remove;
-  std::vector<std::vector<QLineF>::iterator> lines_to_remove;
-  for (auto star = stars_.begin(); star != stars_.end(); ++star) {
-    auto star_point = star->GetViewPoint();
+  std::vector<std::list<StarAndLine>::iterator> stars_to_remove;
+  for (auto item = stars_.begin(); item != stars_.end(); ++item) {
+    auto star_point = item->star.GetViewPoint();
     auto normalized_star_point = (star_point + center_).toPoint();
     if (geometry().contains(normalized_star_point)) {
-      ++line;
       continue;
     }
-    stars_to_remove.push_back(star);
-    if (light_speed_effect_) {
-      lines_to_remove.push_back(line);
-    }
-    ++line;
+    stars_to_remove.push_back(item);
   }
   for (const auto& it : stars_to_remove) {
     stars_.erase(it);
-  }
-  for (auto it : lines_to_remove) {
-    lines_.erase(it);
   }
 }
 
@@ -171,8 +144,8 @@ void BackgroundWidget::SetCenterPos(const QPoint& pos) {
   }
   if (cursor_move_effect_2_ && !light_speed_effect_) {
     center_ = posf;
-    for (auto& star: stars_) {
-      star.MoveCenter(posf);
+    for (auto& item: stars_) {
+      item.star.MoveCenter(posf);
     }
   }
 }
@@ -201,7 +174,23 @@ void BackgroundWidget::mouseReleaseEvent(QMouseEvent*) {
 void BackgroundWidget::mouseMoveEvent(QMouseEvent* event) {
   SetCenterPos(event->pos());
 }
+
 void BackgroundWidget::resizeEvent(QResizeEvent* event) {
   center_ = QPointF(event->size().width() / 2., event->size().height() / 2.);
   prev_pos_ = center_;
 }
+
+void BackgroundWidget::AddLines() {
+  QPointF cmp(0, 0);
+  for (auto& item : stars_) {
+    QPointF pnt = item.star.GetViewPoint() + center_;
+    if (item.line.p1() == cmp){
+      item.line.setP1(pnt);
+    }
+    item.line.setP2(pnt);
+  }
+}
+
+StarAndLine::StarAndLine(QSize window_size, QColor color, QPointF center) :
+ star(Star(window_size, color, center)),
+ line(QLineF(0, 0, 0, 0)){}

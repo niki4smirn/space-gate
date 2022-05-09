@@ -14,6 +14,12 @@
 
 #include "star.h"
 
+struct StarAndLine{
+  StarAndLine(QSize window_size, QColor color, QPointF center);
+  Star star;
+  QLineF line;
+};
+
 class BackgroundWidget : public QWidget {
   Q_OBJECT
 
@@ -32,6 +38,7 @@ class BackgroundWidget : public QWidget {
   void PaintLines(QPainter* painter) const;
   void PaintBackground(QPainter* painter) const;
   void PaintBlur(QPainter* painter) const;
+  void AddLines();
 
   void timerEvent(QTimerEvent* event) override;
   void paintEvent(QPaintEvent*) override;
@@ -50,8 +57,8 @@ class BackgroundWidget : public QWidget {
      QColor(249, 216, 243),
      QColor(216, 249, 230),
      QColor(51, 153, 255)};
-  std::list<Star> stars_;
-  std::vector<QLineF> lines_;
+  std::list<StarAndLine> stars_;
+  //std::vector<QLineF> lines_;
   bool light_speed_effect_ = false;  // enables effect
   double white_blur_ = 0;  // initial white blur
   const double blur_acceleration_ = 1;  // 1 - 254, more - faster

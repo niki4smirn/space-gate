@@ -8,6 +8,7 @@
 
 #include <cmath>
 
+
 class Star {
  public:
   Star(QSize window_size, QColor color, QPointF center);

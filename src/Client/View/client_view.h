@@ -18,6 +18,7 @@ class ClientView : public QMainWindow {
   void CloseWindow();
   void AddWidgets();
   void Connect();
+  void mouseMoveEvent(QMouseEvent* event) override;
 
  private:
   ClientMainMenu* main_menu_;

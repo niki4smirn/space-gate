@@ -34,6 +34,7 @@ ClientMainMenu::ClientMainMenu(QWidget* parent) :
   font_.setBold(true);
   game_name_->setFont(font_);
 
+  SetMouseTracking();
   SetLayouts();
   SetStartWidgetsPos();
   Connect();
@@ -306,5 +307,23 @@ void ClientMainMenu::ReadyButtonPressEvent() {
     ready_status_->setText("READY");
   }
   emit ReadyButtonPressed();
+}
+
+void ClientMainMenu::SetMouseTracking() {
+  background_->setMouseTracking(true);
+  player_list_->setMouseTracking(true);
+  room_list_->setMouseTracking(true);
+  settings_->setMouseTracking(true);
+  exit_->setMouseTracking(true);
+  back_to_start_->setMouseTracking(true);
+  back_to_game_option_->setMouseTracking(true);
+  play_->setMouseTracking(true);
+  start_game_->setMouseTracking(true);
+  create_room_->setMouseTracking(true);
+  join_room_->setMouseTracking(true);
+  ready_status_->setMouseTracking(true);
+  game_name_->setMouseTracking(true);
+  nothing_here_->setMouseTracking(true);
+  interface_->setMouseTracking(true);
 }
 

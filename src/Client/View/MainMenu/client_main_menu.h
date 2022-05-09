@@ -28,6 +28,7 @@ class ClientMainMenu : public QWidget {
   void ButtonsConfigure();
   void SetStartWidgetsPos();
   void SetLayouts();
+  void SetMouseTracking();
 
   private Q_SLOTS:
   void StartGame();

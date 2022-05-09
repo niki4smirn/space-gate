@@ -1,4 +1,5 @@
 #include "client_view.h"
+#include "src/Helpers/logging.h"
 
 ClientView::ClientView() :
     stacked_widget_(new QStackedWidget(this)),
@@ -8,6 +9,13 @@ ClientView::ClientView() :
   setCentralWidget(stacked_widget_);
   showFullScreen();
   Connect();
+  setMouseTracking(true);
+  stacked_widget_->setMouseTracking(true);
+  main_menu_->setMouseTracking(true);
+}
+
+void ClientView::mouseMoveEvent(QMouseEvent* event) {
+  LOG << event->pos();
 }
 
 void ClientView::CloseWindow() {

@@ -3,7 +3,7 @@
 ClientController::ClientController(const QUrl& url) :
     server_url_(url),
     view_(new ClientView) {
-  qInfo().noquote() << "Connecting to" << url.host();
+  LOG << "Connecting to" << url.host();
   connect(&socket_, &QWebSocket::connected, this,
           &ClientController::OnConnect);
   connect(&socket_, &QWebSocket::disconnected, this,
@@ -16,11 +16,11 @@ ClientController::ClientController(const QUrl& url) :
 }
 
 void ClientController::OnConnect() {
-  qInfo().noquote() << "Connected to" << server_url_;
+  LOG << "Connected to" << server_url_;
 }
 
 void ClientController::OnDisconnect() {
-  qInfo().noquote() << "Disconnected from" << server_url_;
+  LOG << "Disconnected from" << server_url_;
 }
 
 QString ClientController::GetControllerName() const {

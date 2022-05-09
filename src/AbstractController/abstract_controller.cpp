@@ -2,19 +2,6 @@
 
 #include "Constants/constants.h"
 
-namespace logging {
-
-QString GetProcessStringByType(Type type) {
-  static const std::unordered_map<Type, QString> type_to_str = {
-      {Type::kHandle, " handling "},
-      {Type::kSend, " sending "},
-      {Type::kReceive, " received "},
-  };
-  return type_to_str.at(type);
-}
-
-}  // namespace logging
-
 AbstractController::AbstractController() {
   connect(&timer_, &QTimer::timeout, this, &AbstractController::Tick);
 }
@@ -22,9 +9,8 @@ AbstractController::AbstractController() {
 void AbstractController::LogEvent(
     const events::EventWrapper& event,
     logging::Type log_type) const {
-  qDebug().noquote().nospace() << GetControllerName()
-                               << logging::GetProcessStringByType(log_type)
-                               << event.ShortDebugString();
+  LOG << GetControllerName()
+      << logging::GetProcessStringByType(log_type) << event.ShortDebugString();
 }
 
 void AbstractController::StartTicking() {

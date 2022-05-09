@@ -40,7 +40,7 @@ void ServerController::OnByteArrayReceived(const QByteArray& message) {
 void ServerController::OnSocketConnect() {
   std::shared_ptr<QWebSocket> current_socket(
       web_socket_server_.nextPendingConnection());
-  qInfo() << "Socket connected:" << current_socket.get();
+  LOG << "Socket connected:" << current_socket.get();
   UserId new_user_id = server_model_.GetUnusedUserId();
   auto new_user = std::make_shared<User>(new_user_id,
                                          current_socket);
@@ -62,7 +62,7 @@ void ServerController::OnSocketConnect() {
 
 void ServerController::OnSocketDisconnect() {
   auto web_socket = qobject_cast<QWebSocket*>(sender());
-  qInfo() << "Socket disconnected:" << web_socket;
+  LOG << "Socket disconnected:" << web_socket;
   if (web_socket) {
     auto user = server_model_.GetUserBySocket(web_socket);
     UserId user_id = user->GetId();

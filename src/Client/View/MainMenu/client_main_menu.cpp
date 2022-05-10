@@ -19,7 +19,7 @@ ClientMainMenu::ClientMainMenu(QWidget* parent) :
     back_to_start_(new QPushButton(this)),
     ready_status_(new QPushButton(this)),
     player_list_(new QListWidget(this)),
-    room_list_(new QListWidget(this)),
+    rooms_list_(new QListWidget(this)),
     nothing_here_(new QLabel(this)),
     interface_(new QWidget(this)) {
   QString family =
@@ -164,9 +164,9 @@ void ClientMainMenu::ChooseRoomOption() {
   create_room_->setVisible(true);
   join_room_->setVisible(true);
   back_to_start_->setVisible(true);
-  room_list_->setVisible(true);
+  rooms_list_->setVisible(true);
 
-  interface_layout_->addWidget(room_list_, 1, 0, 1, 2,
+  interface_layout_->addWidget(rooms_list_, 1, 0, 1, 2,
                                Qt::AlignHCenter | Qt::AlignVCenter);
   interface_layout_->addWidget(create_room_,
                                2,
@@ -198,7 +198,7 @@ void ClientMainMenu::RemoveAllWidgets() {
   start_game_->setVisible(false);
   back_to_game_option_->setVisible(false);
   ready_status_->setVisible(false);
-  room_list_->setVisible(false);
+  rooms_list_->setVisible(false);
   nothing_here_->setVisible(false);
 
   interface_layout_->removeWidget(create_room_);
@@ -211,7 +211,7 @@ void ClientMainMenu::RemoveAllWidgets() {
   interface_layout_->removeWidget(start_game_);
   interface_layout_->removeWidget(back_to_game_option_);
   interface_layout_->removeWidget(ready_status_);
-  interface_layout_->removeWidget(room_list_);
+  interface_layout_->removeWidget(rooms_list_);
   interface_layout_->removeWidget(nothing_here_);
 }
 
@@ -236,10 +236,10 @@ void ClientMainMenu::CreateRoom() {
 }
 
 void ClientMainMenu::JoinRoom() {
-  if (room_list_->currentRow() == -1) {
+  if (rooms_list_->currentRow() == -1) {
     return;
   }
-  RoomId room_id = room_list_->currentItem()->text().toInt();
+  RoomId room_id = rooms_list_->currentItem()->text().toInt();
   emit JoinRoomSignal(room_id);
 
   player_list_->clear();
@@ -273,9 +273,16 @@ void ClientMainMenu::Settings() {
 }
 
 void ClientMainMenu::UpdateRoomList(const server_events::RoomsList& room_list) {
-  room_list_->clear();
+  int current_row = rooms_list_->currentRow();
+  rooms_list_->clear();
   for (auto room : room_list.ids()) {
-    room_list_->addItem(QString::number(room));
+    rooms_list_->addItem(QString::number(room));
+  }
+  if (current_row >= rooms_list_->count()) {
+    current_row = rooms_list_->count() - 1;
+  }
+  if (rooms_list_->count() != 0) {
+    rooms_list_->setCurrentRow(current_row);
   }
 }
 
@@ -315,7 +322,7 @@ void ClientMainMenu::ReadyButtonPressEvent() {
 void ClientMainMenu::SetMouseTracking() {
   background_->setMouseTracking(true);
   player_list_->setMouseTracking(true);
-  room_list_->setMouseTracking(true);
+  rooms_list_->setMouseTracking(true);
   settings_->setMouseTracking(true);
   exit_->setMouseTracking(true);
   back_to_start_->setMouseTracking(true);

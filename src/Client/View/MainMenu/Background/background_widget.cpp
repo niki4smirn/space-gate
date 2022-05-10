@@ -1,12 +1,12 @@
 #include "background_widget.h"
 #include <iostream>
+#include <utility>
 
 BackgroundWidget::BackgroundWidget(QWidget* parent) :
     QWidget(parent) {
   default_star_interval_ = Star::GetTime();
   animation_timer_.start(15, this);
   setMouseTracking(true);
-  this->setMouseTracking(true);
 }
 
 void BackgroundWidget::Paint(QPainter* painter) const {
@@ -24,18 +24,16 @@ void BackgroundWidget::PaintStars(QPainter* painter) const {
   QPen pen(QColor(0, 0, 0, 0));
   painter->setPen(pen);
   for (const auto& item : stars_) {
-    QSize size;
+    int star_diameter;
     if (item.star.GetSize() > max_star_size_) {
-      size.setWidth(static_cast<int>(max_star_size_));
-      size.setHeight(static_cast<int>(max_star_size_));
+      star_diameter = static_cast<int>(max_star_size_);
     } else {
-      size.setWidth(static_cast<int>(item.star.GetSize()));
-      size.setHeight(static_cast<int>(item.star.GetSize()));
+      star_diameter = static_cast<int>(item.star.GetSize());
     }
     QColor color = item.star.GetColor();
     color.setAlpha(255);
     QRadialGradient radialGrad(item.star.GetViewPoint() + center_,
-                               static_cast<int>(size.width() / 2));
+                               star_diameter / 2);
     radialGrad.setColorAt(0, color);
     color.setAlpha(0);
     radialGrad.setColorAt(1, color);
@@ -43,8 +41,8 @@ void BackgroundWidget::PaintStars(QPainter* painter) const {
     QBrush brush(radialGrad);
     painter->setBrush(brush);
     painter->drawEllipse(item.star.GetViewPoint() + center_,
-                         size.width(),
-                         size.height());
+                         star_diameter,
+                         star_diameter);
   }
 }
 void BackgroundWidget::PaintLines(QPainter* painter) const {
@@ -118,7 +116,7 @@ void BackgroundWidget::GenerateStars() {
 }
 
 void BackgroundWidget::RemoveOutOfBoundsStars() {
-  std::vector<std::list<StarAndLine>::iterator> stars_to_remove;
+  std::vector<decltype(stars_.begin())> stars_to_remove;
   for (auto item = stars_.begin(); item != stars_.end(); ++item) {
     auto star_point = item->star.GetViewPoint();
     auto normalized_star_point = (star_point + center_).toPoint();
@@ -192,5 +190,5 @@ void BackgroundWidget::AddLines() {
 }
 
 StarAndLine::StarAndLine(QSize window_size, QColor color, QPointF center) :
-  star(Star(window_size, color, center)),
+  star(Star(window_size, std::move(color), center)),
   line(QLineF(0, 0, 0, 0)) {}

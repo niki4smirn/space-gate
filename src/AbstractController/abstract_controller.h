@@ -10,7 +10,6 @@
 #include "src/Helpers/helpers.h"
 #include "src/Helpers/logging.h"
 
-
 class AbstractController : public QObject {
  public:
   ~AbstractController() override = default;

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "src/Client/View/MainMenu/BackGround/background_widget.h"
+#include "src/Client/View/MainMenu/Background/background_widget.h"
 #include "src/Server/Models/RoomModel/room_model.h"
 #include "Protobuf/client_events.pb.h"
 #include "Protobuf/server_events.pb.h"
@@ -46,7 +46,7 @@ class ClientMainMenu : public QWidget {
   QGridLayout* interface_layout_;
   QGridLayout* background_layout_;
   QListWidget* player_list_;
-  QListWidget* room_list_;
+  QListWidget* rooms_list_;
   QPushButton* settings_;
   QPushButton* exit_;
   QPushButton* back_to_start_;

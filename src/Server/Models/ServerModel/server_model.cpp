@@ -84,11 +84,11 @@ std::shared_ptr<RoomController> ServerModel::GetRoomById(RoomId id) const {
   return rooms_.at(id);
 }
 
-std::map<RoomId, std::shared_ptr
-    <RoomController>> ServerModel::GetRooms() const {
+const std::map<RoomId, std::shared_ptr
+    <RoomController>>& ServerModel::GetRooms() const {
   return rooms_;
 }
 
-std::map<UserId, std::shared_ptr<User>> ServerModel::GetUsers() const {
+const std::map<UserId, std::shared_ptr<User>>& ServerModel::GetUsers() const {
   return users_;
 }

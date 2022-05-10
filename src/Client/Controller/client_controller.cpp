@@ -3,7 +3,7 @@
 ClientController::ClientController(const QUrl& url) :
     server_url_(url),
     view_(new ClientView) {
-  LOG << "Connecting to" << url.host();
+  LOG << "Connecting to " << url.host();
   connect(&socket_, &QWebSocket::connected, this,
           &ClientController::OnConnect);
   connect(&socket_, &QWebSocket::disconnected, this,
@@ -16,11 +16,11 @@ ClientController::ClientController(const QUrl& url) :
 }
 
 void ClientController::OnConnect() {
-  LOG << "Connected to" << server_url_;
+  LOG << "Connected to " << server_url_;
 }
 
 void ClientController::OnDisconnect() {
-  LOG << "Disconnected from" << server_url_;
+  LOG << "Disconnected from " << server_url_;
 }
 
 QString ClientController::GetControllerName() const {
@@ -38,25 +38,29 @@ void ClientController::Send(const events::EventWrapper& event) {
 }
 
 void ClientController::Handle(const events::EventWrapper& event) {
-  if (event.type_case() == events::EventWrapper::kServerEvent) {
-    switch (event.server_event().type_case()) {
-      case server_events::ServerEventWrapper::kRoomInfo: {
-        view_->MenuUpdatePlayerList(event.server_event().room_info());
-        break;
+  switch (event.type_case()) {
+    case events::EventWrapper::kServerEvent: {
+      switch (event.server_event().type_case()) {
+        case server_events::ServerEventWrapper::kRoomInfo: {
+          view_->MenuUpdatePlayerList(event.server_event().room_info());
+          break;
+        }
+        case server_events::ServerEventWrapper::kRoomsList: {
+          view_->MenuUpdateRoomList(event.server_event().rooms_list());
+          break;
+        }
+        default: {}
       }
-      case server_events::ServerEventWrapper::kRoomsList: {
-        view_->MenuUpdateRoomList(event.server_event().rooms_list());
-        break;
-      }
-      default: {}
+      break;
     }
+    default: {}
   }
 }
 
 void ClientController::OnByteArrayReceived(const QByteArray& message) {
   events::EventWrapper received_event;
   if (!received_event.ParseFromArray(message.data(), message.size())) {
-    // fail
+    LOG << GetControllerName() << " failed to parse message";
     return;
   }
   AddEventToHandle(received_event);

@@ -1,6 +1,12 @@
 name: Build
 
-on: [pull_request]
+on:
+  push:
+    branches:
+      [main, developing]
+  pull_request:
+    branches:
+      - '*'
 
 env:
   BUILD_TYPE: Release

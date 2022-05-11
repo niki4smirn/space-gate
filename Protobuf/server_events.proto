@@ -4,6 +4,7 @@ package server_events;
 message ServerEventWrapper {
   oneof type {
     RoomInfo room_info = 1;
+    RoomsList rooms_list = 2;
   }
 }
 
@@ -21,4 +22,8 @@ message RoomInfo {
   repeated RoomUser users = 1;
   uint64 room_id = 2;
   uint64 chief_id = 3;
+}
+
+message RoomsList {
+  repeated uint64 ids = 1;
 }

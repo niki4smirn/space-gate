@@ -16,7 +16,7 @@ ServerController::ServerController()
 void ServerController::OnByteArrayReceived(const QByteArray& message) {
   events::EventWrapper received_event;
   if (!received_event.ParseFromArray(message.data(), message.size())) {
-    // TODO(niki4smirn): handle parse fail
+    LOG << GetControllerName() << " failed to parse message";
     return;
   }
 
@@ -27,7 +27,7 @@ void ServerController::OnByteArrayReceived(const QByteArray& message) {
   UserId user_id = user->GetId();
   client_event->set_sender_id(user_id);
 
-  LogEvent(received_event, log::Type::kReceive);
+  LogEvent(received_event, logging::Type::kReceive);
 
   // TODO(niki4smirn): try to make this check prettier
   if (client_event->has_event_to_server()) {
@@ -40,7 +40,7 @@ void ServerController::OnByteArrayReceived(const QByteArray& message) {
 void ServerController::OnSocketConnect() {
   std::shared_ptr<QWebSocket> current_socket(
       web_socket_server_.nextPendingConnection());
-  qInfo() << "Socket connected:" << current_socket.get();
+  LOG << "Socket connected: " << current_socket.get();
   UserId new_user_id = server_model_.GetUnusedUserId();
   auto new_user = std::make_shared<User>(new_user_id,
                                          current_socket);
@@ -62,7 +62,7 @@ void ServerController::OnSocketConnect() {
 
 void ServerController::OnSocketDisconnect() {
   auto web_socket = qobject_cast<QWebSocket*>(sender());
-  qInfo() << "Socket disconnected:" << web_socket;
+  LOG << "Socket disconnected: " << web_socket;
   if (web_socket) {
     auto user = server_model_.GetUserBySocket(web_socket);
     UserId user_id = user->GetId();
@@ -84,23 +84,48 @@ QString ServerController::GetControllerName() const {
   return "Server";
 }
 
-void ServerController::OnTick() {}
+void ServerController::OnTick() {
+  auto* rooms_list = new server_events::RoomsList;
+  for (const auto& [room_id, room_ptr] : server_model_.GetRooms()) {
+    rooms_list->add_ids(room_id);
+  }
+  auto* server_event = new server_events::ServerEventWrapper;
+  server_event->set_allocated_rooms_list(rooms_list);
+  events::EventWrapper event_wrapper;
+  event_wrapper.set_allocated_server_event(server_event);
+  AddEventToSend(event_wrapper);
+}
 
 void ServerController::Send(const events::EventWrapper& event) {
-  LogEvent(event, log::Type::kSend);
-  const auto& client_event = event.client_event();
-
-  switch (client_event.receiver_case()) {
-    case client_events::ClientEventWrapper::kEventToRoom: {
-      SendEventToRoom(event);
+  switch (event.type_case()) {
+    case events::EventWrapper::kServerEvent: {
+      const auto& users = server_model_.GetUsers();
+      if (!users.empty()) {
+        LogEvent(event, logging::Type::kSend);
+      }
+      for (const auto& [user_id, user_ptr] : users) {
+        auto serialized = event.SerializeAsString();
+        QByteArray byte_array(serialized.data(), serialized.size());
+        user_ptr->GetSocket()->sendBinaryMessage(byte_array);
+      }
       break;
+    }
+    case events::EventWrapper::kClientEvent: {
+      LogEvent(event, logging::Type::kSend);
+      switch (event.client_event().receiver_case()) {
+        case client_events::ClientEventWrapper::kEventToRoom: {
+          SendEventToRoom(event);
+          break;
+        }
+        default: {}
+      }
     }
     default: {}
   }
 }
 
 void ServerController::Handle(const events::EventWrapper& event) {
-  LogEvent(event, log::Type::kHandle);
+  LogEvent(event, logging::Type::kHandle);
   const auto& client_event = event.client_event();
   UserId user_id = client_event.sender_id();
   const auto& event_to_server = client_event.event_to_server();

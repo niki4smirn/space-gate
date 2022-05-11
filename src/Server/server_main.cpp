@@ -6,7 +6,7 @@ int main(int argc, char* argv[]) {
   QCoreApplication app(argc, argv);
 
   auto server_controller = std::make_unique<ServerController>();
-  qInfo() << "Server started";
+  LOG << "Server started";
 
   return QCoreApplication::exec();
 }

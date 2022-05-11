@@ -1,6 +1,6 @@
 #include "logging.h"
 
-namespace log {
+namespace logging {
 
 QString GetProcessStringByType(Type type) {
   static const std::unordered_map<Type, QString> type_to_str = {
@@ -11,4 +11,4 @@ QString GetProcessStringByType(Type type) {
   return type_to_str.at(type);
 }
 
-}  // namespace log
+}  // namespace logging

@@ -52,6 +52,10 @@ add_executable(client
         ${COMMON_SRC}
         src/Client/client_main.cpp
         src/Client/Controller/client_controller.cpp
+        src/Client/View/MainMenu/Background/background_widget.cpp
+        src/Client/View/MainMenu/client_main_menu.cpp
+        src/Client/View/client_view.cpp
+        src/Client/View/MainMenu/Background/star.cpp
         )
 
 set(REQUIRED_QT_PARTS

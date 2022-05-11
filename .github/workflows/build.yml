@@ -1,25 +1,39 @@
 name: Build
 
-on: [push, pull_request]
+on:
+  push:
+    branches:
+      [main, developing]
+  pull_request:
+    branches:
+      - '*'
 
 env:
   BUILD_TYPE: Release
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     name: Build
     steps:
       - uses: actions/checkout@v2.4.0
         name: Checkout
-      - run: sudo add-apt-repository ppa:beineri/opt-qt-5.15.2-focal -y
-        name: Add PPA for Qt5
       - run: sudo apt-get update
         name: Update packages list
-      - run: sudo apt-get install g++-11
-        name: Install g++-11
-      - run: sudo apt-get install libglu1-mesa-dev libgl1-mesa-dev qt515base qt515multimedia qt515websockets
-        name: Install Qt5 and dependencies
+      - name: Cache Qt
+        id: cache-qt
+        uses: actions/cache@v1
+        with:
+          path: ../Qt
+          key: ${{ runner.os }}-QtCache
+      - uses: jurplel/install-qt-action@v2.14.0
+        name: Install Qt
+        with:
+          version: '5.15.2'
+          archives: qtmultimedia qtwebsockets
+          cached: ${{ steps.cache-qt.outputs.cache-hit }}
+          aqtversion: '==2.0.6'
+          install-deps: true
       - run: sudo apt-get install protobuf-compiler
         name: Install Protobuf
       - run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DCMAKE_CXX_COMPILER=g++-11 -DCMAKE_C_COMPILER=gcc-11

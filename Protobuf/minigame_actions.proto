@@ -1,0 +1,12 @@
+syntax = "proto3";
+package minigame_actions;
+
+message SampleMinigame {
+  string str = 1;
+}
+
+message MinigameAction {
+  oneof minigame {
+    SampleMinigame sample_minigame = 1;
+  }
+}

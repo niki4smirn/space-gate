@@ -1,0 +1,13 @@
+syntax = "proto3";
+package minigame_responses;
+
+message SampleResponse {
+  repeated string strs = 1;
+  repeated uint64 ids = 2;
+}
+
+message MinigameResponse {
+  oneof type {
+    SampleResponse sample_response = 1;
+  }
+}

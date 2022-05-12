@@ -12,7 +12,7 @@
     static_cast<void>(0) : \
     static_cast<void>(ERROR_LOG(std::string(" Assertion failed: ") + (msg))));
 
-namespace log {
+namespace logging {
 
 enum class Type {
   kHandle,
@@ -22,4 +22,4 @@ enum class Type {
 
 QString GetProcessStringByType(Type type);
 
-}  // namespace log
+}  // namespace logging

@@ -61,9 +61,9 @@ void ServerModel::AddUserToRoom(UserId user_id, RoomId room_id) {
 }
 
 void ServerModel::DeleteUserFromRoom(UserId user_id) {
-  room_id_for_user_id_[user_id] = std::nullopt;
   auto room = GetRoomByUserId(user_id);
   room->DeleteUser(user_id);
+  room_id_for_user_id_[user_id] = std::nullopt;
   if (room->IsEmpty()) {
     DeleteRoom(room->GetId());
   }
@@ -82,4 +82,13 @@ bool ServerModel::IsInSomeRoom(UserId id) const {
 std::shared_ptr<RoomController> ServerModel::GetRoomById(RoomId id) const {
   Q_ASSERT(ExistsRoom(id));
   return rooms_.at(id);
+}
+
+const std::map<RoomId, std::shared_ptr
+    <RoomController>>& ServerModel::GetRooms() const {
+  return rooms_;
+}
+
+const std::map<UserId, std::shared_ptr<User>>& ServerModel::GetUsers() const {
+  return users_;
 }

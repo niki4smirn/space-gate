@@ -8,9 +8,9 @@ AbstractController::AbstractController() {
 
 void AbstractController::LogEvent(
     const events::EventWrapper& event,
-    log::Type log_type) const {
+    logging::Type log_type) const {
   LOG << GetControllerName()
-      << log::GetProcessStringByType(log_type) << event.ShortDebugString();
+      << logging::GetProcessStringByType(log_type) << event.ShortDebugString();
 }
 
 void AbstractController::StartTicking() {

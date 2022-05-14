@@ -18,6 +18,7 @@ void ServerModel::AddUser(const std::shared_ptr<User>& user) {
   users_[id] = user;
   user_id_by_socket_[socket.get()] = id;
   room_id_for_user_id_[id] = std::nullopt;
+  emit SendRoomsList();
 }
 
 void ServerModel::DeleteUser(UserId id) {
@@ -42,11 +43,13 @@ RoomId ServerModel::GetUnusedRoomId() const {
 
 void ServerModel::AddRoom(const std::shared_ptr<RoomController>& room) {
   rooms_[room->GetId()] = room;
+  emit SendRoomsList();
 }
 
 void ServerModel::DeleteRoom(RoomId id) {
   Q_ASSERT(ExistsRoom(id));
   rooms_.erase(id);
+  emit SendRoomsList();
 }
 
 bool ServerModel::ExistsRoom(RoomId id) const {

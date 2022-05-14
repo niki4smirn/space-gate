@@ -28,6 +28,8 @@ class ServerController : public AbstractController {
  private:
   void SendEventToRoom(const events::EventWrapper& event) const;
 
+  void SendRoomsListEvent();
+
   QWebSocketServer web_socket_server_;
   ServerModel server_model_;
 };

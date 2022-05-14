@@ -21,5 +21,7 @@ class RoomController : public AbstractController {
   void Handle(const events::EventWrapper& event) override;
 
  private:
+  void SendRoomInfoEvent();
+
   RoomModel room_model_;
 };

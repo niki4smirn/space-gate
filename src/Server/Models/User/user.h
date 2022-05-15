@@ -22,6 +22,8 @@ class User {
   WaitingStatus GetStatus() const;
   void SetStatus(WaitingStatus new_status);
 
+  static WaitingStatus InverseStatus(WaitingStatus status);
+
  private:
   UserId id_;
   std::shared_ptr<QWebSocket> socket_;

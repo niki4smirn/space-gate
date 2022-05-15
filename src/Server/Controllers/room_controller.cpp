@@ -58,19 +58,8 @@ void RoomController::Handle(const events::EventWrapper& event) {
     case client_events::EventToRoom::kChangeWaitingStatus: {
       UserId user_id = client_event.sender_id();
       auto current_status = room_model_.GetUserWaitingStatus(user_id);
-      User::WaitingStatus new_status{User::WaitingStatus::kNone};
-      switch (current_status) {
-        case User::WaitingStatus::kNotReady: {
-          new_status = User::WaitingStatus::kReady;
-          break;
-        }
-        case User::WaitingStatus::kReady: {
-          new_status = User::WaitingStatus::kNotReady;
-          break;
-        }
-        default: {}
-      }
-      room_model_.SetUserWaitingStatus(user_id, new_status);
+      room_model_.SetUserWaitingStatus(user_id,
+                                       User::InverseStatus(current_status));
       break;
     }
     default: {}
@@ -90,17 +79,9 @@ void RoomController::SendRoomInfoEvent() {
     auto* proto_user = room_info->add_users();
     auto* str = new std::string{std::to_string(user_id)};
     proto_user->set_allocated_nickname(str);
-    switch (user_ptr->GetStatus()) {
-      case User::WaitingStatus::kNotReady: {
-        proto_user->set_is_ready(server_events::RoomUser::kNotReady);
-        break;
-      }
-      case User::WaitingStatus::kReady: {
-        proto_user->set_is_ready(server_events::RoomUser::kReady);
-        break;
-      }
-      default: {}
-    }
+    auto proto_user_status =
+        static_cast<server_events::RoomUser::Status>(user_ptr->GetStatus());
+    proto_user->set_is_ready(proto_user_status);
   }
 
   auto* server_event = new server_events::ServerEventWrapper;

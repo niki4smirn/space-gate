@@ -18,3 +18,17 @@ User::WaitingStatus User::GetStatus() const {
 void User::SetStatus(User::WaitingStatus new_status) {
   status_ = new_status;
 }
+
+User::WaitingStatus User::InverseStatus(User::WaitingStatus status) {
+  switch (status) {
+    case WaitingStatus::kNotReady: {
+      return WaitingStatus::kReady;
+    }
+    case WaitingStatus::kReady: {
+      return WaitingStatus::kNotReady;
+    }
+    default: {
+      return WaitingStatus::kNone;
+    }
+  }
+}

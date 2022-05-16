@@ -7,6 +7,7 @@ message ServerEventWrapper {
   oneof type {
     RoomInfo room_info = 1;
     RoomsList rooms_list = 2;
+    GameStatus game_status = 3;
     minigame_responses.MinigameResponse game_response = 4;
   }
 }

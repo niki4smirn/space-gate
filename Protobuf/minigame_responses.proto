@@ -2,12 +2,25 @@ syntax = "proto3";
 package minigame_responses;
 
 message SampleResponse {
+  enum Role {
+    kFirst = 0;
+    kSecond = 1;
+    kThird = 2;
+    kFourth = 3;
+  }
   repeated string strs = 1;
   repeated uint64 ids = 2;
+  Role role = 3;
 }
 
 message MinigameResponse {
+  enum Result {
+    kCompleted = 0;
+    kFailed = 1;
+  }
+  uint64 time_left = 1;
   oneof type {
-    SampleResponse sample_response = 1;
+    Result result = 2;
+    SampleResponse sample_response = 3;
   }
 }

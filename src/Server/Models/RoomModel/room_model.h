@@ -6,7 +6,9 @@
 
 using RoomId = uint64_t;
 
-class RoomModel {
+class RoomModel : public QObject {
+  Q_OBJECT
+
  public:
   RoomModel(RoomId room_id, const std::shared_ptr<User>& chief);
 
@@ -28,6 +30,9 @@ class RoomModel {
   void SetUserWaitingStatus(UserId id, User::WaitingStatus status);
 
   const std::unordered_map<UserId, std::shared_ptr<User>>& GetUsers() const;
+
+ signals:
+  void SendRoomInfo();
 
  private:
   RoomId id_;

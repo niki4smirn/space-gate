@@ -9,11 +9,13 @@ void RoomModel::AddUser(const std::shared_ptr<User>& user) {
   UserId id = user->GetId();
   users_[id] = user;
   user->SetStatus(User::WaitingStatus::kNotReady);
+  emit SendRoomInfo();
 }
 
 void RoomModel::DeleteUser(UserId id) {
   Q_ASSERT(HasUser(id));
   users_.erase(id);
+  emit SendRoomInfo();
 }
 
 RoomId RoomModel::GetRoomId() const {
@@ -34,6 +36,7 @@ bool RoomModel::IsEmpty() const {
 
 void RoomModel::SetChiefId(UserId id) {
   chief_id_ = id;
+  emit SendRoomInfo();
 }
 
 UserId RoomModel::GetRandomUser() const {
@@ -45,6 +48,7 @@ void RoomModel::SetUserWaitingStatus(UserId id, User::WaitingStatus status) {
   Q_ASSERT(HasUser(id));
   auto user = users_.at(id);
   user->SetStatus(status);
+  emit SendRoomInfo();
 }
 
 User::WaitingStatus RoomModel::GetUserWaitingStatus(UserId id) const {

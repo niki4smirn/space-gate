@@ -9,7 +9,9 @@
 #include "src/Server/Models/User/user.h"
 #include "src/Server/Controllers/room_controller.h"
 
-class ServerModel {
+class ServerModel : public QObject {
+  Q_OBJECT
+
  public:
   std::shared_ptr<User> GetUserBySocket(QWebSocket* socket) const;
   std::shared_ptr<User> GetUserById(UserId id) const;
@@ -35,6 +37,9 @@ class ServerModel {
 
   const std::map<RoomId, std::shared_ptr<RoomController>>& GetRooms() const;
   const std::map<UserId, std::shared_ptr<User>>& GetUsers() const;
+
+ signals:
+  void SendRoomsList();
 
  private:
   std::map<UserId, std::shared_ptr<User>> users_;

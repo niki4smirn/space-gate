@@ -10,6 +10,8 @@ ServerController::ServerController()
             this,
             &ServerController::OnSocketConnect);
   }
+  connect(&server_model_, &ServerModel::SendRoomsList,
+          this, &ServerController::SendRoomsListEvent);
   StartTicking();
 }
 
@@ -84,17 +86,7 @@ QString ServerController::GetControllerName() const {
   return "Server";
 }
 
-void ServerController::OnTick() {
-  auto* rooms_list = new server_events::RoomsList;
-  for (const auto& [room_id, room_ptr] : server_model_.GetRooms()) {
-    rooms_list->add_ids(room_id);
-  }
-  auto* server_event = new server_events::ServerEventWrapper;
-  server_event->set_allocated_rooms_list(rooms_list);
-  events::EventWrapper event_wrapper;
-  event_wrapper.set_allocated_server_event(server_event);
-  AddEventToSend(event_wrapper);
-}
+void ServerController::OnTick() {}
 
 void ServerController::Send(const events::EventWrapper& event) {
   switch (event.type_case()) {
@@ -160,4 +152,16 @@ void ServerController::SendEventToRoom(
     const events::EventWrapper& event) const {
   server_model_.GetRoomByUserId(
       event.client_event().sender_id())->AddEventToHandle(event);
+}
+
+void ServerController::SendRoomsListEvent() {
+  auto* rooms_list = new server_events::RoomsList;
+  for (const auto& [room_id, room_ptr] : server_model_.GetRooms()) {
+    rooms_list->add_ids(room_id);
+  }
+  auto* server_event = new server_events::ServerEventWrapper;
+  server_event->set_allocated_rooms_list(rooms_list);
+  events::EventWrapper event_wrapper;
+  event_wrapper.set_allocated_server_event(server_event);
+  AddEventToSend(event_wrapper);
 }

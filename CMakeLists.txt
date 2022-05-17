@@ -56,7 +56,7 @@ add_executable(client
         src/Client/View/MainMenu/client_main_menu.cpp
         src/Client/View/client_view.cpp
         src/Client/View/MainMenu/Background/star.cpp
-        )
+        src/Client/Controller/input_controller.cpp src/Client/Controller/input_controller.h)
 
 set(REQUIRED_QT_PARTS
         Qt::Core

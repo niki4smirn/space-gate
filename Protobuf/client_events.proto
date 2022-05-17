@@ -39,13 +39,13 @@ message EventToRoom {
   }
 }
 
-message StartMinigame {
+message JoinMinigame {
   uint64 minigame_id = 1;
 }
 
 message EventToGame {
   oneof type {
-    StartMinigame start_minigame = 1;
+    JoinMinigame join_minigame = 1;
     minigame_actions.MinigameAction minigame_action = 2;
   }
 }

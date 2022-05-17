@@ -4,11 +4,12 @@ package server_events;
 import "Protobuf/minigame_responses.proto";
 
 message ServerEventWrapper {
+  optional uint64 reciever_id = 1;
   oneof type {
-    RoomInfo room_info = 1;
-    RoomsList rooms_list = 2;
-    GameStatus game_status = 3;
-    minigame_responses.MinigameResponse game_response = 4;
+    RoomInfo room_info = 2;
+    RoomsList rooms_list = 3;
+    GameInfo game_info = 4;
+    minigame_responses.MinigameResponse game_response = 5;
   }
 }
 
@@ -32,17 +33,19 @@ message RoomsList {
   repeated uint64 ids = 1;
 }
 
-message MinigamesList {
-  repeated uint64 ids = 1;
+message Minigame {
+  uint64 id = 1;
+  uint64 num_of_joined = 2;
 }
 
-message GameStatus {
+message GameInfo {
   enum Status {
     kStarted = 0;
     kGoing = 1;
     kEnded = 2;
   }
   uint64 progress = 1;
-  MinigamesList minigames_list = 2;
+  repeated Minigame minigames = 2;
   Status status = 3;
+  optional uint64 joined_minigame = 4;
 }

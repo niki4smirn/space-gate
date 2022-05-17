@@ -12,6 +12,9 @@ class GameController : public AbstractController {
   QString GetControllerName() const override;
 
  private:
+  void SendGameInfoEvent();
+  void StartMinigameEvent();
+
   void OnTick() override;
 
   void Send(const events::EventWrapper& event) override;

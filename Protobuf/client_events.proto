@@ -27,8 +27,11 @@ message EventToServer {
 
 message ChangeWaitingStatus {}
 
+message StartGame{}
+
 message EventToRoom {
   oneof type {
     ChangeWaitingStatus change_waiting_status = 1;
+    StartGame start_game = 2;
   }
 }

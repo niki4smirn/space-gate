@@ -36,6 +36,9 @@ void ClientView::Connect() {
   connect(main_menu_,
           &ClientMainMenu::JoinRoomSignal,
           [this](uint64_t room_id){emit JoinRoom(room_id);});
+  connect(main_menu_,
+          &ClientMainMenu::StartGame,
+          [this]() {emit StartGame();});
 }
 
 void ClientView::AddWidgets() {

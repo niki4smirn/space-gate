@@ -83,6 +83,10 @@ void ClientController::ConnectView() {
           &ClientView::JoinRoom,
           this,
           &ClientController::SendJoinRoomEvent);
+  connect(view_,
+          &ClientView::StartGame,
+          this,
+          &ClientController::SendStartGameEvent);
 }
 void ClientController::SendReadyStatus() {
   events::EventWrapper ready_event;
@@ -127,4 +131,15 @@ void ClientController::SendJoinRoomEvent(RoomId room_id) {
   events::EventWrapper event_to_send;
   event_to_send.set_allocated_client_event(client_event_wrapper);
   AddEventToSend(event_to_send);
+}
+
+void ClientController::SendStartGameEvent() {
+  events::EventWrapper start_event;
+  auto* event_to_room = new client_events::EventToRoom;
+  auto* event_wrapper = new client_events::ClientEventWrapper;
+  auto* start_game_event = new client_events::StartGame;
+  event_to_room->set_allocated_start_game(start_game_event);
+  event_wrapper->set_allocated_event_to_room(event_to_room);
+  start_event.set_allocated_client_event(event_wrapper);
+  AddEventToSend(start_event);
 }

@@ -131,7 +131,7 @@ void ClientMainMenu::Connect() {
           &QPushButton::clicked,
           this,
           &ClientMainMenu::CreateRoom);
-  connect(start_game_, &QPushButton::clicked, this, &ClientMainMenu::StartGame);
+  connect(start_game_, &QPushButton::clicked, [&]() {emit StartGame();});
   connect(join_room_, &QPushButton::clicked, this, &ClientMainMenu::JoinRoom);
   connect(back_to_game_option_,
           &QPushButton::clicked,
@@ -151,11 +151,6 @@ void ClientMainMenu::Connect() {
           &BackgroundWidget::SetLightEffect);
   connect(ready_status_,
           &QPushButton::clicked, this, &ClientMainMenu::ReadyButtonPressEvent);
-}
-
-void ClientMainMenu::StartGame() {
-  RemoveAllWidgets();
-  emit StartEffect(true);
 }
 
 void ClientMainMenu::ChooseRoomOption() {
@@ -289,10 +284,11 @@ void ClientMainMenu::UpdateRoomList(const server_events::RoomsList& room_list) {
 void ClientMainMenu::UpdatePlayerList(
     const server_events::RoomInfo& room_info) {
   player_list_->clear();
-  for (int i = 0; i < room_info.users().size(); i++) {
+  const auto& users = room_info.users();
+  for (int i = 0; i < users.size(); i++) {
     player_list_->addItem(
-        QString::fromStdString(room_info.users().at(i).nickname()));
-    switch (room_info.users().at(i).is_ready()) {
+        QString::fromStdString(users.at(i).nickname()));
+    switch (users.at(i).is_ready()) {
       case server_events::RoomUser::kNotReady: {
         player_list_->item(i)->setBackground(QColorConstants::Red);
         break;
@@ -308,6 +304,11 @@ void ClientMainMenu::UpdatePlayerList(
       default: {}
     }
   }
+  bool can_start = std::all_of(users.begin(), users.end(),
+                               [](const auto& user){
+    return user.is_ready() == server_events::RoomUser::kReady;
+  });
+  start_game_->setEnabled(can_start);
 }
 
 void ClientMainMenu::ReadyButtonPressEvent() {

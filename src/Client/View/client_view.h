@@ -29,4 +29,5 @@ class ClientView : public QMainWindow {
   void CreateRoom();
   void LeaveRoom();
   void JoinRoom(uint64_t room_id);
+  void StartGame();
 };

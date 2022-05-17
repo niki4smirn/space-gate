@@ -32,7 +32,6 @@ class ClientMainMenu : public QWidget {
   void SetMouseTracking();
 
   private Q_SLOTS:
-  void StartGame();
   void ChooseRoomOption();
   void BackToStart();
   void BackToGameOption();
@@ -68,5 +67,6 @@ class ClientMainMenu : public QWidget {
   void CreateRoomSignal();
   void LeaveRoom();
   void JoinRoomSignal(RoomId room_id);
+  void StartGame();
 };
 

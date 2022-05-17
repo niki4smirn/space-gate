@@ -145,10 +145,6 @@ void ClientMainMenu::Connect() {
           this,
           &ClientMainMenu::BackToStart);
   connect(settings_, &QPushButton::clicked, this, &ClientMainMenu::Settings);
-  connect(this,
-          &ClientMainMenu::StartEffect,
-          background_,
-          &BackgroundWidget::SetLightEffect);
   connect(ready_status_,
           &QPushButton::clicked, this, &ClientMainMenu::ReadyButtonPressEvent);
 }
@@ -336,5 +332,10 @@ void ClientMainMenu::SetMouseTracking() {
   game_name_->setMouseTracking(true);
   nothing_here_->setMouseTracking(true);
   interface_->setMouseTracking(true);
+}
+
+void ClientMainMenu::PlayStartEffect() {
+  RemoveAllWidgets();
+  background_->SetLightEffect(true);
 }
 

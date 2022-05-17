@@ -54,3 +54,7 @@ void ClientView::MenuUpdateRoomList(const server_events::RoomsList& room_list) {
   main_menu_->UpdateRoomList(room_list);
 }
 
+void ClientView::PlayStartEffect() {
+  main_menu_->PlayStartEffect();
+}
+

@@ -15,7 +15,6 @@ class ServerController : public AbstractController {
 
   QString GetControllerName() const override;
 
-  public Q_SLOTS:
   void OnByteArrayReceived(const QByteArray& message);
   void OnSocketConnect();
   void OnSocketDisconnect();

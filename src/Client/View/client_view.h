@@ -13,6 +13,7 @@ class ClientView : public QMainWindow {
   ClientView();
   void MenuUpdatePlayerList(const server_events::RoomInfo& room_info);
   void MenuUpdateRoomList(const server_events::RoomsList& room_list);
+  void PlayStartEffect();
 
  private:
   void CloseWindow();
@@ -20,7 +21,6 @@ class ClientView : public QMainWindow {
   void Connect();
   void mouseMoveEvent(QMouseEvent* event) override;
 
- private:
   ClientMainMenu* main_menu_;
   QStackedWidget* stacked_widget_;
 

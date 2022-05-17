@@ -54,13 +54,19 @@ void RoomController::Handle(const events::EventWrapper& event) {
   LogEvent(event, logging::Type::kHandle);
   const auto& client_event = event.client_event();
   const auto& room_event = client_event.event_to_room();
+  UserId user_id = client_event.sender_id();
   switch (room_event.type_case()) {
     case client_events::EventToRoom::kChangeWaitingStatus: {
-      UserId user_id = client_event.sender_id();
       auto current_status = room_model_.GetUserWaitingStatus(user_id);
       room_model_.SetUserWaitingStatus(user_id,
                                        User::InverseStatus(current_status));
       break;
+    }
+    case client_events::EventToRoom::kStartGame: {
+      if (user_id != room_model_.GetChiefId() || !IsEverybodyReady()) {
+        break;
+      }
+      SendStartGameEvent();
     }
     default: {}
   }
@@ -90,4 +96,22 @@ void RoomController::SendRoomInfoEvent() {
   events::EventWrapper event;
   event.set_allocated_server_event(server_event);
   AddEventToSend(event);
+}
+
+bool RoomController::IsEverybodyReady() {
+  const auto& users = room_model_.GetUsers();
+  return std::all_of(users.begin(), users.end(), [](const auto& user) {
+    return user.second->GetStatus() == User::WaitingStatus::kReady;
+  });
+}
+
+void RoomController::SendStartGameEvent() {
+  auto* start_game_event = new server_events::StartGame;
+
+  auto* event_wrapper = new server_events::ServerEventWrapper;
+  event_wrapper->set_allocated_start_game(start_game_event);
+
+  events::EventWrapper start_event;
+  start_event.set_allocated_server_event(event_wrapper);
+  AddEventToSend(start_event);
 }

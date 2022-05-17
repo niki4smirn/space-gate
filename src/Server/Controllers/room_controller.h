@@ -22,6 +22,8 @@ class RoomController : public AbstractController {
 
  private:
   void SendRoomInfoEvent();
+  void SendStartGameEvent();
+  bool IsEverybodyReady();
 
   RoomModel room_model_;
 };

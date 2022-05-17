@@ -22,16 +22,15 @@ void ServerController::OnByteArrayReceived(const QByteArray& message) {
     return;
   }
 
-  auto* client_event = received_event.mutable_client_event();
-
   auto message_socket = qobject_cast<QWebSocket*>(sender());
   auto user = server_model_.GetUserBySocket(message_socket);
   UserId user_id = user->GetId();
+
+  auto* client_event = received_event.mutable_client_event();
   client_event->set_sender_id(user_id);
 
   LogEvent(received_event, logging::Type::kReceive);
 
-  // TODO(niki4smirn): try to make this check prettier
   if (client_event->has_event_to_server()) {
     AddEventToHandle(received_event);
   } else {
@@ -46,9 +45,6 @@ void ServerController::OnSocketConnect() {
   UserId new_user_id = server_model_.GetUnusedUserId();
   auto new_user = std::make_shared<User>(new_user_id,
                                          current_socket);
-  // TODO(Everyone): replace with adding to handle queue
-  // so, this TODO is not really relevant, because it may cause some
-  // security problems
   server_model_.AddUser(new_user);
 
   connect(new_user->GetSocket().get(),
@@ -68,9 +64,6 @@ void ServerController::OnSocketDisconnect() {
   if (web_socket) {
     auto user = server_model_.GetUserBySocket(web_socket);
     UserId user_id = user->GetId();
-    // TODO(Everyone): replace with adding to handle queue
-    // so, this TODO is not really relevant, because it may cause some
-    // security problems
     if (server_model_.IsInSomeRoom(user_id)) {
       auto room = server_model_.GetRoomByUserId(user_id);
       room->DeleteUser(user_id);

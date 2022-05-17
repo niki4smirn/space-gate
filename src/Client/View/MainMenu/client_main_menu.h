@@ -22,6 +22,7 @@ class ClientMainMenu : public QWidget {
   void UpdateRoomList(const server_events::RoomsList& room_list);
   void UpdatePlayerList(const server_events::RoomInfo& room_info);
   void SetCenterPos(QPoint pos);
+  void PlayStartEffect();
 
  private:
   void RemoveAllWidgets();
@@ -31,7 +32,6 @@ class ClientMainMenu : public QWidget {
   void SetLayouts();
   void SetMouseTracking();
 
-  private Q_SLOTS:
   void ChooseRoomOption();
   void BackToStart();
   void BackToGameOption();

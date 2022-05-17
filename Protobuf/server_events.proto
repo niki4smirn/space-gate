@@ -5,8 +5,11 @@ message ServerEventWrapper {
   oneof type {
     RoomInfo room_info = 1;
     RoomsList rooms_list = 2;
+    StartGame start_game = 3;
   }
 }
+
+message StartGame {}
 
 message RoomUser {
   enum Status {

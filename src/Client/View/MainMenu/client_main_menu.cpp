@@ -192,6 +192,8 @@ void ClientMainMenu::RemoveAllWidgets() {
   rooms_list_->setVisible(false);
   nothing_here_->setVisible(false);
 
+  ready_status_->setText("READY");
+
   interface_layout_->removeWidget(create_room_);
   interface_layout_->removeWidget(join_room_);
   interface_layout_->removeWidget(back_to_start_);

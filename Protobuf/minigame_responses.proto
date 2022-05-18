@@ -8,9 +8,8 @@ message SampleResponse {
     kThird = 2;
     kFourth = 3;
   }
-  repeated string strs = 1;
-  repeated uint64 ids = 2;
-  Role role = 3;
+  map<uint64, string> answers = 1;
+  Role role = 2;
 }
 
 message MinigameResponse {

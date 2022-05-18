@@ -18,9 +18,9 @@ AbstractMinigame::AbstractMinigame(
 
   for (auto& player : *players) {
     auto id = player->GetId();
-    players_ids_.push_back(id);
     players_[id] = std::move(player);
-    roles_ids_[id] = roles.back();
+    role_id_by_player_id_[id] = roles.back();
+    player_id_by_role_id_[roles.back()] = id;
     roles.pop_back();
   }
 }

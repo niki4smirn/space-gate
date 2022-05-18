@@ -4,7 +4,7 @@ package server_events;
 import "Protobuf/minigame_responses.proto";
 
 message ServerEventWrapper {
-  optional uint64 reciever_id = 1;
+  uint64 receiver_id = 1;
   oneof type {
     RoomInfo room_info = 2;
     RoomsList rooms_list = 3;

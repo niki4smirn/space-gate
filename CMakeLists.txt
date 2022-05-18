@@ -48,6 +48,7 @@ add_executable(server
         src/Server/Models/RoomModel/room_model.cpp
         src/Server/Models/GameModel/game_model.cpp
         src/Server/Games/abstract_minigame.cpp
+        src/Server/Games/SampleMinigame/sample_minigame.cpp
         )
 
 add_executable(client

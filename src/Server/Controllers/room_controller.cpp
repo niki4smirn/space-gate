@@ -20,12 +20,11 @@ void RoomController::OnTick() {}
 void RoomController::Send(const events::EventWrapper& event) {
   switch (event.type_case()) {
     case events::EventWrapper::kServerEvent: {
-      LogEvent(event, logging::Type::kSend);
-      for (auto [_, user_ptr] : room_model_.GetUsers()) {
-        auto serialized = event.SerializeAsString();
-        QByteArray byte_array(serialized.data(), serialized.size());
-        user_ptr->GetSocket()->sendBinaryMessage(byte_array);
+      const auto& users = room_model_.GetUsers();
+      if (!users.empty()) {
+        LogEvent(event, logging::Type::kSend);
       }
+      SendEveryUser(event);
       break;
     }
     default: {}
@@ -114,4 +113,14 @@ void RoomController::SendStartGameEvent() {
   events::EventWrapper start_event;
   start_event.set_allocated_server_event(event_wrapper);
   AddEventToSend(start_event);
+}
+
+void RoomController::SendEveryUser(events::EventWrapper event) const {
+  const auto& users = room_model_.GetUsers();
+  for (const auto& [user_id, user_ptr] : users) {
+    event.mutable_server_event()->set_receiver_id(user_id);
+    auto serialized = event.SerializeAsString();
+    QByteArray byte_array(serialized.data(), serialized.size());
+    user_ptr->GetSocket()->sendBinaryMessage(byte_array);
+  }
 }

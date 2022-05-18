@@ -2,10 +2,11 @@ syntax = "proto3";
 package server_events;
 
 message ServerEventWrapper {
+  uint64 receiver_id = 1;
   oneof type {
-    RoomInfo room_info = 1;
-    RoomsList rooms_list = 2;
-    StartGame start_game = 3;
+    RoomInfo room_info = 2;
+    RoomsList rooms_list = 3;
+    StartGame start_game = 4;
   }
 }
 

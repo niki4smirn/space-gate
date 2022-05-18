@@ -26,6 +26,7 @@ class ServerController : public AbstractController {
 
  private:
   void SendEventToRoom(const events::EventWrapper& event) const;
+  void SendEveryUser(events::EventWrapper event) const;
 
   void SendRoomsListEvent();
 

@@ -88,11 +88,7 @@ void ServerController::Send(const events::EventWrapper& event) {
       if (!users.empty()) {
         LogEvent(event, logging::Type::kSend);
       }
-      for (const auto& [user_id, user_ptr] : users) {
-        auto serialized = event.SerializeAsString();
-        QByteArray byte_array(serialized.data(), serialized.size());
-        user_ptr->GetSocket()->sendBinaryMessage(byte_array);
-      }
+      SendEveryUser(event);
       break;
     }
     case events::EventWrapper::kClientEvent: {
@@ -157,4 +153,14 @@ void ServerController::SendRoomsListEvent() {
   events::EventWrapper event_wrapper;
   event_wrapper.set_allocated_server_event(server_event);
   AddEventToSend(event_wrapper);
+}
+
+void ServerController::SendEveryUser(events::EventWrapper event) const {
+  const auto& users = server_model_.GetUsers();
+  for (const auto& [user_id, user_ptr] : users) {
+    event.mutable_server_event()->set_receiver_id(user_id);
+    auto serialized = event.SerializeAsString();
+    QByteArray byte_array(serialized.data(), serialized.size());
+    user_ptr->GetSocket()->sendBinaryMessage(byte_array);
+  }
 }

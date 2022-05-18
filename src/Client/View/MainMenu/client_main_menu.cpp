@@ -265,7 +265,7 @@ void ClientMainMenu::Settings() {
                                Qt::AlignHCenter | Qt::AlignVCenter);
 }
 
-void ClientMainMenu::UpdateRoomList(const server_events::RoomsList& room_list) {
+void ClientMainMenu::UpdateRoomsList(const server_events::RoomsList& room_list) {
   int current_row = rooms_list_->currentRow();
   rooms_list_->clear();
   for (auto room : room_list.ids()) {
@@ -286,25 +286,12 @@ void ClientMainMenu::UpdatePlayerList(
   for (int i = 0; i < users.size(); i++) {
     player_list_->addItem(
         QString::fromStdString(users.at(i).nickname()));
-    switch (users.at(i).is_ready()) {
-      case server_events::RoomUser::kNotReady: {
-        player_list_->item(i)->setBackground(QColorConstants::Red);
-        break;
-      }
-      case server_events::RoomUser::kReady: {
-        player_list_->item(i)->setBackground(QColorConstants::Green);
-        break;
-      }
-      case server_events::RoomUser::kNone: {
-        player_list_->item(i)->setBackground(QColorConstants::Gray);
-        break;
-      }
-      default: {}
-    }
+    auto color = StatusToColor(users.at(i).ready_status());
+    player_list_->item(i)->setBackground(color);
   }
   bool can_start = std::all_of(users.begin(), users.end(),
                                [](const auto& user){
-    return user.is_ready() == server_events::RoomUser::kReady;
+    return user.ready_status() == server_events::RoomUser::kReady;
   });
   start_game_->setEnabled(can_start);
 }
@@ -341,3 +328,22 @@ void ClientMainMenu::PlayStartEffect() {
   background_->SetLightEffect(true);
 }
 
+QColor ClientMainMenu::StatusToColor(server_events::RoomUser::Status status) {
+  QColor result;
+  switch (status) {
+    case server_events::RoomUser::kNotReady: {
+      result = QColorConstants::Red;
+      break;
+    }
+    case server_events::RoomUser::kReady: {
+      result = QColorConstants::Green;
+      break;
+    }
+    case server_events::RoomUser::kNone: {
+      result = QColorConstants::Gray;
+      break;
+    }
+    default: {}
+  }
+  return result;
+}

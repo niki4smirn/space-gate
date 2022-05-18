@@ -19,7 +19,7 @@ class ClientMainMenu : public QWidget {
 
  public:
   explicit ClientMainMenu(QWidget* parent = nullptr);
-  void UpdateRoomList(const server_events::RoomsList& room_list);
+  void UpdateRoomsList(const server_events::RoomsList& room_list);
   void UpdatePlayerList(const server_events::RoomInfo& room_info);
   void SetCenterPos(QPoint pos);
   void PlayStartEffect();
@@ -59,6 +59,8 @@ class ClientMainMenu : public QWidget {
   QLabel* nothing_here_;
   QWidget* interface_;
   QFont font_;
+
+  static QColor StatusToColor(server_events::RoomUser::Status status);
 
  signals:
   void StartEffect(bool state);

@@ -19,7 +19,7 @@ message RoomUser {
     kReady = 2;
   }
   string nickname = 1;
-  Status is_ready = 2;
+  Status ready_status = 2;
 }
 
 message RoomInfo {

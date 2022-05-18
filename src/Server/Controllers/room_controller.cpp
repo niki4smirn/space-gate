@@ -86,7 +86,7 @@ void RoomController::SendRoomInfoEvent() {
     proto_user->set_allocated_nickname(str);
     auto proto_user_status =
         static_cast<server_events::RoomUser::Status>(user_ptr->GetStatus());
-    proto_user->set_is_ready(proto_user_status);
+    proto_user->set_ready_status(proto_user_status);
   }
 
   auto* server_event = new server_events::ServerEventWrapper;

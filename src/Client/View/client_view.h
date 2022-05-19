@@ -11,8 +11,9 @@ class ClientView : public QMainWindow {
   Q_OBJECT
  public:
   ClientView();
-  void MenuUpdatePlayerList(const server_events::RoomInfo& room_info);
-  void MenuUpdateRoomList(const server_events::RoomsList& room_list);
+  void UpdateRoomInfoMenu(const server_events::RoomInfo& room_info,
+                          int client_id);
+  void UpdateRoomsListMenu(const server_events::RoomsList& room_list);
   void PlayStartEffect();
 
  private:

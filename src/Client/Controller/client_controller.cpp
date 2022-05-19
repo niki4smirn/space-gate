@@ -42,11 +42,12 @@ void ClientController::Handle(const events::EventWrapper& event) {
     case events::EventWrapper::kServerEvent: {
       switch (event.server_event().type_case()) {
         case server_events::ServerEventWrapper::kRoomInfo: {
-          view_->MenuUpdatePlayerList(event.server_event().room_info());
+          view_->UpdateRoomInfoMenu(event.server_event().room_info(),
+                                    event.server_event().receiver_id());
           break;
         }
         case server_events::ServerEventWrapper::kRoomsList: {
-          view_->MenuUpdateRoomList(event.server_event().rooms_list());
+          view_->UpdateRoomsListMenu(event.server_event().rooms_list());
           break;
         }
         case server_events::ServerEventWrapper::kStartGame: {

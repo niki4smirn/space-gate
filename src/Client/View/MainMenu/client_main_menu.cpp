@@ -36,14 +36,14 @@ ClientMainMenu::ClientMainMenu(QWidget* parent) :
 
   SetMouseTracking();
   SetLayouts();
-  SetStartWidgetsPos();
+  ShowStartWidget();
   Connect();
 }
 void ClientMainMenu::SetCenterPos(QPoint pos) {
   background_->SetCenterPos(pos);
 }
 
-void ClientMainMenu::SetStartWidgetsPos() {
+void ClientMainMenu::ShowStartWidget() {
   RemoveAllWidgets();
 
   game_name_->setVisible(true);
@@ -175,7 +175,8 @@ void ClientMainMenu::BackToGameOption() {
 }
 
 void ClientMainMenu::BackToStart() {
-  SetStartWidgetsPos();
+  ResetAllWidgets();
+  ShowStartWidget();
 }
 
 void ClientMainMenu::RemoveAllWidgets() {
@@ -192,8 +193,6 @@ void ClientMainMenu::RemoveAllWidgets() {
   rooms_list_->setVisible(false);
   nothing_here_->setVisible(false);
 
-  ready_status_->setText("READY");
-
   interface_layout_->removeWidget(create_room_);
   interface_layout_->removeWidget(join_room_);
   interface_layout_->removeWidget(back_to_start_);
@@ -209,22 +208,7 @@ void ClientMainMenu::RemoveAllWidgets() {
 }
 
 void ClientMainMenu::CreateRoom() {
-  player_list_->clear();
-  RemoveAllWidgets();
-
-  player_list_->setVisible(true);
-  start_game_->setVisible(true);
-  ready_status_->setVisible(true);
-  back_to_game_option_->setVisible(true);
-
-  interface_layout_->addWidget(player_list_, 1, 0, 1, 2,
-                               Qt::AlignHCenter | Qt::AlignVCenter);
-  interface_layout_->addWidget(start_game_, 2, 0,
-                               Qt::AlignRight | Qt::AlignVCenter);
-  interface_layout_->addWidget(ready_status_, 2, 1,
-                               Qt::AlignLeft | Qt::AlignVCenter);
-  interface_layout_->addWidget(back_to_game_option_, 3, 0, 1, 2,
-                               Qt::AlignHCenter | Qt::AlignVCenter);
+  ShowRoomChiefInterface();
   emit CreateRoomSignal();
 }
 
@@ -235,18 +219,7 @@ void ClientMainMenu::JoinRoom() {
   RoomId room_id = rooms_list_->currentItem()->text().toInt();
   emit JoinRoomSignal(room_id);
 
-  player_list_->clear();
-  RemoveAllWidgets();
-  player_list_->setVisible(true);
-  ready_status_->setVisible(true);
-  back_to_game_option_->setVisible(true);
-
-  interface_layout_->addWidget(player_list_, 1, 0, 1, 2,
-                               Qt::AlignHCenter | Qt::AlignVCenter);
-  interface_layout_->addWidget(ready_status_, 2, 0, 1, 2,
-                               Qt::AlignHCenter | Qt::AlignVCenter);
-  interface_layout_->addWidget(back_to_game_option_, 3, 0, 1, 2,
-                               Qt::AlignHCenter | Qt::AlignVCenter);
+  ShowRoomGuestInterface();
 }
 
 void ClientMainMenu::Settings() {
@@ -265,7 +238,8 @@ void ClientMainMenu::Settings() {
                                Qt::AlignHCenter | Qt::AlignVCenter);
 }
 
-void ClientMainMenu::UpdateRoomsList(const server_events::RoomsList& room_list) {
+void ClientMainMenu::UpdateRoomsList(
+    const server_events::RoomsList& room_list) {
   int current_row = rooms_list_->currentRow();
   rooms_list_->clear();
   for (auto room : room_list.ids()) {
@@ -279,7 +253,7 @@ void ClientMainMenu::UpdateRoomsList(const server_events::RoomsList& room_list) 
   }
 }
 
-void ClientMainMenu::UpdatePlayerList(
+void ClientMainMenu::UpdatePlayersList(
     const server_events::RoomInfo& room_info) {
   player_list_->clear();
   const auto& users = room_info.users();
@@ -346,4 +320,51 @@ QColor ClientMainMenu::StatusToColor(server_events::RoomUser::Status status) {
     default: {}
   }
   return result;
+}
+
+void ClientMainMenu::UpdateInterface(bool is_chief) {
+  if (is_chief) {
+    ShowRoomChiefInterface();
+  } else {
+    ShowRoomGuestInterface();
+  }
+}
+
+void ClientMainMenu::ShowRoomChiefInterface() {
+  RemoveAllWidgets();
+  player_list_->setVisible(true);
+  ready_status_->setVisible(true);
+  back_to_game_option_->setVisible(true);
+  start_game_->setVisible(true);
+
+  interface_layout_->addWidget(player_list_, 1, 0, 1, 2,
+                               Qt::AlignHCenter | Qt::AlignVCenter);
+  interface_layout_->addWidget(start_game_, 2, 0,
+                               Qt::AlignRight | Qt::AlignVCenter);
+  interface_layout_->addWidget(ready_status_, 2, 1,
+                               Qt::AlignLeft | Qt::AlignVCenter);
+  interface_layout_->addWidget(back_to_game_option_, 3, 0, 1, 2,
+                               Qt::AlignHCenter | Qt::AlignVCenter);
+}
+
+void ClientMainMenu::ShowRoomGuestInterface() {
+  RemoveAllWidgets();
+
+  player_list_->setVisible(true);
+  ready_status_->setVisible(true);
+  back_to_game_option_->setVisible(true);
+
+  interface_layout_->addWidget(player_list_, 1, 0, 1, 2,
+                               Qt::AlignHCenter | Qt::AlignVCenter);
+  interface_layout_->addWidget(ready_status_, 2, 0, 1, 2,
+                               Qt::AlignHCenter | Qt::AlignVCenter);
+  interface_layout_->addWidget(back_to_game_option_, 3, 0, 1, 2,
+                               Qt::AlignHCenter | Qt::AlignVCenter);
+}
+
+void ClientMainMenu::ResetAllWidgets() {
+  RemoveAllWidgets();
+
+  ready_status_->setText("READY");
+  player_list_->clear();
 }

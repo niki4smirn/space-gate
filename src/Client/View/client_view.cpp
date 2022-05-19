@@ -45,12 +45,14 @@ void ClientView::AddWidgets() {
   stacked_widget_->addWidget(main_menu_);
 }
 
-void ClientView::MenuUpdatePlayerList(
-    const server_events::RoomInfo& room_info) {
-  main_menu_->UpdatePlayerList(room_info);
+void ClientView::UpdateRoomInfoMenu(
+    const server_events::RoomInfo& room_info,
+    int client_id) {
+  main_menu_->UpdatePlayersList(room_info);
+  main_menu_->UpdateInterface(client_id == room_info.chief_id());
 }
 
-void ClientView::MenuUpdateRoomList(const server_events::RoomsList& room_list) {
+void ClientView::UpdateRoomsListMenu(const server_events::RoomsList& room_list) {
   main_menu_->UpdateRoomsList(room_list);
 }
 

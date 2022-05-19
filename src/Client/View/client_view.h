@@ -12,7 +12,7 @@ class ClientView : public QMainWindow {
  public:
   ClientView();
   void UpdateRoomInfoMenu(const server_events::RoomInfo& room_info,
-                          int client_id);
+                          uint64_t client_id);
   void UpdateRoomsListMenu(const server_events::RoomsList& room_list);
   void PlayStartEffect();
 

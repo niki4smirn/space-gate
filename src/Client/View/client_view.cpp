@@ -47,7 +47,7 @@ void ClientView::AddWidgets() {
 
 void ClientView::UpdateRoomInfoMenu(
     const server_events::RoomInfo& room_info,
-    int client_id) {
+    uint64_t client_id) {
   main_menu_->UpdatePlayersList(room_info);
   main_menu_->UpdateInterface(client_id == room_info.chief_id());
 }

@@ -40,14 +40,15 @@ void ClientController::Send(const events::EventWrapper& event) {
 void ClientController::Handle(const events::EventWrapper& event) {
   switch (event.type_case()) {
     case events::EventWrapper::kServerEvent: {
-      switch (event.server_event().type_case()) {
+      const auto& server_event = event.server_event();
+      switch (server_event.type_case()) {
         case server_events::ServerEventWrapper::kRoomInfo: {
-          view_->UpdateRoomInfoMenu(event.server_event().room_info(),
-                                    event.server_event().receiver_id());
+          view_->UpdateRoomInfoMenu(server_event.room_info(),
+                                    server_event.receiver_id());
           break;
         }
         case server_events::ServerEventWrapper::kRoomsList: {
-          view_->UpdateRoomsListMenu(event.server_event().rooms_list());
+          view_->UpdateRoomsListMenu(server_event.rooms_list());
           break;
         }
         case server_events::ServerEventWrapper::kStartGame: {

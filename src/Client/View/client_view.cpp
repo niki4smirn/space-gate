@@ -52,7 +52,8 @@ void ClientView::UpdateRoomInfoMenu(
   main_menu_->UpdateInterface(client_id == room_info.chief_id());
 }
 
-void ClientView::UpdateRoomsListMenu(const server_events::RoomsList& room_list) {
+void ClientView::UpdateRoomsListMenu(
+    const server_events::RoomsList& room_list) {
   main_menu_->UpdateRoomsList(room_list);
 }
 

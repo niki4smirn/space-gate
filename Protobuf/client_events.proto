@@ -19,10 +19,21 @@ message LeaveRoom {}
 
 message EventToServer {
   oneof type {
+    ActionWithRoom room_event = 1;
+    KeysPressed keys = 2;
+  }
+}
+
+message ActionWithRoom {
+  oneof type {
     CreateRoom create_room = 1;
     EnterRoom enter_room = 2;
     LeaveRoom leave_room = 3;
   }
+}
+
+message KeysPressed {
+  repeated string keys = 1;
 }
 
 message ChangeWaitingStatus {}

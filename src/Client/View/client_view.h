@@ -1,6 +1,7 @@
 #pragma once
 
 #include "src/Client/View/MainMenu/client_main_menu.h"
+#include "src/Client/Controller/input_controller.h"
 #include "src/Server/Models/RoomModel/room_model.h"
 
 #include <QWidget>
@@ -19,8 +20,11 @@ class ClientView : public QMainWindow {
   void AddWidgets();
   void Connect();
   void mouseMoveEvent(QMouseEvent* event) override;
+  void keyPressEvent(QKeyEvent* event) override;
+  void keyReleaseEvent(QKeyEvent* event) override;
 
  private:
+  InputController* input_controller_;
   ClientMainMenu* main_menu_;
   QStackedWidget* stacked_widget_;
 
@@ -29,4 +33,5 @@ class ClientView : public QMainWindow {
   void CreateRoom();
   void LeaveRoom();
   void JoinRoom(uint64_t room_id);
+  void KeyEventToServer(std::set<std::string>& keys);
 };

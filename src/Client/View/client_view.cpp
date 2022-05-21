@@ -3,7 +3,8 @@
 
 ClientView::ClientView() :
     stacked_widget_(new QStackedWidget(this)),
-    main_menu_(new ClientMainMenu(this)) {
+    main_menu_(new ClientMainMenu(this)),
+    input_controller_(new InputController(this)){
   AddWidgets();
   stacked_widget_->setCurrentWidget(main_menu_);
   setCentralWidget(stacked_widget_);
@@ -36,6 +37,9 @@ void ClientView::Connect() {
   connect(main_menu_,
           &ClientMainMenu::JoinRoomSignal,
           [this](uint64_t room_id){emit JoinRoom(room_id);});
+  connect(input_controller_,
+          &InputController::KeyEventToServer,
+          [this](std::set<std::string> keys){emit KeyEventToServer(keys);});
 }
 
 void ClientView::AddWidgets() {
@@ -49,5 +53,14 @@ void ClientView::MenuUpdatePlayerList(
 
 void ClientView::MenuUpdateRoomList(const server_events::RoomsList& room_list) {
   main_menu_->UpdateRoomList(room_list);
+}
+
+void ClientView::keyPressEvent(QKeyEvent* event) {
+  QWidget::keyPressEvent(event);
+  input_controller_->KeyPressed(event->nativeScanCode());
+}
+
+void ClientView::keyReleaseEvent(QKeyEvent* event) {
+  input_controller_->KeyPressed(event->nativeScanCode());
 }
 

@@ -83,6 +83,10 @@ void ClientController::ConnectView() {
           &ClientView::JoinRoom,
           this,
           &ClientController::SendJoinRoomEvent);
+  connect(view_,
+          &ClientView::KeyEventToServer,
+          this,
+          &ClientController::SendKeyEvent);
 }
 void ClientController::SendReadyStatus() {
   events::EventWrapper ready_event;
@@ -127,4 +131,8 @@ void ClientController::SendJoinRoomEvent(RoomId room_id) {
   events::EventWrapper event_to_send;
   event_to_send.set_allocated_client_event(client_event_wrapper);
   AddEventToSend(event_to_send);
+}
+
+void ClientController::SendKeyEvent(std::set<std::string>& keys) {
+
 }

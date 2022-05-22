@@ -3,7 +3,8 @@
 
 const uint64_t SampleMinigame::players_count = 4;
 
-SampleMinigame::SampleMinigame(std::vector<std::shared_ptr<User>>* players)
+SampleMinigame::SampleMinigame(
+    const std::vector<std::shared_ptr<User>>& players)
     : AbstractMinigame(players, 5, 3000) {
   StartMinigame();
 }
@@ -16,7 +17,7 @@ void SampleMinigame::OnTick() {
   AbstractMinigame::OnTick();
 
   if (ticks_ == duration_ && !CheckMinigameStatus()) {
-      emit MinigameEnded();
+      emit MinigameEnded(MinigameType::kSample, 0);
   }
 }
 
@@ -50,7 +51,7 @@ bool SampleMinigame::CheckMinigameStatus() {
   SendResponseMessages();
 
   if (temp == right_answer_) {
-    emit MinigameEnded(complexity_);
+    emit MinigameEnded(MinigameType::kSample, complexity_);
 
     return true;
   }

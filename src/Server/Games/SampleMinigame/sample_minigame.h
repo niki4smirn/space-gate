@@ -4,11 +4,13 @@
 
 class SampleMinigame final : public AbstractMinigame {
  public:
-  explicit SampleMinigame(std::vector<std::shared_ptr<User>>* players);
+  explicit SampleMinigame(const std::vector<std::shared_ptr<User>>& players);
 
   QString GetControllerName() const override;
 
   static const uint64_t players_count;
+
+  ~SampleMinigame() override = default;
 
  private:
   void OnTick() override;

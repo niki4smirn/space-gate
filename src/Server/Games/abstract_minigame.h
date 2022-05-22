@@ -2,6 +2,7 @@
 
 #include "src/AbstractController/abstract_controller.h"
 #include "src/Server/Models/User/user.h"
+#include "src/Helpers/minigames_types.h"
 
 using RoleId = uint64_t;
 
@@ -10,14 +11,14 @@ class AbstractMinigame : public AbstractController {
 
  public:
   AbstractMinigame(
-      std::vector<std::shared_ptr<User>>* players,
+      const std::vector<std::shared_ptr<User>>& players,
       uint64_t complexity,
       uint64_t duration);
 
   ~AbstractMinigame() override = default;
 
  signals:
-  void MinigameEnded(uint64_t score = 0);
+  void MinigameEnded(MinigameType type, uint64_t score = 0);
 
  protected:
   virtual void StartMinigame();

@@ -6,7 +6,8 @@ message SampleMinigame {
 }
 
 message MinigameAction {
+  uint64 minigame_id = 1;
   oneof minigame {
-    SampleMinigame sample_minigame = 1;
+    SampleMinigame sample_minigame = 2;
   }
 }

@@ -22,6 +22,7 @@ class RoomController : public AbstractController {
 
  private:
   void SendRoomInfoEvent();
+  void GameEndedEvent(uint64_t score);
 
   RoomModel room_model_;
 };

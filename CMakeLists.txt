@@ -72,5 +72,5 @@ set(REQUIRED_QT_PARTS
 foreach (executable server; client)
     target_link_libraries(${executable} ${REQUIRED_QT_PARTS})
     target_link_libraries(${executable} protobuf::libprotobuf)
-    protobuf_generate(TARGET ${executable} PROTOC_OUT_DIR ../ PROTOS ${scheme_PROTOS})
+    protobuf_generate(--experimental_allow_proto3_optional TARGET ${executable} PROTOC_OUT_DIR ../ PROTOS ${scheme_PROTOS})
 endforeach()

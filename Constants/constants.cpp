@@ -10,4 +10,5 @@ constexpr int kScoreToFinish = 20;
 constexpr int kMinigamesCount = 1;
 constexpr int kMinigamesAddingFrequency = kTickTime * 60;
 constexpr int kMaxMinigames = 4;
-}  // namespace constant
+
+}  // namespace constants

@@ -17,6 +17,7 @@ ClientView::ClientView() :
 
 void ClientView::mouseMoveEvent(QMouseEvent* event) {
   main_menu_->SetCenterPos(event->pos());
+  input_controller_->MouseMove(event->pos());
 }
 
 void ClientView::CloseWindow() {
@@ -39,7 +40,10 @@ void ClientView::Connect() {
           [this](uint64_t room_id){emit JoinRoom(room_id);});
   connect(input_controller_,
           &InputController::KeyEventToServer,
-          [this](std::set<std::string> keys){emit KeyEventToServer(keys);});
+          [this](std::string key){emit KeyEventToServer(key);});
+  connect(input_controller_,
+          &InputController::MouseMoveToServer,
+          [this](const QPoint& pos){emit MouseMoveToServer(pos);});
 }
 
 void ClientView::AddWidgets() {
@@ -61,6 +65,14 @@ void ClientView::keyPressEvent(QKeyEvent* event) {
 }
 
 void ClientView::keyReleaseEvent(QKeyEvent* event) {
-  input_controller_->KeyPressed(event->nativeScanCode());
+  input_controller_->KeyReleased(event->nativeScanCode());
+}
+
+void ClientView::mousePressEvent(QMouseEvent* event) {
+  input_controller_->MousePosStartTracking();
+}
+
+void ClientView::mouseReleaseEvent(QMouseEvent* event) {
+  input_controller_->MousePosStopTracking();
 }
 

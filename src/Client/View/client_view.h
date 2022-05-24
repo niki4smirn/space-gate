@@ -22,6 +22,8 @@ class ClientView : public QMainWindow {
   void mouseMoveEvent(QMouseEvent* event) override;
   void keyPressEvent(QKeyEvent* event) override;
   void keyReleaseEvent(QKeyEvent* event) override;
+  void mousePressEvent(QMouseEvent* event) override;
+  void mouseReleaseEvent(QMouseEvent* event) override;
 
  private:
   InputController* input_controller_;
@@ -33,5 +35,6 @@ class ClientView : public QMainWindow {
   void CreateRoom();
   void LeaveRoom();
   void JoinRoom(uint64_t room_id);
-  void KeyEventToServer(std::set<std::string>& keys);
+  void KeyEventToServer(std::string& key);
+  void MouseMoveToServer(const QPoint& pos);
 };

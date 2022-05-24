@@ -24,7 +24,8 @@ class ClientController : public AbstractController {
   void SendCreateRoomEvent();
   void SendLeaveRoomEvent();
   void SendJoinRoomEvent(RoomId room_id);
-  void SendKeyEvent(std::set<std::string>& keys);
+  void SendKeyEvent(std::string& key);
+  void SendMouseMove(const QPoint& pos);
 
  protected:
   void OnTick() override;

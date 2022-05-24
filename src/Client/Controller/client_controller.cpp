@@ -87,6 +87,10 @@ void ClientController::ConnectView() {
           &ClientView::KeyEventToServer,
           this,
           &ClientController::SendKeyEvent);
+  connect(view_,
+          &ClientView::MouseMoveToServer,
+          this,
+          &ClientController::SendMouseMove);
 }
 void ClientController::SendReadyStatus() {
   events::EventWrapper ready_event;
@@ -133,6 +137,10 @@ void ClientController::SendJoinRoomEvent(RoomId room_id) {
   AddEventToSend(event_to_send);
 }
 
-void ClientController::SendKeyEvent(std::set<std::string>& keys) {
+void ClientController::SendKeyEvent(std::string& key) {
+  LOG << key << " pressed in client controller";
+}
 
+void ClientController::SendMouseMove(const QPoint& pos) {
+  LOG << "x = " << pos.x() << " y = " << pos.y();
 }

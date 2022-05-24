@@ -48,6 +48,14 @@ add_executable(server
         src/Server/Models/Player/player.cpp
         )
 
+if (WIN32)
+    set(SYSTEM_DEPENDENT_SOURCES
+            src/Client/Controller/key_names_windows.cpp)
+else()
+    set(SYSTEM_DEPENDENT_SOURCES
+            src/Client/Controller/key_names_unix.cpp)
+endif (WIN32)
+
 add_executable(client
         ${COMMON_SRC}
         src/Client/client_main.cpp
@@ -59,15 +67,8 @@ add_executable(client
         src/Client/Controller/input_controller.cpp
         src/Client/Controller/input_controller.h
         src/Client/Controller/key_names.h
-        SYSTEM_DEPENDENT_SOURCES
+        ${SYSTEM_DEPENDENT_SOURCES}
         )
-if (WIN32)
-    set(SYSTEM_DEPENDENT_SOURCES
-            Client/Controller/key_names_windows.cpp)
-else()
-    set(SYSTEM_DEPENDENT_SOURCES
-            Client/Controller/key_names_unix.cpp)
-endif (WIN32)
 
 set(REQUIRED_QT_PARTS
         Qt::Core

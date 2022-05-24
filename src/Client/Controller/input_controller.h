@@ -13,14 +13,19 @@ class InputController : public QObject{
  public:
   explicit InputController(QWidget* parent);
   void KeyPressed(quint32 key_number);
-  void KeyRelease(quint32 key_number);
+  void KeyReleased(quint32 key_number);
+  void MousePosStartTracking();
+  void MousePosStopTracking();
+  void MouseMove(const QPoint& pos);
+  
 
  private:
   std::set<std::string> keys_pressed_;
-  int prev_size_ = 0;
+  bool mouse_pressed_;
 
   signals:
-  void KeyEventToServer(std::set<std::string> keys_);
+  void KeyEventToServer(std::string key);
+  void MouseMoveToServer(const QPoint& pos);
 
 };
 

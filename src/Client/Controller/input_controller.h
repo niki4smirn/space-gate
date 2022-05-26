@@ -14,8 +14,8 @@ struct Key {
   int time;
 };
 
-class InputController : public QObject{
-  Q_OBJECT
+class InputController : public QObject {
+ Q_OBJECT
 
  public:
   explicit InputController(QWidget* parent);
@@ -29,7 +29,6 @@ class InputController : public QObject{
   void AddTime();
   void RemoveKeys();
   bool FindKey(const std::string& key);
-  
 
  private:
   QBasicTimer timer_;
@@ -38,7 +37,7 @@ class InputController : public QObject{
   int tick_ = 15;
   int hold_time_ = 240;
 
-  signals:
+ signals:
   void KeyEventToServer(std::string key);
   void MouseMoveToServer(const QPoint& pos);
 

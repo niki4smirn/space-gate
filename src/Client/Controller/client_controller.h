@@ -24,7 +24,7 @@ class ClientController : public AbstractController {
   void SendCreateRoomEvent();
   void SendLeaveRoomEvent();
   void SendJoinRoomEvent(RoomId room_id);
-  void SendKeyEvent(std::string& key);
+  void SendKeyEvent(const std::string& key);
   void SendMouseMove(const QPoint& pos);
 
  protected:

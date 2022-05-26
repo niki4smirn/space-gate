@@ -137,7 +137,7 @@ void ClientController::SendJoinRoomEvent(RoomId room_id) {
   AddEventToSend(event_to_send);
 }
 
-void ClientController::SendKeyEvent(std::string& key) {
+void ClientController::SendKeyEvent(const std::string& key) {
   LOG << key;
 }
 

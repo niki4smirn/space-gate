@@ -4,7 +4,7 @@
 ClientView::ClientView() :
     stacked_widget_(new QStackedWidget(this)),
     main_menu_(new ClientMainMenu(this)),
-    input_controller_(new InputController(this)){
+    input_controller_(new InputController(this)) {
   AddWidgets();
   stacked_widget_->setCurrentWidget(main_menu_);
   setCentralWidget(stacked_widget_);
@@ -28,22 +28,22 @@ void ClientView::Connect() {
   connect(main_menu_, &ClientMainMenu::Close, this, &ClientView::CloseWindow);
   connect(main_menu_,
           &ClientMainMenu::ReadyButtonPressed,
-          [this](){emit ReadyButtonPressed();});
+          [this]() { emit ReadyButtonPressed(); });
   connect(main_menu_,
           &ClientMainMenu::CreateRoomSignal,
-          [this](){emit CreateRoom();});
+          [this]() { emit CreateRoom(); });
   connect(main_menu_,
           &ClientMainMenu::LeaveRoom,
-          [this](){emit LeaveRoom();});
+          [this]() { emit LeaveRoom(); });
   connect(main_menu_,
           &ClientMainMenu::JoinRoomSignal,
-          [this](uint64_t room_id){emit JoinRoom(room_id);});
+          [this](uint64_t room_id) { emit JoinRoom(room_id); });
   connect(input_controller_,
           &InputController::KeyEventToServer,
-          [this](std::string key){emit KeyEventToServer(key);});
+          [this](std::string key) { emit KeyEventToServer(key); });
   connect(input_controller_,
           &InputController::MouseMoveToServer,
-          [this](const QPoint& pos){emit MouseMoveToServer(pos);});
+          [this](const QPoint& pos) { emit MouseMoveToServer(pos); });
 }
 
 void ClientView::AddWidgets() {

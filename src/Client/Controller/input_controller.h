@@ -5,6 +5,7 @@
 #include <QBasicTimer>
 
 #include <vector>
+#include <list>
 
 #include "key_names.h"
 #include "Constants/constants.h"
@@ -33,9 +34,9 @@ class InputController : public QObject {
 
  private:
   QBasicTimer timer_;
-  std::vector<Key> keys_pressed_;
+  std::list<Key> keys_pressed_;
   bool track_mouse_ = false;
-  int hold_time_ = 240;
+  int hold_time_ = 90;
 
  signals:
   void KeyEventToServer(std::string key);

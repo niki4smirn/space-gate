@@ -5,14 +5,14 @@ InputController::InputController(QWidget* parent) {
 }
 
 void InputController::KeyPressed(quint32 key_number) {
-  if (!key_names::kNativeCodeToKeyName.contains(key_number)){
+  if (!key_names::kNativeCodeToKeyName.contains(key_number)) {
     return;
   }
   auto key = key_names::kNativeCodeToKeyName.at(key_number);
   if (FindKey(key)) {
     return;
   }
-  keys_pressed_.emplace_back(Key(key));
+  keys_pressed_.emplace_back(key);
   emit KeyEventToServer(key);
 }
 
@@ -54,13 +54,11 @@ void InputController::RemoveKeys() {
     keys_pressed_.erase(it);
   }
 }
+
 bool InputController::FindKey(const std::string& key) {
-  for (const auto& key_it : keys_pressed_) {
-    if (key_it.key == key) {
-      return true;
-    }
-  }
-  return false;
+  return std::any_of(keys_pressed_.begin(),
+                     keys_pressed_.end(),
+                     [key](auto key_it) { return key_it.key == key; });
 }
 
 Key::Key(std::string pressed_key) {

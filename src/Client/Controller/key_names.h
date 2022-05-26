@@ -1,10 +1,10 @@
 #pragma once
 
 #include <unordered_map>
-#include <QString>
+#include <string>
 
 namespace KeyNames {
 
-extern const std::unordered_map<uint32_t, QString> kNativeCodeToKeyName;
+extern const std::unordered_map<uint32_t, std::string> kNativeCodeToKeyName;
 
 }  // namespace KeyNames

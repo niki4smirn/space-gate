@@ -2,7 +2,7 @@
 
 namespace KeyNames {
 
-const std::unordered_map<uint32_t, QString> kNativeCodeToKeyName{
+const std::unordered_map<uint32_t, std::string> kNativeCodeToKeyName{
     {1, "Esc"},
     {59, "F1"},
     {60, "F2"},

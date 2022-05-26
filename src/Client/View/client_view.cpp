@@ -64,10 +64,6 @@ void ClientView::keyPressEvent(QKeyEvent* event) {
   input_controller_->KeyPressed(event->nativeScanCode());
 }
 
-void ClientView::keyReleaseEvent(QKeyEvent* event) {
-  input_controller_->KeyReleased(event->nativeScanCode());
-}
-
 void ClientView::mousePressEvent(QMouseEvent* event) {
   input_controller_->MousePosStartTracking();
 }

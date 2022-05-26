@@ -138,7 +138,7 @@ void ClientController::SendJoinRoomEvent(RoomId room_id) {
 }
 
 void ClientController::SendKeyEvent(std::string& key) {
-  LOG << key << " pressed in client controller";
+  LOG << key;
 }
 
 void ClientController::SendMouseMove(const QPoint& pos) {

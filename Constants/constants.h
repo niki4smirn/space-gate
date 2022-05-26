@@ -7,6 +7,7 @@ namespace constants {
 extern const QString kDefaultServerIp;
 extern const int kDefaultPort;
 extern const int kTickTime;
+extern const int kKeyTickTime;
 
 }  // namespace constants
 

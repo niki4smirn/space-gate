@@ -1,11 +1,14 @@
 #include "input_controller.h"
 
 InputController::InputController(QWidget* parent) {
-  timer_.start(tick_, this);
+  timer_.start(constants::kKeyTickTime, this);
 }
 
 void InputController::KeyPressed(quint32 key_number) {
-  auto key = KeyNames::kNativeCodeToKeyName.at(key_number);
+  if (!key_names::kNativeCodeToKeyName.contains(key_number)){
+    return;
+  }
+  auto key = key_names::kNativeCodeToKeyName.at(key_number);
   if (FindKey(key)) {
     return;
   }
@@ -14,15 +17,15 @@ void InputController::KeyPressed(quint32 key_number) {
 }
 
 void InputController::MousePosStartTracking() {
-  mouse_pressed_ = true;
+  track_mouse_ = true;
 }
 
 void InputController::MousePosStopTracking() {
-  mouse_pressed_ = false;
+  track_mouse_ = false;
 }
 
 void InputController::MouseMove(const QPoint& pos) {
-  if (!mouse_pressed_) {
+  if (!track_mouse_) {
     return;
   }
   emit MouseMoveToServer(pos);
@@ -36,7 +39,7 @@ void InputController::timerEvent(QTimerEvent* event) {
 
 void InputController::AddTime() {
   for (auto& key : keys_pressed_) {
-    key.time += 15;
+    key.time += constants::kKeyTickTime;
   }
 }
 

@@ -66,7 +66,6 @@ add_executable(client
         src/Client/View/MainMenu/Background/star.cpp
         src/Client/Controller/input_controller.cpp
         src/Client/Controller/input_controller.h
-        src/Client/Controller/key_names.h
         ${SYSTEM_DEPENDENT_SOURCES}
         )
 

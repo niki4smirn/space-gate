@@ -7,6 +7,7 @@
 #include <vector>
 
 #include "key_names.h"
+#include "Constants/constants.h"
 
 struct Key {
   explicit Key(std::string pressed_key);
@@ -33,8 +34,7 @@ class InputController : public QObject {
  private:
   QBasicTimer timer_;
   std::vector<Key> keys_pressed_;
-  bool mouse_pressed_ = false;
-  int tick_ = 15;
+  bool track_mouse_ = false;
   int hold_time_ = 240;
 
  signals:

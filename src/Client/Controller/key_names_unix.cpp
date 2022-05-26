@@ -1,6 +1,6 @@
 #include "key_names.h"
 
-namespace KeyNames {
+namespace key_names {
 
 const std::unordered_map<uint32_t, std::string> kNativeCodeToKeyName{
     {9, "Esc"},
@@ -107,4 +107,4 @@ const std::unordered_map<uint32_t, std::string> kNativeCodeToKeyName{
     {90, "0"},
     {91, "."}};
 
-}  // namespace KeyNames
+}  // namespace key_names

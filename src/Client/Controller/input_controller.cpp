@@ -61,7 +61,7 @@ bool InputController::FindKey(const std::string& key) {
                      [key](auto key_it) { return key_it.key == key; });
 }
 
-Key::Key(std::string pressed_key) {
+Key::Key(const std::string& pressed_key) {
   key = pressed_key;
   time = 0;
 }

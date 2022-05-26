@@ -11,7 +11,7 @@
 #include "Constants/constants.h"
 
 struct Key {
-  explicit Key(std::string pressed_key);
+  explicit Key(const std::string& pressed_key);
   std::string key;
   int time;
 };
@@ -39,6 +39,6 @@ class InputController : public QObject {
   int hold_time_ = 90;
 
  signals:
-  void KeyEventToServer(std::string key);
+  void KeyEventToServer(const std::string& key);
   void MouseMoveToServer(const QPoint& pos);
 };

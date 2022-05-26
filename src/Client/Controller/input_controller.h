@@ -15,7 +15,7 @@ struct Key {
 };
 
 class InputController : public QObject {
- Q_OBJECT
+  Q_OBJECT
 
  public:
   explicit InputController(QWidget* parent);
@@ -40,6 +40,4 @@ class InputController : public QObject {
  signals:
   void KeyEventToServer(std::string key);
   void MouseMoveToServer(const QPoint& pos);
-
 };
-

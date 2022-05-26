@@ -9,7 +9,8 @@
 #include <QMainWindow>
 
 class ClientView : public QMainWindow {
- Q_OBJECT
+  Q_OBJECT
+
  public:
   ClientView();
   void MenuUpdatePlayerList(const server_events::RoomInfo& room_info);
@@ -34,6 +35,6 @@ class ClientView : public QMainWindow {
   void CreateRoom();
   void LeaveRoom();
   void JoinRoom(uint64_t room_id);
-  void KeyEventToServer(std::string& key);
+  void KeyEventToServer(const std::string& key);
   void MouseMoveToServer(const QPoint& pos);
 };

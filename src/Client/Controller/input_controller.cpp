@@ -47,7 +47,7 @@ void InputController::RemoveKeys() {
       keys_to_remove_.push_back(key);
     }
   }
-  for (const auto& it: keys_to_remove_) {
+  for (const auto& it : keys_to_remove_) {
     keys_pressed_.erase(it);
   }
 }

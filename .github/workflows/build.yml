@@ -3,7 +3,7 @@ name: Build
 on:
   push:
     branches:
-      [main, developing]
+      [ main, developing ]
   pull_request:
     branches:
       - '*'
@@ -34,8 +34,27 @@ jobs:
           cached: ${{ steps.cache-qt.outputs.cache-hit }}
           aqtversion: '==2.0.6'
           install-deps: true
-      - run: sudo apt-get install protobuf-compiler
-        name: Install Protobuf
+      - name: Cache protobuf library
+        id: cache-protobuf
+        uses: actions/cache@v1
+        with:
+          path: protobuf
+          key: ${{ runner.os }}-protobuf
+      - name: Build protobuf library
+        if: steps.cache-protobuf.outputs.cache-hit != 'true'
+        run: |
+          git clone https://github.com/protocolbuffers/protobuf.git
+          cd protobuf
+          git submodule update --init --recursive
+          ./autogen.sh
+          ./configure
+          make -j2
+          make check
+      - name: Install protobuf library
+        run: |
+          cd protobuf
+          sudo make install
+          sudo ldconfig
       - run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DCMAKE_CXX_COMPILER=g++-11 -DCMAKE_C_COMPILER=gcc-11
         name: Configure CMake
       - run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}} -j2

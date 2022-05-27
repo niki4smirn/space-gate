@@ -1,0 +1,25 @@
+syntax = "proto3";
+package minigame_responses;
+
+message SampleResponse {
+  enum Role {
+    kFirst = 0;
+    kSecond = 1;
+    kThird = 2;
+    kFourth = 3;
+  }
+  map<uint64, string> answers = 1;
+  Role role = 2;
+}
+
+message MinigameResponse {
+  enum Result {
+    kCompleted = 0;
+    kFailed = 1;
+  }
+  uint64 remaining_time = 1;
+  oneof type {
+    Result result = 2;
+    SampleResponse sample_response = 3;
+  }
+}

@@ -50,10 +50,10 @@ add_executable(server
 
 if (WIN32)
     set(SYSTEM_DEPENDENT_SOURCES
-            src/Client/Controller/key_names_windows.cpp)
+            src/Client/Controller/InputController/key_names_windows.cpp)
 else()
     set(SYSTEM_DEPENDENT_SOURCES
-            src/Client/Controller/key_names_unix.cpp)
+            src/Client/Controller/InputController/key_names_unix.cpp)
 endif (WIN32)
 
 add_executable(client
@@ -64,8 +64,7 @@ add_executable(client
         src/Client/View/MainMenu/client_main_menu.cpp
         src/Client/View/client_view.cpp
         src/Client/View/MainMenu/Background/star.cpp
-        src/Client/Controller/input_controller.cpp
-        src/Client/Controller/input_controller.h
+        src/Client/Controller/InputController/input_controller.cpp
         ${SYSTEM_DEPENDENT_SOURCES}
         )
 

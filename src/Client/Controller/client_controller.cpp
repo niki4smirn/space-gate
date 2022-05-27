@@ -90,7 +90,7 @@ void ClientController::ConnectView() {
   connect(view_,
           &ClientView::MouseMoveToServer,
           this,
-          &ClientController::SendMouseMove);
+          &ClientController::SendMouseMoveEvent);
 }
 void ClientController::SendReadyStatus() {
   events::EventWrapper ready_event;
@@ -141,6 +141,6 @@ void ClientController::SendKeyEvent(const std::string& key) {
   LOG << key;
 }
 
-void ClientController::SendMouseMove(const QPoint& pos) {
+void ClientController::SendMouseMoveEvent(const QPoint& pos) {
   LOG << "x = " << pos.x() << " y = " << pos.y();
 }

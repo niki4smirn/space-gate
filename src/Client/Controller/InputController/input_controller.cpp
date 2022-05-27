@@ -1,6 +1,6 @@
 #include "input_controller.h"
 
-InputController::InputController(QWidget* parent) {
+InputController::InputController() {
   timer_.start(constants::kKeyTickTime, this);
 }
 
@@ -17,15 +17,15 @@ void InputController::KeyPressed(quint32 key_number) {
 }
 
 void InputController::MousePosStartTracking() {
-  track_mouse_ = true;
+  is_mouse_tracking_ = true;
 }
 
 void InputController::MousePosStopTracking() {
-  track_mouse_ = false;
+  is_mouse_tracking_ = false;
 }
 
 void InputController::MouseMove(const QPoint& pos) {
-  if (!track_mouse_) {
+  if (!is_mouse_tracking_) {
     return;
   }
   emit MouseMoveToServer(pos);
@@ -61,7 +61,19 @@ bool InputController::FindKey(const std::string& key) {
                      [key](auto key_it) { return key_it.key == key; });
 }
 
-Key::Key(const std::string& pressed_key) {
-  key = pressed_key;
-  time = 0;
+void InputController::MouseKeyPressed(const Qt::MouseButton& button) {
+  switch (button) {
+    case Qt::LeftButton: {
+      emit MouseKeyToServer("LeftButton");
+      break;
+    }
+    case Qt::RightButton: {
+      emit MouseKeyToServer("RightButton");
+      break;
+    }
+    default: {}
+  }
 }
+
+Key::Key(const std::string& pressed_key) :
+  key(pressed_key) {}

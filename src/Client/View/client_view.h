@@ -1,7 +1,7 @@
 #pragma once
 
 #include "src/Client/View/MainMenu/client_main_menu.h"
-#include "src/Client/Controller/input_controller.h"
+#include "src/Client/Controller/InputController/input_controller.h"
 #include "src/Server/Models/RoomModel/room_model.h"
 
 #include <QWidget>
@@ -26,7 +26,7 @@ class ClientView : public QMainWindow {
   void mouseReleaseEvent(QMouseEvent* event) override;
 
  private:
-  InputController* input_controller_;
+  std::unique_ptr<InputController> input_controller_;
   ClientMainMenu* main_menu_;
   QStackedWidget* stacked_widget_;
 

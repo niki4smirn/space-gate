@@ -4,7 +4,7 @@
 ClientView::ClientView() :
     stacked_widget_(new QStackedWidget(this)),
     main_menu_(new ClientMainMenu(this)),
-    input_controller_(new InputController(this)) {
+    input_controller_(new InputController) {
   AddWidgets();
   stacked_widget_->setCurrentWidget(main_menu_);
   setCentralWidget(stacked_widget_);
@@ -38,12 +38,15 @@ void ClientView::Connect() {
   connect(main_menu_,
           &ClientMainMenu::JoinRoomSignal,
           [this](uint64_t room_id) { emit JoinRoom(room_id); });
-  connect(input_controller_,
+  connect(input_controller_.get(),
           &InputController::KeyEventToServer,
           [this](std::string key) { emit KeyEventToServer(key); });
-  connect(input_controller_,
+  connect(input_controller_.get(),
           &InputController::MouseMoveToServer,
           [this](const QPoint& pos) { emit MouseMoveToServer(pos); });
+  connect(input_controller_.get(),
+          &InputController::MouseKeyToServer,
+          [this](std::string key) { emit KeyEventToServer(key); });
 }
 
 void ClientView::AddWidgets() {
@@ -66,6 +69,7 @@ void ClientView::keyPressEvent(QKeyEvent* event) {
 
 void ClientView::mousePressEvent(QMouseEvent* event) {
   input_controller_->MousePosStartTracking();
+  input_controller_->MouseKeyPressed(event->button());
 }
 
 void ClientView::mouseReleaseEvent(QMouseEvent* event) {

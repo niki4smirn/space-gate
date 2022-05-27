@@ -27,8 +27,10 @@ void GameController::Handle(const events::EventWrapper& event) {
 
   switch (game_event.type_case()) {
     case client_events::EventToGame::kJoinMinigame: {
-      model_.AddPlayerToMinigame(client_event.sender_id(),
-                                 game_event.join_minigame().minigame_id());
+      if (!model_.IsPlayerBusy(client_event.sender_id())) {
+        model_.AddPlayerToMinigame(client_event.sender_id(),
+                                   game_event.join_minigame().minigame_id());
+      }
 
       break;
     }
@@ -120,7 +122,7 @@ events::EventWrapper GameController::GetGameInfo(UserId player_id) const {
 
   game_info->set_progress(model_.GetProgress());
 
-  for (const auto& [minigame_type, players] : model_.GetAvailableMinigames()) {
+  for (const auto& [minigame_type, players] : model_.GetPlayersByMinigame()) {
     auto* minigame_info = game_info->add_minigames_info();
     minigame_info->set_id(static_cast<MinigameId>(minigame_type));
     minigame_info->set_num_of_joined(players.size());

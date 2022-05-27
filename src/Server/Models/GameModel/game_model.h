@@ -26,12 +26,14 @@ class GameModel : public QObject {
   const std::vector<std::shared_ptr<User>>& GetPlayersForMinigame(
       MinigameType type);
   std::vector<UserId> GetFreePlayersIds() const;
+  bool IsPlayerBusy(UserId id);
+
 
   AbstractMinigame* GetMinigameById(MinigameId id);
   std::optional<MinigameType> GetMinigameTypeByPlayerId(UserId id) const;
   const
     std::unordered_map<MinigameType, std::vector<std::shared_ptr<User>>>&
-      GetAvailableMinigames() const;
+      GetPlayersByMinigame() const;
 
   void AddMinigame(MinigameType type);
   void AddCreatedMinigame(MinigameType type, AbstractMinigame* minigame);
@@ -55,6 +57,6 @@ class GameModel : public QObject {
   std::unordered_map<MinigameType, AbstractMinigame*> minigames_;
   std::unordered_map<UserId, MinigameType> minigame_by_player_id_;
   std::unordered_map<MinigameType, std::vector<std::shared_ptr<User>>>
-      available_minigames_;
-  std::unordered_map<UserId, bool> busy_players_;
+      players_by_minigame_;
+  std::unordered_map<UserId, bool> is_busy_;
 };

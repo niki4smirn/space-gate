@@ -4,10 +4,10 @@
 
 AbstractMinigame::AbstractMinigame(
     const std::vector<std::shared_ptr<User>>& players,
-    uint64_t complexity,
+    uint64_t max_score,
     uint64_t duration)
     : duration_(duration),
-      complexity_(complexity) {
+      max_score_(max_score) {
   std::vector<uint64_t> roles(players.size());
   for (size_t i = 0; i < roles.size(); ++i) {
     roles[i] = i;

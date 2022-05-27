@@ -73,9 +73,13 @@ std::vector<std::shared_ptr<User>> RoomModel::GetVectorOfUsers() const {
 }
 
 void RoomModel::DeleteGameController() {
-  delete game_controller_;
+  game_controller_.reset();
 }
 
-void RoomModel::SetGameController(GameController* controller) {
-  game_controller_ = controller;
+void RoomModel::SetGameController(std::shared_ptr<GameController> controller) {
+  game_controller_ = std::move(controller);
+}
+
+std::shared_ptr<GameController> RoomModel::GetGameController() const {
+  return game_controller_;
 }

@@ -33,7 +33,8 @@ class RoomModel : public QObject {
   const std::unordered_map<UserId, std::shared_ptr<User>>& GetUsers() const;
   std::vector<std::shared_ptr<User>> GetVectorOfUsers() const;
 
-  void SetGameController(GameController* controller);
+  void SetGameController(std::shared_ptr<GameController> controller);
+  std::shared_ptr<GameController> GetGameController() const;
   void DeleteGameController();
 
  signals:
@@ -44,5 +45,5 @@ class RoomModel : public QObject {
   UserId chief_id_;
   std::unordered_map<UserId, std::shared_ptr<User>> users_;
 
-  GameController* game_controller_{nullptr};
+  std::shared_ptr<GameController> game_controller_{nullptr};
 };

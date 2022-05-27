@@ -63,9 +63,12 @@ void RoomController::Handle(const events::EventWrapper& event) {
       break;
     }
     case client_events::EventToRoom::kStartGame: {
-      auto* game_controller =
-          new GameController(room_model_.GetVectorOfUsers());
-      room_model_.SetGameController(game_controller);
+      auto controller =
+          std::make_shared<GameController>(room_model_.GetVectorOfUsers());
+      connect(controller.get(), &GameController::GameEnded,
+              this, &RoomController::GameEndedEvent);
+
+      room_model_.SetGameController(std::move(controller));
       break;
     }
     default: {}
@@ -111,4 +114,8 @@ void RoomController::GameEndedEvent(uint64_t score) {
   AddEventToSend(event);
 
   room_model_.DeleteGameController();
+}
+
+void RoomController::SendEventToGame(const events::EventWrapper& event) {
+  room_model_.GetGameController()->AddEventToHandle(event);
 }

@@ -16,7 +16,7 @@ QString SampleMinigame::GetControllerName() const {
 void SampleMinigame::OnTick() {
   AbstractMinigame::OnTick();
 
-  if (ticks_ == duration_ && !CheckMinigameStatus()) {
+  if (ticks_ == duration_ && !IsCompleted()) {
       emit MinigameEnded(MinigameType::kSample, 0);
   }
 }
@@ -30,20 +30,20 @@ void SampleMinigame::Handle(const events::EventWrapper& event) {
   answers_[role_id_by_player_id_[event.client_event().sender_id()]] =
       QString::fromStdString(action.str());
 
-  CheckMinigameStatus();
+  IsCompleted();
 }
 
 void SampleMinigame::StartMinigame() {
   AbstractMinigame::StartMinigame();
 }
 
-bool SampleMinigame::CheckMinigameStatus() {
+bool SampleMinigame::IsCompleted() {
   QString temp = "";
 
-  for (RoleId id = 0; id < 4; ++id) {
+  for (RoleId id = 0; id < players_count; ++id) {
     temp += answers_[id];
 
-    if (id < 3) {
+    if (id < players_count - 1) {
       temp += " ";
     }
   }
@@ -51,7 +51,7 @@ bool SampleMinigame::CheckMinigameStatus() {
   SendResponseMessages();
 
   if (temp == right_answer_) {
-    emit MinigameEnded(MinigameType::kSample, complexity_);
+    emit MinigameEnded(MinigameType::kSample, max_score_);
 
     return true;
   }
@@ -88,6 +88,7 @@ events::EventWrapper SampleMinigame::GenerateResponseMessage(UserId user_id) {
       static_cast<minigame_responses::SampleResponse_Role>(
           role_id_by_player_id_[user_id]));
 
+  game_response->set_remaining_time(duration_ - ticks_);
   game_response->set_allocated_sample_response(sample_response);
   server_event->set_allocated_game_response(game_response);
 

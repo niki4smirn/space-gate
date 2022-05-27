@@ -19,7 +19,7 @@ class SampleMinigame final : public AbstractMinigame {
   void Handle(const events::EventWrapper& event) override;
 
   void StartMinigame() override;
-  bool CheckMinigameStatus() override;
+  bool IsCompleted() override;
 
   void SendResponseMessages() override;
   events::EventWrapper GenerateResponseMessage(UserId user_id) override;

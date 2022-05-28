@@ -62,10 +62,8 @@ void ClientView::MenuUpdateRoomList(const server_events::RoomsList& room_list) {
   main_menu_->UpdateRoomList(room_list);
 }
 
-// #include <iostream>
 void ClientView::keyPressEvent(QKeyEvent* event) {
   QWidget::keyPressEvent(event);
-  // std::cout << event->nativeScanCode() << " key pressed\n";
   input_controller_->KeyPressed(event->nativeScanCode());
 }
 

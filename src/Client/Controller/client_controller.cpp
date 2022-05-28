@@ -83,6 +83,14 @@ void ClientController::ConnectView() {
           &ClientView::JoinRoom,
           this,
           &ClientController::SendJoinRoomEvent);
+  connect(view_,
+          &ClientView::KeyEventToServer,
+          this,
+          &ClientController::SendKeyEvent);
+  connect(view_,
+          &ClientView::MouseMoveToServer,
+          this,
+          &ClientController::SendMouseMoveEvent);
 }
 void ClientController::SendReadyStatus() {
   events::EventWrapper ready_event;
@@ -127,4 +135,12 @@ void ClientController::SendJoinRoomEvent(RoomId room_id) {
   events::EventWrapper event_to_send;
   event_to_send.set_allocated_client_event(client_event_wrapper);
   AddEventToSend(event_to_send);
+}
+
+void ClientController::SendKeyEvent(key_names::keys key) {
+  LOG << key_names::kEnumToKeyName.at(key);
+}
+
+void ClientController::SendMouseMoveEvent(const QPoint& pos) {
+  LOG << "x = " << pos.x() << " y = " << pos.y();
 }

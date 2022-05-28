@@ -14,6 +14,8 @@ class RoomController : public AbstractController {
 
   bool IsEmpty() const;
 
+  void SendEventToGame(const events::EventWrapper& event);
+
  protected:
   void OnTick() override;
 
@@ -22,6 +24,7 @@ class RoomController : public AbstractController {
 
  private:
   void SendRoomInfoEvent();
+  void GameEndedEvent(uint64_t score);
 
   RoomModel room_model_;
 };

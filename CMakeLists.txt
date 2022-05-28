@@ -25,6 +25,8 @@ set(scheme_PROTOS
         Protobuf/events.proto
         Protobuf/client_events.proto
         Protobuf/server_events.proto
+        Protobuf/minigame_actions.proto
+        Protobuf/minigame_responses.proto
         )
 include_directories(${Protobuf_INCLUDE_DIRS})
 
@@ -45,7 +47,8 @@ add_executable(server
         src/Server/Controllers/game_controller.cpp
         src/Server/Models/RoomModel/room_model.cpp
         src/Server/Models/GameModel/game_model.cpp
-        src/Server/Models/Player/player.cpp
+        src/Server/Games/abstract_minigame.cpp
+        src/Server/Games/SampleMinigame/sample_minigame.cpp
         )
 
 if (WIN32)

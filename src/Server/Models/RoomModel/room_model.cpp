@@ -61,3 +61,25 @@ const std::unordered_map<UserId, std::shared_ptr<User>>&
     RoomModel::GetUsers() const {
   return users_;
 }
+
+std::vector<std::shared_ptr<User>> RoomModel::GetVectorOfUsers() const {
+  std::vector<std::shared_ptr<User>> users;
+
+  for (const auto& [_, user] : users_) {
+    users.push_back(user);
+  }
+
+  return users;
+}
+
+void RoomModel::DeleteGameController() {
+  game_controller_.reset();
+}
+
+void RoomModel::SetGameController(std::shared_ptr<GameController> controller) {
+  game_controller_ = std::move(controller);
+}
+
+std::shared_ptr<GameController> RoomModel::GetGameController() const {
+  return game_controller_;
+}

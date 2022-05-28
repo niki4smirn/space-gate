@@ -5,6 +5,7 @@
 #include <QWebSocket>
 
 #include "src/AbstractController/abstract_controller.h"
+#include "src/Helpers/InputController/input_controller.h"
 #include "src/Client/View/client_view.h"
 
 class ClientController : public AbstractController {
@@ -24,7 +25,7 @@ class ClientController : public AbstractController {
   void SendCreateRoomEvent();
   void SendLeaveRoomEvent();
   void SendJoinRoomEvent(RoomId room_id);
-  void SendKeyEvent(const std::string& key);
+  void SendKeyEvent(key_names::keys key);
   void SendMouseMoveEvent(const QPoint& pos);
 
  protected:

@@ -40,13 +40,13 @@ void ClientView::Connect() {
           [this](uint64_t room_id) { emit JoinRoom(room_id); });
   connect(input_controller_.get(),
           &InputController::KeyEventToServer,
-          [this](std::string key) { emit KeyEventToServer(key); });
+          [this](key_names::keys key) { emit KeyEventToServer(key); });
   connect(input_controller_.get(),
           &InputController::MouseMoveToServer,
           [this](const QPoint& pos) { emit MouseMoveToServer(pos); });
   connect(input_controller_.get(),
           &InputController::MouseKeyToServer,
-          [this](std::string key) { emit KeyEventToServer(key); });
+          [this](key_names::keys key) { emit KeyEventToServer(key); });
 }
 
 void ClientView::AddWidgets() {
@@ -62,8 +62,10 @@ void ClientView::MenuUpdateRoomList(const server_events::RoomsList& room_list) {
   main_menu_->UpdateRoomList(room_list);
 }
 
+// #include <iostream>
 void ClientView::keyPressEvent(QKeyEvent* event) {
   QWidget::keyPressEvent(event);
+  // std::cout << event->nativeScanCode() << " key pressed\n";
   input_controller_->KeyPressed(event->nativeScanCode());
 }
 

@@ -11,8 +11,8 @@
 #include "Constants/constants.h"
 
 struct Key {
-  explicit Key(const std::string& pressed_key);
-  std::string key;
+  explicit Key(key_names::keys key_pressed);
+  key_names::keys key;
   int time = 0;
 };
 
@@ -20,7 +20,7 @@ class InputController : public QObject {
   Q_OBJECT
 
  public:
-  explicit InputController();
+  InputController();
   void KeyPressed(quint32 key_number);
   void MousePosStartTracking();
   void MousePosStopTracking();
@@ -31,7 +31,7 @@ class InputController : public QObject {
  private:
   void AddTime();
   void RemoveKeys();
-  bool FindKey(const std::string& key);
+  bool FindKey(key_names::keys key);
 
  private:
   QBasicTimer timer_;
@@ -40,7 +40,7 @@ class InputController : public QObject {
   int hold_time_ = 90;
 
  signals:
-  void KeyEventToServer(const std::string& key);
+  void KeyEventToServer(key_names::keys key);
   void MouseMoveToServer(const QPoint& pos);
-  void MouseKeyToServer(const std::string& key);
+  void MouseKeyToServer(key_names::keys key);
 };

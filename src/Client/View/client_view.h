@@ -1,7 +1,7 @@
 #pragma once
 
 #include "src/Client/View/MainMenu/client_main_menu.h"
-#include "src/Client/Controller/InputController/input_controller.h"
+#include "src/Helpers/InputController/input_controller.h"
 #include "src/Server/Models/RoomModel/room_model.h"
 
 #include <QWidget>
@@ -35,6 +35,6 @@ class ClientView : public QMainWindow {
   void CreateRoom();
   void LeaveRoom();
   void JoinRoom(uint64_t room_id);
-  void KeyEventToServer(const std::string& key);
+  void KeyEventToServer(key_names::keys key);
   void MouseMoveToServer(const QPoint& pos);
 };

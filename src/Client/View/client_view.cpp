@@ -85,4 +85,3 @@ void ClientView::mousePressEvent(QMouseEvent* event) {
 void ClientView::mouseReleaseEvent(QMouseEvent* event) {
   input_controller_->MousePosStopTracking();
 }
-

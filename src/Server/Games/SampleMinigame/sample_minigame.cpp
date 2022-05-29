@@ -1,5 +1,6 @@
 #include "sample_minigame.h"
-#include "Constants/constants.h"
+
+#include "src/Helpers/Constants/constants.h"
 
 const uint64_t SampleMinigame::players_count = 4;
 

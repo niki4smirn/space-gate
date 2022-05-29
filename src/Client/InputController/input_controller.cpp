@@ -5,10 +5,10 @@ InputController::InputController() {
 }
 
 void InputController::KeyPressed(quint32 key_number) {
-  if (!key_names::kNativeCodeToKeyEnum.contains(key_number)) {
+  if (!input::kNativeCodeToName.contains(key_number)) {
     return;
   }
-  auto key = key_names::kNativeCodeToKeyEnum.at(key_number);
+  auto key = input::kNativeCodeToName.at(key_number);
   if (FindKey(key)) {
     return;
   }
@@ -55,7 +55,7 @@ void InputController::RemoveKeys() {
   }
 }
 
-bool InputController::FindKey(key_names::keys key) {
+bool InputController::FindKey(input::Name key) {
   return std::any_of(keys_pressed_.begin(),
                      keys_pressed_.end(),
                      [key](auto key_it) { return key_it.key == key; });
@@ -64,16 +64,16 @@ bool InputController::FindKey(key_names::keys key) {
 void InputController::MouseKeyPressed(const Qt::MouseButton& button) {
   switch (button) {
     case Qt::LeftButton: {
-      emit MouseKeyToServer(key_names::kLeftMouseButton);
+      emit MouseKeyToServer(input::Name::kLeftMouseButton);
       break;
     }
     case Qt::RightButton: {
-      emit MouseKeyToServer(key_names::kRightMouseButton);
+      emit MouseKeyToServer(input::Name::kRightMouseButton);
       break;
     }
     default: {}
   }
 }
 
-Key::Key(key_names::keys key_pressed) :
+Key::Key(input::Name key_pressed) :
   key(key_pressed) {}

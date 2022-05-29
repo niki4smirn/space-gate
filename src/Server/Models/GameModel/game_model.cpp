@@ -1,6 +1,6 @@
 #include "game_model.h"
 
-#include "Constants/constants.h"
+#include "src/Helpers/Constants/constants.h"
 #include "src/Helpers/helpers.h"
 
 GameModel::GameModel(const std::vector<std::shared_ptr<User>>& players) {

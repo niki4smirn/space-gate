@@ -24,6 +24,9 @@ class RoomController : public AbstractController {
 
  private:
   void SendRoomInfoEvent();
+  void SendStartGameEvent();
+  bool IsEverybodyReady();
+  void SendEveryUser(events::EventWrapper event) const;
   void GameEndedEvent(uint64_t score);
 
   RoomModel room_model_;

@@ -5,7 +5,7 @@
 #include <QWebSocket>
 
 #include "src/AbstractController/abstract_controller.h"
-#include "src/Helpers/InputController/input_controller.h"
+#include "src/Client/InputController/input_controller.h"
 #include "src/Client/View/client_view.h"
 
 class ClientController : public AbstractController {

@@ -3,7 +3,7 @@
 #include <cstdint>
 
 #include "src/Server/Models/User/user.h"
-#include "src/Server/Controllers/game_controller.h"
+#include "src/Server/Controllers/GameController/game_controller.h"
 
 using RoomId = uint64_t;
 

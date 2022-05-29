@@ -2,7 +2,7 @@
 
 #include <QRandomGenerator64>
 
-#include "Constants/constants.h"
+#include "src/Helpers/Constants/constants.h"
 
 GameController::GameController(
     const std::vector<std::shared_ptr<User>>& players)

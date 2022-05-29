@@ -1,6 +1,6 @@
 #pragma once
 
-#include "minigames_types.h"
+#include "src/Client/Games/minigames_types.h"
 
 #include <QDebug>
 

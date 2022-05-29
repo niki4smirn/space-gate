@@ -8,7 +8,7 @@
 #include <list>
 
 #include "input_names.h"
-#include "Constants/constants.h"
+#include "src/Helpers/Constants/constants.h"
 
 struct Key {
   explicit Key(input::Name key_pressed);

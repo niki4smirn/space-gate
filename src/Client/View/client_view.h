@@ -1,7 +1,7 @@
 #pragma once
 
 #include "src/Client/View/MainMenu/client_main_menu.h"
-#include "src/Helpers/InputController/input_controller.h"
+#include "src/Client/InputController/input_controller.h"
 #include "src/Server/Models/RoomModel/room_model.h"
 
 #include <QWidget>

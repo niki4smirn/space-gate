@@ -2,7 +2,7 @@
 
 #include "src/AbstractController/abstract_controller.h"
 #include "src/Server/Models/User/user.h"
-#include "src/Helpers/minigames_types.h"
+#include "src/Client/Games/minigames_types.h"
 
 using RoleId = uint64_t;
 

@@ -124,7 +124,7 @@ void RoomController::SendStartGameEvent() {
 
 void RoomController::SendEveryUser(events::EventWrapper event) const {
   const auto& users = room_model_.GetUsers();
-  for (const auto& [user_id, user_ptr]: users) {
+  for (const auto& [user_id, user_ptr] : users) {
     event.mutable_server_event()->set_receiver_id(user_id);
     auto serialized = event.SerializeAsString();
     QByteArray byte_array(serialized.data(), serialized.size());

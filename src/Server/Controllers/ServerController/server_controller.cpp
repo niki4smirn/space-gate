@@ -1,6 +1,6 @@
 #include "server_controller.h"
 
-#include "Constants/constants.h"
+#include "src/Helpers/Constants/constants.h"
 
 ServerController::ServerController()
   :  web_socket_server_("", QWebSocketServer::NonSecureMode) {

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "src/Server/Games/abstract_minigame.h"
+#include "src/Server/Games/AbstractMinigame/abstract_minigame.h"
 
 class SampleMinigame final : public AbstractMinigame {
  public:

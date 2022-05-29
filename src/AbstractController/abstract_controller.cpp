@@ -1,6 +1,6 @@
 #include "abstract_controller.h"
 
-#include "Constants/constants.h"
+#include "src/Helpers/Constants/constants.h"
 
 AbstractController::AbstractController() {
   connect(&timer_, &QTimer::timeout, this, &AbstractController::Tick);

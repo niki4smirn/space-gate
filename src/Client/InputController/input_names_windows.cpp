@@ -97,7 +97,7 @@ const std::unordered_map<uint32_t, Name> kNativeCodeToName{
     {29, Name::kLCtrl},
     {56, Name::kLAlt},
     {57, Name::kSpace},
-    {312,Name:: kRAlt},
+    {312, Name:: kRAlt},
     {347, Name::kWindows},
     {349, Name::kActionList},
     {285, Name::kRCtrl},

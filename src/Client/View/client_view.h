@@ -38,6 +38,6 @@ class ClientView : public QMainWindow {
   void LeaveRoom();
   void JoinRoom(uint64_t room_id);
   void StartGame();
-  void KeyEventToServer(key_names::keys key);
+  void KeyEventToServer(input::Name key);
   void MouseMoveToServer(const QPoint& pos);
 };

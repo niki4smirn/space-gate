@@ -170,8 +170,8 @@ void ClientController::SendStartGameEvent() {
   AddEventToSend(start_event);
 }
 
-void ClientController::SendKeyEvent(key_names::keys key) {
-  LOG << key_names::kEnumToKeyName.at(key);
+void ClientController::SendKeyEvent(input::Name key) {
+  LOG << input::InputNameToString(key);
 }
 
 void ClientController::SendMouseMoveEvent(const QPoint& pos) {

@@ -35,6 +35,7 @@ set(COMMON_SRC
         src/Helpers/helpers.cpp
         Constants/constants.cpp
         src/Helpers/logging.cpp
+        src/Helpers/InputController/input_names.cpp
         )
 
 add_executable(server
@@ -53,10 +54,10 @@ add_executable(server
 
 if (WIN32)
     set(SYSTEM_DEPENDENT_SOURCES
-            src/Helpers/InputController/key_names_windows.cpp)
+            src/Helpers/InputController/input_names_windows.cpp)
 else()
     set(SYSTEM_DEPENDENT_SOURCES
-            src/Helpers/InputController/key_names_unix.cpp)
+            src/Helpers/InputController/input_names_unix.cpp)
 endif (WIN32)
 
 add_executable(client

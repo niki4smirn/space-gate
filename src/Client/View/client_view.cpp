@@ -43,13 +43,13 @@ void ClientView::Connect() {
           [this]() {emit StartGame();});
   connect(input_controller_.get(),
           &InputController::KeyEventToServer,
-          [this](key_names::keys key) { emit KeyEventToServer(key); });
+          [this](input::Name key) { emit KeyEventToServer(key); });
   connect(input_controller_.get(),
           &InputController::MouseMoveToServer,
           [this](const QPoint& pos) { emit MouseMoveToServer(pos); });
   connect(input_controller_.get(),
           &InputController::MouseKeyToServer,
-          [this](key_names::keys key) { emit KeyEventToServer(key); });
+          [this](input::Name key) { emit KeyEventToServer(key); });
 }
 
 void ClientView::AddWidgets() {

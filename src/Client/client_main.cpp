@@ -1,7 +1,7 @@
 #include <QApplication>
 #include <QUrl>
 
-#include "Constants/constants.h"
+#include "src/Helpers/Constants/constants.h"
 #include "Controller/client_controller.h"
 
 int main(int argc, char* argv[]) {

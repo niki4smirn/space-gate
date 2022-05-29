@@ -8,11 +8,14 @@ message ServerEventWrapper {
   oneof type {
     RoomInfo room_info = 2;
     RoomsList rooms_list = 3;
-    GameInfo game_info = 4;
-    minigame_responses.MinigameResponse game_response = 5;
-    GameResult game_result = 6;
+    StartGame start_game = 4;
+    GameInfo game_info = 5;
+    minigame_responses.MinigameResponse game_response = 6;
+    GameResult game_result = 7;
   }
 }
+
+message StartGame {}
 
 message RoomUser {
   enum Status {
@@ -21,7 +24,7 @@ message RoomUser {
     kReady = 2;
   }
   string nickname = 1;
-  Status is_ready = 2;
+  Status ready_status = 2;
 }
 
 message RoomInfo {

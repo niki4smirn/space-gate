@@ -7,7 +7,7 @@
 #include <QWebSocket>
 
 #include "src/Server/Models/User/user.h"
-#include "src/Server/Controllers/room_controller.h"
+#include "src/Server/Controllers/RoomController/room_controller.h"
 
 class ServerModel : public QObject {
   Q_OBJECT

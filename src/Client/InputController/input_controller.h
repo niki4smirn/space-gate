@@ -7,12 +7,12 @@
 #include <vector>
 #include <list>
 
-#include "key_names.h"
-#include "Constants/constants.h"
+#include "input_names.h"
+#include "src/Helpers/Constants/constants.h"
 
 struct Key {
-  explicit Key(key_names::keys key_pressed);
-  key_names::keys key;
+  explicit Key(input::Name key_pressed);
+  input::Name key;
   int time = 0;
 };
 
@@ -31,7 +31,7 @@ class InputController : public QObject {
  private:
   void AddTime();
   void RemoveKeys();
-  bool FindKey(key_names::keys key);
+  bool FindKey(input::Name key);
 
  private:
   QBasicTimer timer_;
@@ -40,7 +40,7 @@ class InputController : public QObject {
   int hold_time_ = 90;
 
  signals:
-  void KeyEventToServer(key_names::keys key);
+  void KeyEventToServer(input::Name key);
   void MouseMoveToServer(const QPoint& pos);
-  void MouseKeyToServer(key_names::keys key);
+  void MouseKeyToServer(input::Name key);
 };

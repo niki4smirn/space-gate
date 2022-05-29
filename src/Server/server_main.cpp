@@ -1,6 +1,6 @@
 #include <QCoreApplication>
 
-#include "Controllers/server_controller.h"
+#include "src/Server/Controllers/ServerController/server_controller.h"
 
 int main(int argc, char* argv[]) {
   QCoreApplication app(argc, argv);

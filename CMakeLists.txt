@@ -33,30 +33,31 @@ include_directories(${Protobuf_INCLUDE_DIRS})
 set(COMMON_SRC
         src/AbstractController/abstract_controller.cpp
         src/Helpers/helpers.cpp
-        Constants/constants.cpp
+        src/Helpers/Constants/constants.cpp
         src/Helpers/logging.cpp
+        src/Client/InputController/input_names.cpp
         )
 
 add_executable(server
         ${COMMON_SRC}
         src/Server/server_main.cpp
-        src/Server/Controllers/server_controller.cpp
+        src/Server/Controllers/ServerController/server_controller.cpp
         src/Server/Models/User/user.cpp
         src/Server/Models/ServerModel/server_model.cpp
-        src/Server/Controllers/room_controller.cpp
-        src/Server/Controllers/game_controller.cpp
+        src/Server/Controllers/RoomController/room_controller.cpp
+        src/Server/Controllers/GameController/game_controller.cpp
         src/Server/Models/RoomModel/room_model.cpp
         src/Server/Models/GameModel/game_model.cpp
-        src/Server/Games/abstract_minigame.cpp
+        src/Server/Games/AbstractMinigame/abstract_minigame.cpp
         src/Server/Games/SampleMinigame/sample_minigame.cpp
         )
 
 if (WIN32)
     set(SYSTEM_DEPENDENT_SOURCES
-            src/Helpers/InputController/key_names_windows.cpp)
+            src/Client/InputController/input_names_windows.cpp)
 else()
     set(SYSTEM_DEPENDENT_SOURCES
-            src/Helpers/InputController/key_names_unix.cpp)
+            src/Client/InputController/input_names_unix.cpp)
 endif (WIN32)
 
 add_executable(client
@@ -67,7 +68,7 @@ add_executable(client
         src/Client/View/MainMenu/client_main_menu.cpp
         src/Client/View/client_view.cpp
         src/Client/View/MainMenu/Background/star.cpp
-        src/Helpers/InputController/input_controller.cpp
+        src/Client/InputController/input_controller.cpp
         ${SYSTEM_DEPENDENT_SOURCES}
         )
 

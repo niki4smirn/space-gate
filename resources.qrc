@@ -1,0 +1,20 @@
+<RCC>
+    <qresource>
+        <file>/home/ekkatrina_hottova/SpaceGatePics/background.png</file>
+    </qresource>
+    <qresource>
+        <file>/home/ekkatrina_hottova/SpaceGatePics/Buttons/blue_button.png</file>
+    </qresource>
+    <qresource>
+        <file>/home/ekkatrina_hottova/SpaceGatePics/Buttons/green_button.png</file>
+    </qresource>
+    <qresource>
+        <file>/home/ekkatrina_hottova/SpaceGatePics/Buttons/purple_button.png</file>
+    </qresource>
+    <qresource>
+        <file>/home/ekkatrina_hottova/SpaceGatePics/Buttons/red_button.png</file>
+    </qresource>
+    <qresource>
+        <file>/home/ekkatrina_hottova/SpaceGatePics/Buttons/yellow_button.png</file>
+    </qresource>
+</RCC>

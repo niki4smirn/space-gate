@@ -69,6 +69,8 @@ add_executable(client
         src/Client/View/MainMenu/Background/star.cpp
         src/Helpers/InputController/input_controller.cpp
         ${SYSTEM_DEPENDENT_SOURCES}
+        game_widget.cpp
+        resources.qrc
         )
 
 set(REQUIRED_QT_PARTS
@@ -84,3 +86,4 @@ foreach (executable server; client)
     target_link_libraries(${executable} protobuf::libprotobuf)
     protobuf_generate(TARGET ${executable} PROTOC_OUT_DIR ../ PROTOS ${scheme_PROTOS})
 endforeach()
+

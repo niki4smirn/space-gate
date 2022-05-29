@@ -1,6 +1,7 @@
 #pragma once
 
 #include "src/Client/View/MainMenu/client_main_menu.h"
+#include "src/Helpers/InputController/input_controller.h"
 #include "src/Server/Models/RoomModel/room_model.h"
 
 #include <QWidget>
@@ -9,6 +10,7 @@
 
 class ClientView : public QMainWindow {
   Q_OBJECT
+
  public:
   ClientView();
   void UpdateRoomInfoMenu(const server_events::RoomInfo& room_info,
@@ -21,7 +23,12 @@ class ClientView : public QMainWindow {
   void AddWidgets();
   void Connect();
   void mouseMoveEvent(QMouseEvent* event) override;
+  void keyPressEvent(QKeyEvent* event) override;
+  void mousePressEvent(QMouseEvent* event) override;
+  void mouseReleaseEvent(QMouseEvent* event) override;
 
+ private:
+  std::unique_ptr<InputController> input_controller_;
   ClientMainMenu* main_menu_;
   QStackedWidget* stacked_widget_;
 
@@ -31,4 +38,6 @@ class ClientView : public QMainWindow {
   void LeaveRoom();
   void JoinRoom(uint64_t room_id);
   void StartGame();
+  void KeyEventToServer(key_names::keys key);
+  void MouseMoveToServer(const QPoint& pos);
 };

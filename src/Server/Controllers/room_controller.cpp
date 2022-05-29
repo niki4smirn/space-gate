@@ -66,6 +66,13 @@ void RoomController::Handle(const events::EventWrapper& event) {
         break;
       }
       SendStartGameEvent();
+      auto controller =
+          std::make_shared<GameController>(room_model_.GetVectorOfUsers());
+      connect(controller.get(), &GameController::GameEnded,
+              this, &RoomController::GameEndedEvent);
+
+      room_model_.SetGameController(std::move(controller));
+      break;
     }
     default: {}
   }
@@ -117,10 +124,29 @@ void RoomController::SendStartGameEvent() {
 
 void RoomController::SendEveryUser(events::EventWrapper event) const {
   const auto& users = room_model_.GetUsers();
-  for (const auto& [user_id, user_ptr] : users) {
+  for (const auto& [user_id, user_ptr]: users) {
     event.mutable_server_event()->set_receiver_id(user_id);
     auto serialized = event.SerializeAsString();
     QByteArray byte_array(serialized.data(), serialized.size());
     user_ptr->GetSocket()->sendBinaryMessage(byte_array);
   }
+}
+
+void RoomController::GameEndedEvent(uint64_t score) {
+  auto* game_result = new server_events::GameResult();
+  game_result->set_score(score);
+
+  auto* server_event = new server_events::ServerEventWrapper();
+  server_event->set_allocated_game_result(game_result);
+
+  events::EventWrapper event;
+  event.set_allocated_server_event(server_event);
+
+  AddEventToSend(event);
+
+  room_model_.DeleteGameController();
+}
+
+void RoomController::SendEventToGame(const events::EventWrapper& event) {
+  room_model_.GetGameController()->AddEventToHandle(event);
 }

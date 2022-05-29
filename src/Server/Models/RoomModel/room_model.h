@@ -3,6 +3,7 @@
 #include <cstdint>
 
 #include "src/Server/Models/User/user.h"
+#include "src/Server/Controllers/game_controller.h"
 
 using RoomId = uint64_t;
 
@@ -30,6 +31,11 @@ class RoomModel : public QObject {
   void SetUserWaitingStatus(UserId id, User::WaitingStatus status);
 
   const std::unordered_map<UserId, std::shared_ptr<User>>& GetUsers() const;
+  std::vector<std::shared_ptr<User>> GetVectorOfUsers() const;
+
+  void SetGameController(std::shared_ptr<GameController> controller);
+  std::shared_ptr<GameController> GetGameController() const;
+  void DeleteGameController();
 
  signals:
   void SendRoomInfo();
@@ -38,4 +44,6 @@ class RoomModel : public QObject {
   RoomId id_;
   UserId chief_id_;
   std::unordered_map<UserId, std::shared_ptr<User>> users_;
+
+  std::shared_ptr<GameController> game_controller_{nullptr};
 };

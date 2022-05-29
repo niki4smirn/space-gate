@@ -5,6 +5,7 @@
 #include <QWebSocket>
 
 #include "src/AbstractController/abstract_controller.h"
+#include "src/Helpers/InputController/input_controller.h"
 #include "src/Client/View/client_view.h"
 
 class ClientController : public AbstractController {
@@ -24,6 +25,8 @@ class ClientController : public AbstractController {
   void SendLeaveRoomEvent();
   void SendJoinRoomEvent(RoomId room_id);
   void SendStartGameEvent();
+  void SendKeyEvent(key_names::keys key);
+  void SendMouseMoveEvent(const QPoint& pos);
 
  protected:
   void OnTick() override;

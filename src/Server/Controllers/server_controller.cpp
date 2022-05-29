@@ -98,6 +98,13 @@ void ServerController::Send(const events::EventWrapper& event) {
           SendEventToRoom(event);
           break;
         }
+        case client_events::ClientEventWrapper::kEventToGame: {
+          auto room =
+              server_model_.GetRoomByUserId(event.client_event().sender_id());
+          room->SendEventToGame(event);
+
+          break;
+        }
         default: {}
       }
     }

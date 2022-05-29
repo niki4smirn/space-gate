@@ -1,5 +1,3 @@
 *
 !.gitignore
-!events.proto
-!client_events.proto
-!server_events.proto
+!*.proto

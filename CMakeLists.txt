@@ -25,6 +25,8 @@ set(scheme_PROTOS
         Protobuf/events.proto
         Protobuf/client_events.proto
         Protobuf/server_events.proto
+        Protobuf/minigame_actions.proto
+        Protobuf/minigame_responses.proto
         )
 include_directories(${Protobuf_INCLUDE_DIRS})
 
@@ -45,8 +47,17 @@ add_executable(server
         src/Server/Controllers/game_controller.cpp
         src/Server/Models/RoomModel/room_model.cpp
         src/Server/Models/GameModel/game_model.cpp
-        src/Server/Models/Player/player.cpp
+        src/Server/Games/abstract_minigame.cpp
+        src/Server/Games/SampleMinigame/sample_minigame.cpp
         )
+
+if (WIN32)
+    set(SYSTEM_DEPENDENT_SOURCES
+            src/Helpers/InputController/key_names_windows.cpp)
+else()
+    set(SYSTEM_DEPENDENT_SOURCES
+            src/Helpers/InputController/key_names_unix.cpp)
+endif (WIN32)
 
 add_executable(client
         ${COMMON_SRC}
@@ -56,6 +67,8 @@ add_executable(client
         src/Client/View/MainMenu/client_main_menu.cpp
         src/Client/View/client_view.cpp
         src/Client/View/MainMenu/Background/star.cpp
+        src/Helpers/InputController/input_controller.cpp
+        ${SYSTEM_DEPENDENT_SOURCES}
         )
 
 set(REQUIRED_QT_PARTS

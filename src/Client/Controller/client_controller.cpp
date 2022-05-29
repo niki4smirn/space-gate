@@ -71,6 +71,7 @@ void ClientController::OnByteArrayReceived(const QByteArray& message) {
   AddEventToHandle(received_event);
   LogEvent(received_event, logging::Type::kReceive);
 }
+
 void ClientController::ConnectView() {
   connect(view_,
           &ClientView::ReadyButtonPressed,
@@ -92,7 +93,16 @@ void ClientController::ConnectView() {
           &ClientView::StartGame,
           this,
           &ClientController::SendStartGameEvent);
+  connect(view_,
+          &ClientView::KeyEventToServer,
+          this,
+          &ClientController::SendKeyEvent);
+  connect(view_,
+          &ClientView::MouseMoveToServer,
+          this,
+          &ClientController::SendMouseMoveEvent);
 }
+
 void ClientController::SendReadyStatus() {
   auto* wait_status_event = new client_events::ChangeWaitingStatus;
   auto* event_to_room = new client_events::EventToRoom;
@@ -158,4 +168,12 @@ void ClientController::SendStartGameEvent() {
   events::EventWrapper start_event;
   start_event.set_allocated_client_event(event_wrapper);
   AddEventToSend(start_event);
+}
+
+void ClientController::SendKeyEvent(key_names::keys key) {
+  LOG << key_names::kEnumToKeyName.at(key);
+}
+
+void ClientController::SendMouseMoveEvent(const QPoint& pos) {
+  LOG << "x = " << pos.x() << " y = " << pos.y();
 }

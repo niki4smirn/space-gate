@@ -1,5 +1,0 @@
-/home/ekkatrina_hottova/game_widget/cmake-build-debug/CMakeFiles/game_widget.dir
-/home/ekkatrina_hottova/game_widget/cmake-build-debug/CMakeFiles/edit_cache.dir
-/home/ekkatrina_hottova/game_widget/cmake-build-debug/CMakeFiles/rebuild_cache.dir
-/home/ekkatrina_hottova/game_widget/cmake-build-debug/CMakeFiles/game_widget_autogen_timestamp_deps.dir
-/home/ekkatrina_hottova/game_widget/cmake-build-debug/CMakeFiles/game_widget_autogen.dir

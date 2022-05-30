@@ -101,6 +101,10 @@ void ClientController::ConnectView() {
           &ClientView::MouseMoveToServer,
           this,
           &ClientController::SendMouseMoveEvent);
+  connect(view_,
+          &ClientView::JoinMinigame,
+          this,
+          &ClientController::SendJoinMinigame);
 }
 
 void ClientController::SendReadyStatus() {
@@ -176,4 +180,19 @@ void ClientController::SendKeyEvent(input::Name key) {
 
 void ClientController::SendMouseMoveEvent(const QPoint& pos) {
   LOG << "x = " << pos.x() << " y = " << pos.y();
+}
+
+void ClientController::SendJoinMinigame(int minigame_index) {
+  auto* join_minigame_event = new client_events::JoinMinigame;
+  join_minigame_event->set_minigame_id(minigame_index);
+
+  auto* event_to_game = new client_events::EventToGame;
+  event_to_game->set_allocated_join_minigame(join_minigame_event);
+
+  auto* event_wrapper = new client_events::ClientEventWrapper;
+  event_wrapper->set_allocated_event_to_game(event_to_game);
+
+  events::EventWrapper event;
+  event.set_allocated_client_event(event_wrapper);
+  AddEventToSend(event);
 }

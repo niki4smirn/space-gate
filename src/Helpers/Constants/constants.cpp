@@ -12,4 +12,6 @@ constexpr int kMinigamesCount = 1;
 constexpr int kMinigamesAddingFrequency = kTickTime * 60;
 constexpr int kMaxMinigames = 4;
 
+constexpr int kStartAnimationDuration = 5000;
+
 }  // namespace constants

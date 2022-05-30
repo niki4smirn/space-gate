@@ -14,6 +14,8 @@ extern const int kMinigamesCount;
 extern const int kMinigamesAddingFrequency;
 extern const int kMaxMinigames;
 
+extern const int kStartAnimationDuration;
+
 }  // namespace constants
 
 

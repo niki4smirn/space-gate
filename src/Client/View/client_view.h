@@ -3,6 +3,7 @@
 #include "src/Client/View/MainMenu/client_main_menu.h"
 #include "src/Client/InputController/input_controller.h"
 #include "src/Server/Models/RoomModel/room_model.h"
+#include "src/Client/View/GameWidget/game_widget.h"
 
 #include <QWidget>
 #include <QStackedWidget>
@@ -17,6 +18,7 @@ class ClientView : public QMainWindow {
                           uint64_t client_id);
   void UpdateRoomsListMenu(const server_events::RoomsList& room_list);
   void PlayStartEffect();
+  void OpenGame();
 
  private:
   void CloseWindow();
@@ -30,6 +32,7 @@ class ClientView : public QMainWindow {
  private:
   std::unique_ptr<InputController> input_controller_;
   ClientMainMenu* main_menu_;
+  GameWidget* game_widget_;
   QStackedWidget* stacked_widget_;
 
  signals:
@@ -40,4 +43,5 @@ class ClientView : public QMainWindow {
   void StartGame();
   void KeyEventToServer(input::Name key);
   void MouseMoveToServer(const QPoint& pos);
+  void JoinMinigame(int minigame_index);
 };

@@ -10,22 +10,25 @@
 #include <QPushButton>
 #include "QWidget"
 
-class MainWidget : public QMainWindow {
+class MainWidget : public QWidget {
 Q_OBJECT
 public:
-    MainWidget();
+    MainWidget(QWidget* parent = nullptr);
 
     ~MainWidget();
 
 private:
-    QWidget* widget_;
     QPushButton* red_button_;
     QPushButton* green_button_;
     QPushButton* blue_button_;
     QPushButton* yellow_button_;
     QPushButton* purple_button_;
     void SetIcons();
-    void SetGeometry();
+    void SetButtonsGeometry();
+    void SetButtonsSize();
+    void SetBackground();
+    void ButtonClicked();
+    void ButtonHovered();
 };
 
 

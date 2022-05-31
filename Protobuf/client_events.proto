@@ -30,7 +30,7 @@ message EventToServer {
 
 message ChangeWaitingStatus {}
 
-message StartGame{}
+message StartGame {}
 
 message EventToRoom {
   oneof type {
@@ -43,9 +43,12 @@ message JoinMinigame {
   uint64 minigame_id = 1;
 }
 
+message LeaveMinigame {}
+
 message EventToGame {
   oneof type {
     JoinMinigame join_minigame = 1;
     minigame_actions.MinigameAction minigame_action = 2;
+    LeaveMinigame leave_minigame = 3;
   }
 }

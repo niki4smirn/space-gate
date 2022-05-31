@@ -14,6 +14,7 @@ class GameWidget : public QWidget {
 
  signals:
   void JoinMinigame(int minigame_index);
+  void LeaveMinigame();
 
  private:
   void OpenMainGameWidget();

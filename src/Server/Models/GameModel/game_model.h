@@ -29,20 +29,20 @@ class GameModel : public QObject {
   bool IsPlayerBusy(UserId id);
 
 
-  AbstractMinigame* GetMinigameById(MinigameId id);
+  std::shared_ptr<AbstractMinigame> GetMinigameByType(MinigameType type);
   std::optional<MinigameType> GetMinigameTypeByPlayerId(UserId id) const;
   const
     std::unordered_map<MinigameType, std::vector<std::shared_ptr<User>>>&
       GetPlayersByMinigame() const;
 
   void AddMinigame(MinigameType type);
-  void AddCreatedMinigame(MinigameType type, AbstractMinigame* minigame);
+  void AddCreatedMinigame(MinigameType type,
+                          std::shared_ptr<AbstractMinigame> minigame);
   void DeleteMinigame(MinigameType type);
 
   void AddScore(uint64_t score);
 
-  void AddPlayerToMinigame(UserId player_id, MinigameId minigame_id);
-  void MakePlayersBusy(const std::vector<std::shared_ptr<User>>& players);
+  void AddPlayerToMinigameQueue(UserId player_id, MinigameType type);
 
  signals:
   void SendGameInfo();
@@ -53,10 +53,11 @@ class GameModel : public QObject {
   GameStatus status_{GameStatus::kGoing};
 
   std::unordered_map<UserId, std::shared_ptr<User>> players_;
+  std::set<UserId> free_users_ids_;
 
-  std::unordered_map<MinigameType, AbstractMinigame*> minigames_;
+  std::unordered_map<MinigameType,
+                     std::shared_ptr<AbstractMinigame>> minigames_;
   std::unordered_map<UserId, MinigameType> minigame_by_player_id_;
   std::unordered_map<MinigameType, std::vector<std::shared_ptr<User>>>
       players_by_minigame_;
-  std::unordered_map<UserId, bool> is_busy_;
 };

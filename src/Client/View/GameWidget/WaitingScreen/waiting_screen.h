@@ -3,6 +3,7 @@
 #include <QWidget>
 #include <QLabel>
 #include <QPushButton>
+#include <QGridLayout>
 
 class WaitingScreen : public QWidget {
   Q_OBJECT
@@ -16,4 +17,6 @@ class WaitingScreen : public QWidget {
  private:
   QLabel* text_;
   QPushButton* leave_button_;
+
+  QGridLayout* layout_;
 };

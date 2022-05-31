@@ -19,6 +19,8 @@ class ClientView : public QMainWindow {
   void UpdateRoomsListMenu(const server_events::RoomsList& room_list);
   void PlayStartEffect();
   void OpenGame();
+  void UpdateProgress(uint64_t progress);
+  void UpdateMinigame(const server_events::MinigameInfo& minigame_info);
 
  private:
   void CloseWindow();
@@ -44,4 +46,5 @@ class ClientView : public QMainWindow {
   void KeyEventToServer(input::Name key);
   void MouseMoveToServer(const QPoint& pos);
   void JoinMinigame(int minigame_index);
+  void LeaveMinigame();
 };

@@ -5,7 +5,7 @@ namespace helpers {
 uint64_t GetMinigamePlayersCountByType(MinigameType type) {
   switch (type) {
     case MinigameType::kSample: {
-      return 4;
+      return 2;
     }
     default: {
       return 0;

@@ -54,6 +54,15 @@ void ClientController::Handle(const events::EventWrapper& event) {
         case server_events::ServerEventWrapper::kStartGame: {
           view_->PlayStartEffect();
         }
+        case server_events::ServerEventWrapper::kGameInfo: {
+          const auto& game_info = server_event.game_info();
+          view_->UpdateProgress(game_info.progress());
+          if (game_info.has_joined_minigame()) {
+            auto minigame_index = game_info.joined_minigame();
+            view_->UpdateMinigame(game_info.minigames_info(minigame_index));
+          }
+          break;
+        }
         default: {}
       }
       break;
@@ -105,6 +114,10 @@ void ClientController::ConnectView() {
           &ClientView::JoinMinigame,
           this,
           &ClientController::SendJoinMinigame);
+  connect(view_,
+          &ClientView::LeaveMinigame,
+          this,
+          &ClientController::SendLeaveMinigame);
 }
 
 void ClientController::SendReadyStatus() {
@@ -188,6 +201,20 @@ void ClientController::SendJoinMinigame(int minigame_index) {
 
   auto* event_to_game = new client_events::EventToGame;
   event_to_game->set_allocated_join_minigame(join_minigame_event);
+
+  auto* event_wrapper = new client_events::ClientEventWrapper;
+  event_wrapper->set_allocated_event_to_game(event_to_game);
+
+  events::EventWrapper event;
+  event.set_allocated_client_event(event_wrapper);
+  AddEventToSend(event);
+}
+
+void ClientController::SendLeaveMinigame() {
+  auto* leave_minigame_event = new client_events::LeaveMinigame;
+
+  auto* event_to_game = new client_events::EventToGame;
+  event_to_game->set_allocated_leave_minigame(leave_minigame_event);
 
   auto* event_wrapper = new client_events::ClientEventWrapper;
   event_wrapper->set_allocated_event_to_game(event_to_game);

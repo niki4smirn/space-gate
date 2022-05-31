@@ -17,6 +17,7 @@ GameWidget::GameWidget(QWidget* parent) :
 
   connect(waiting_screen_, &WaitingScreen::Leave, [&]() {
     OpenMainGameWidget();
+    emit LeaveMinigame();
   });
 }
 

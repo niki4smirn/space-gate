@@ -55,6 +55,9 @@ void ClientView::Connect() {
           [this](int minigame_index) {
     emit JoinMinigame(minigame_index);
   });
+  connect(game_widget_, &GameWidget::LeaveMinigame, [&]() {
+    emit LeaveMinigame();
+  });
 }
 
 void ClientView::AddWidgets() {
@@ -97,4 +100,11 @@ void ClientView::mouseReleaseEvent(QMouseEvent* event) {
 
 void ClientView::OpenGame() {
   stacked_widget_->setCurrentWidget(game_widget_);
+}
+
+void ClientView::UpdateProgress(uint64_t progress) {}
+
+void ClientView::UpdateMinigame(
+    const server_events::MinigameInfo& minigame_info) {
+  LOG << "Update Minigame";
 }

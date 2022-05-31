@@ -25,20 +25,33 @@ void GameController::Handle(const events::EventWrapper& event) {
   const auto& client_event = event.client_event();
   const auto& game_event = client_event.event_to_game();
 
+  UserId user_id = client_event.sender_id();
+
   switch (game_event.type_case()) {
     case client_events::EventToGame::kJoinMinigame: {
       if (!model_.IsPlayerBusy(client_event.sender_id())) {
-        model_.AddPlayerToMinigame(client_event.sender_id(),
-                                   game_event.join_minigame().minigame_id());
+        MinigameId minigame_id = game_event.join_minigame().minigame_id();
+        model_.AddPlayerToMinigameQueue(client_event.sender_id(),
+                                        static_cast<MinigameType>(minigame_id));
       }
 
       break;
     }
     case client_events::EventToGame::kMinigameAction: {
-      AbstractMinigame* minigame =
-          model_.GetMinigameById(game_event.minigame_action().minigame_id());
+      MinigameId minigame_id = game_event.join_minigame().minigame_id();
+      auto minigame =
+          model_.GetMinigameByType(static_cast<MinigameType>(minigame_id));
 
       minigame->AddEventToHandle(event);
+
+      break;
+    }
+    case client_events::EventToGame::kLeaveMinigame: {
+      // TODO(niki4smirn): remove person from minigame and stop game in case of running
+      MinigameId minigame_id = game_event.join_minigame().minigame_id();
+      auto minigame =
+          model_.GetMinigameByType(static_cast<MinigameType>(minigame_id));
+      break;
     }
     default: {}
   }
@@ -91,14 +104,12 @@ void GameController::SendGameInfoEvent() {
 }
 
 void GameController::StartMinigameEvent(MinigameType type) {
-  AbstractMinigame* minigame;
+  std::shared_ptr<AbstractMinigame> minigame;
   auto& players = model_.GetPlayersForMinigame(type);
-
-  model_.MakePlayersBusy(players);
 
   switch (type) {
     case MinigameType::kSample: {
-      minigame = new SampleMinigame(players);
+      minigame = std::make_shared<SampleMinigame>(players);
       break;
     }
     default: {}
@@ -106,7 +117,7 @@ void GameController::StartMinigameEvent(MinigameType type) {
 
   model_.AddCreatedMinigame(type, minigame);
 
-  connect(minigame,
+  connect(minigame.get(),
           &AbstractMinigame::MinigameEnded,
           this,
           &GameController::MinigameEndedEvent);

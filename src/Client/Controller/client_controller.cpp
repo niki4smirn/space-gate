@@ -58,8 +58,13 @@ void ClientController::Handle(const events::EventWrapper& event) {
           const auto& game_info = server_event.game_info();
           view_->UpdateProgress(game_info.progress());
           if (game_info.has_joined_minigame()) {
-            auto minigame_index = game_info.joined_minigame();
-            view_->UpdateMinigame(game_info.minigames_info(minigame_index));
+            for (const auto& minigame_info : game_info.minigames_info()) {
+              if (minigame_info.id() == game_info.joined_minigame()) {
+                auto minigame_index = game_info.joined_minigame();
+                view_->UpdateMinigame(game_info.minigames_info(
+                    minigame_index));
+              }
+            }
           }
           break;
         }

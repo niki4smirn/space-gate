@@ -103,3 +103,8 @@ void SampleMinigame::SendResponseMessages() {
     AddEventToSend(GenerateResponseMessage(id));
   }
 }
+
+void SampleMinigame::ForceEnd() {
+  // when somebody left minigame
+  emit MinigameEnded(MinigameType::kSample, 0);
+}

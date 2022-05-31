@@ -7,7 +7,9 @@
 
 GameModel::GameModel(const std::vector<std::shared_ptr<User>>& players) {
   for (const auto& player : players) {
-    players_[player->GetId()] = player;
+    auto player_id = player->GetId();
+    players_[player_id] = player;
+    free_users_ids_.insert(player_id);
   }
   emit SendGameInfo();
 }
@@ -17,21 +19,23 @@ const std::unordered_map<UserId,
   return players_;
 }
 
-std::shared_ptr<AbstractMinigame> GameModel::GetMinigameByType(MinigameType type) {
+std::shared_ptr<AbstractMinigame> GameModel::GetMinigameByType(
+    MinigameType type) {
   return minigames_[type];
 }
 
 void GameModel::AddPlayerToMinigameQueue(UserId player_id,
                                          MinigameType type) {
   players_by_minigame_[type].push_back(players_[player_id]);
-  minigame_by_player_id_[player_id] = type;
+  free_users_ids_.erase(player_id);
+  minigame_type_by_player_id_[player_id] = type;
+
+  emit SendGameInfo();
 
   if (players_by_minigame_[type].size()
       == helpers::GetMinigamePlayersCountByType(type)) {
     emit StartMinigame(type);
   }
-
-  emit SendGameInfo();
 }
 
 const
@@ -43,11 +47,11 @@ const
 
 std::optional<MinigameType> GameModel::GetMinigameTypeByPlayerId(
     UserId id) const {
-  if (!minigame_by_player_id_.contains(id)) {
+  if (!minigame_type_by_player_id_.contains(id)) {
     return std::nullopt;
   }
 
-  return minigame_by_player_id_.at(id);
+  return minigame_type_by_player_id_.at(id);
 }
 
 uint64_t GameModel::GetProgress() const {
@@ -76,7 +80,7 @@ void GameModel::DeleteMinigame(MinigameType type) {
 
   for (const auto& player : players_by_minigame_[type]) {
     auto player_id = player->GetId();
-    minigame_by_player_id_.erase(player_id);
+    minigame_type_by_player_id_.erase(player_id);
     free_users_ids_.insert(player_id);
   }
 
@@ -88,6 +92,8 @@ void GameModel::DeleteMinigame(MinigameType type) {
 void GameModel::AddCreatedMinigame(
     MinigameType type, std::shared_ptr<AbstractMinigame> minigame) {
   minigames_[type] = std::move(minigame);
+
+  emit SendGameInfo();
 }
 
 GameStatus GameModel::GetStatus() const {
@@ -105,5 +111,19 @@ int GameModel::GetMinigamesCount() const {
 }
 
 bool GameModel::IsPlayerBusy(UserId id) {
-  return free_users_ids_.contains(id);
+  return !free_users_ids_.contains(id);
+}
+
+void GameModel::DeletePlayer(UserId id) {
+  if (!IsPlayerBusy(id)) {
+    return;
+  }
+  free_users_ids_.insert(id);
+  auto minigame_type = minigame_type_by_player_id_[id];
+  players_by_minigame_.erase(minigame_type);
+  if (minigames_.contains(minigame_type)) {
+    auto minigame = minigames_[minigame_type];
+    minigame->ForceEnd();
+  }
+  emit SendGameInfo();
 }

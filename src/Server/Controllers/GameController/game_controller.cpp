@@ -47,10 +47,7 @@ void GameController::Handle(const events::EventWrapper& event) {
       break;
     }
     case client_events::EventToGame::kLeaveMinigame: {
-      // TODO(niki4smirn): remove person from minigame and stop game in case of running
-      MinigameId minigame_id = game_event.join_minigame().minigame_id();
-      auto minigame =
-          model_.GetMinigameByType(static_cast<MinigameType>(minigame_id));
+      model_.DeletePlayer(user_id);
       break;
     }
     default: {}

@@ -6,10 +6,10 @@ MainGameWidget::MainGameWidget(QWidget* parent) :
   button2_(new QPushButton(this)),
   layout_(new QGridLayout(this)) {
   connect(button1_, &QPushButton::clicked, [&]() {
-    emit JoinMinigame(0);
+    emit JoinMinigame(1);
   });
   connect(button2_, &QPushButton::clicked, [&]() {
-    emit JoinMinigame(1);
+    emit JoinMinigame(2);
   });
 
   layout_->addWidget(button1_, 0, 0);

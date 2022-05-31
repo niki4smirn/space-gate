@@ -52,6 +52,7 @@ void MainWidget::SetIcons() {
     purple_button_->setVisible(1);
 
     QPixmap pixmap_red(":/home/ekkatrina_hottova/SpaceGatePics/Buttons/red_button.png");
+    pixmap_red = pixmap_red.scaled(QSize(220, 175), Qt::IgnoreAspectRatio);
     red_button_->setIcon(QIcon(pixmap_red));
     red_button_->setIconSize(pixmap_red.size());
     red_button_->setFixedSize(pixmap_red.size());
@@ -59,26 +60,29 @@ void MainWidget::SetIcons() {
 }
 
 void MainWidget::SetButtonsSize() {
-    blue_button_->setFixedSize(378, 120);
-    green_button_->setFixedSize(295, 120);
-    red_button_->setFixedSize(220, 175);
-    yellow_button_->setFixedSize(316, 130);
+    double width = QApplication::screens()[0]->size().width();
+    double height = QApplication::screens()[0]->size().height();
+    blue_button_->setFixedSize(width / 1920 * 378, height / 1080 * 120);
+    green_button_->setFixedSize(width / 1920 * 295, height / 1080 * 120);
+    red_button_->setFixedSize(width / 1920 * 220, height / 1080 * 175);
+    yellow_button_->setFixedSize(width / 1920 * 316, height / 1080 * 130);
+    purple_button_->setFixedSize(width / 1920 * 225, height / 1080 * 150);
+
 }
 
 void MainWidget::SetButtonsGeometry() {
+    double width = QApplication::screens()[0]->size().width();
+    double height = QApplication::screens()[0]->size().height();
     blue_button_->setFlat(1);
-    blue_button_->setGeometry(1410, 930, 100, 200);
+    blue_button_->setGeometry(width * 1410 / 1920, height / 1080 * 930, 1, 1);
     green_button_->setFlat(1);
-    green_button_->setGeometry(68, 930, 100, 100);
-    red_button_->setFlat(1);
-    red_button_->setGeometry(472, 878, 100, 100);
+    green_button_->setGeometry(width * 68 / 1920, height / 1080 * 930 , 1, 1);
+//    red_button_->setFlat(1);
+    red_button_->setGeometry(width / 1920 * 472, height / 1080 * 878, 1, 1);
     yellow_button_->setFlat(1);
-    yellow_button_->setGeometry(727, 810, 100, 100);
-    purple_button_->setGeometry(1080, 885, 100, 100);
-    purple_button_->setFixedSize(225, 150);
+    yellow_button_->setGeometry(width / 1920 * 727, height / 1080 * 810, 1, 1);
+    purple_button_->setGeometry(width / 1920 * 1080, height / 1080 * 885, 1, 1);
     purple_button_->setFlat(1);
-    std::cerr<<QApplication::screens()[0]->size().height();
-    std::cerr<<QApplication::screens()[0]->size().width();
 }
 
 void MainWidget::SetBackground() {
@@ -106,6 +110,25 @@ void MainWidget::ButtonClicked() {
         blue_button_->setFixedSize(pixmap_bl.size());
         blue_button_->setVisible(1);
     });
+//    connect(red_button_, &QPushButton::pressed, this, [=] {
+//        QPixmap pixmap_red(":/home/ekkatrina_hottova/SpaceGatePics/Buttons/red_button_clicked.png");
+//        pixmap_red = pixmap_red.scaled(QSize(220, 175), Qt::IgnoreAspectRatio);
+//        red_button_->setIcon(QIcon(pixmap_red));
+//        red_button_->setIconSize(pixmap_red.size());
+//        red_button_->setFixedSize(pixmap_red.size());
+//        red_button_->setVisible(1);
+//    });
+//    connect(red_button_, &QPushButton::released, this, [=] {
+//        QPixmap pixmap_red(":/home/ekkatrina_hottova/SpaceGatePics/Buttons/red_button.png");
+//        pixmap_red = pixmap_red.scaled(QSize(220, 175), Qt::IgnoreAspectRatio);
+//        red_button_->setIcon(QIcon(pixmap_red));
+//        red_button_->setIconSize(pixmap_red.size());
+//        red_button_->setFixedSize(pixmap_red.size());
+//        red_button_->setVisible(1);
+//    });
 }
+
+
+
 
 

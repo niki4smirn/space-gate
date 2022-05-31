@@ -14,11 +14,31 @@ MainWidget::MainWidget(QWidget* parent) : QWidget(parent) {
     purple_button_ = new QPushButton(this);
     red_button_ = new QPushButton(this);
     blue_button_ = new QPushButton(this);
+    red_bulb_red_ = new QLabel(this);
+    green_bulb_red_ = new QLabel(this);
+    blue_bulb_red_ = new QLabel(this);
+    yellow_bulb_red_ = new QLabel(this);
+    red_bulb_purple_ = new QLabel(this);
+    green_bulb_purple_ = new QLabel(this);
+    blue_bulb_purple_ = new QLabel(this);
+    yellow_bulb_purple_ = new QLabel(this);
+    red_bulb_green_ = new QLabel(this);
+    green_bulb_green_ = new QLabel(this);
+    blue_bulb_green_ = new QLabel(this);
+    yellow_bulb_green_ = new QLabel(this);
+    red_bulb_blue_ = new QLabel(this);
+    green_bulb_blue_ = new QLabel(this);
+    blue_bulb_blue_ = new QLabel(this);
+    yellow_bulb_blue_ = new QLabel(this);
     SetButtonsSize();
     SetIcons();
     SetButtonsGeometry();
     SetBackground();
     ButtonClicked();
+//    setMouseTracking(1);
+    SetBulbsSize();
+    SetBulbsIcons();
+    SetBulbsGeometry();
 }
 
 MainWidget::~MainWidget() {
@@ -71,16 +91,12 @@ void MainWidget::SetButtonsSize() {
 void MainWidget::SetButtonsGeometry() {
     double width = QApplication::screens()[0]->size().width();
     double height = QApplication::screens()[0]->size().height();
-    blue_button_->setFlat(1);
+
     blue_button_->setGeometry(width * 1410 / 1920, height / 1080 * 930, 1, 1);
-    green_button_->setFlat(1);
     green_button_->setGeometry(width * 68 / 1920, height / 1080 * 930 , 1, 1);
-//    red_button_->setFlat(1);
     red_button_->setGeometry(width / 1920 * 472, height / 1080 * 878, 1, 1);
-    yellow_button_->setFlat(1);
     yellow_button_->setGeometry(width / 1920 * 727, height / 1080 * 810, 1, 1);
     purple_button_->setGeometry(width / 1920 * 1080, height / 1080 * 885, 1, 1);
-    purple_button_->setFlat(1);
 }
 
 void MainWidget::SetBackground() {
@@ -157,6 +173,102 @@ void MainWidget::ButtonClicked() {
         yellow_button_->setIconSize(pixmap_yel.size());
     });
 }
+
+void MainWidget::SetBulbsIcons() {
+    QPixmap pixmap_yel(":/home/ekkatrina_hottova/SpaceGatePics/Bulbs/yellow_bulb_off.png");
+    pixmap_yel = pixmap_yel.scaled(yellow_bulb_red_->size());
+    yellow_bulb_red_->setPixmap(pixmap_yel);
+    yellow_bulb_purple_->setPixmap(pixmap_yel);
+    yellow_bulb_green_->setPixmap(pixmap_yel);
+    yellow_bulb_blue_->setPixmap(pixmap_yel);
+
+    QPixmap pixmap_bl(":/home/ekkatrina_hottova/SpaceGatePics/Bulbs/blue_bulb_off.png");
+    pixmap_bl = pixmap_bl.scaled(blue_bulb_red_->size());
+    blue_bulb_red_->setPixmap(pixmap_bl);
+    blue_bulb_purple_->setPixmap(pixmap_bl);
+    blue_bulb_green_->setPixmap(pixmap_bl);
+    blue_bulb_blue_->setPixmap(pixmap_bl);
+
+    QPixmap pixmap_gr(":/home/ekkatrina_hottova/SpaceGatePics/Bulbs/green_bulb_off.png");
+    pixmap_gr = pixmap_gr.scaled(green_bulb_red_->size());
+    green_bulb_red_->setPixmap(pixmap_gr);
+    green_bulb_purple_->setPixmap(pixmap_gr);
+    green_bulb_green_->setPixmap(pixmap_gr);
+    green_bulb_blue_->setPixmap(pixmap_gr);
+
+    QPixmap pixmap_red(":/home/ekkatrina_hottova/SpaceGatePics/Bulbs/red_bulb_off.png");
+    pixmap_red = pixmap_red.scaled(red_bulb_red_->size());
+    red_bulb_red_->setPixmap(pixmap_red);
+    red_bulb_purple_->setPixmap(pixmap_red);
+    red_bulb_green_->setPixmap(pixmap_red);
+    red_bulb_blue_->setPixmap(pixmap_red);
+}
+
+void MainWidget::SetBulbsSize() {
+    double width = QApplication::screens()[0]->size().width() / 1920 * 40;
+    double height = QApplication::screens()[0]->size().height() / 1080 * 31;
+
+    yellow_bulb_red_->setFixedSize(width, height);
+    red_bulb_red_->setFixedSize(width, height);
+    blue_bulb_red_->setFixedSize(width, height);
+    green_bulb_red_->setFixedSize(width, height);
+
+    yellow_bulb_purple_->setFixedSize(width, height);
+    red_bulb_purple_->setFixedSize(width, height);
+    blue_bulb_purple_->setFixedSize(width, height);
+    green_bulb_purple_->setFixedSize(width, height);
+
+    yellow_bulb_green_->setFixedSize(width, height);
+    red_bulb_green_->setFixedSize(width, height);
+    blue_bulb_green_->setFixedSize(width, height);
+    green_bulb_green_->setFixedSize(width, height);
+
+    yellow_bulb_blue_->setFixedSize(width, height);
+    red_bulb_blue_->setFixedSize(width, height);
+    blue_bulb_blue_->setFixedSize(width, height);
+    green_bulb_blue_->setFixedSize(width, height);
+
+}
+
+void MainWidget::SetBulbsGeometry() {
+    double width = QApplication::screens()[0]->size().width();
+    double height = QApplication::screens()[0]->size().height();
+
+    yellow_bulb_red_->setGeometry(width / 1920 * 487, height / 1080 * 825, 1, 1);
+    green_bulb_red_->setGeometry(width / 1920 * 532, height / 1080 * 825, 1, 1);
+    blue_bulb_red_->setGeometry(width / 1920 * 577, height / 1080 * 825, 1, 1);
+    red_bulb_red_->setGeometry(width / 1920 * 622, height / 1080 * 825, 1, 1);
+
+    yellow_bulb_purple_->setGeometry(width / 1920 * 1095, height / 1080 * 847, 1, 1);
+    green_bulb_purple_->setGeometry(width / 1920 * 1147, height / 1080 * 847, 1, 1);
+    blue_bulb_purple_->setGeometry(width / 1920 * 1200, height / 1080 * 847, 1, 1);
+    red_bulb_purple_->setGeometry(width / 1920 * 1252, height / 1080 * 847, 1, 1);
+
+    yellow_bulb_green_->setGeometry(width / 1920 * 82, height / 1080 * 892, 1, 1);
+    green_bulb_green_->setGeometry(width / 1920 * 142, height / 1080 * 892, 1, 1);
+    blue_bulb_green_->setGeometry(width / 1920 * 202, height / 1080 * 892, 1, 1);
+    red_bulb_green_->setGeometry(width / 1920 * 263, height / 1080 * 892, 1, 1);
+
+    yellow_bulb_blue_->setGeometry(width / 1920 * 1575, height / 1080 * 892, 1, 1);
+    green_bulb_blue_->setGeometry(width / 1920 * 1627, height / 1080 * 892, 1, 1);
+    blue_bulb_blue_->setGeometry(width / 1920 * 1680, height / 1080 * 892, 1, 1);
+    red_bulb_blue_->setGeometry(width / 1920 * 1733, height / 1080 * 892, 1, 1);
+
+
+}
+
+
+//void MainWidget::mouseMoveEvent(QMouseEvent *event) {
+//    QWidget::mouseMoveEvent(event);
+//    if (blue_button_->is) {
+//        std::cerr<<"lol ";
+//    } else {
+//        std::cerr<<"cringe ";
+//    }
+//}
+
+
+
 
 
 

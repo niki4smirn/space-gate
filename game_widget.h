@@ -23,12 +23,31 @@ private:
     QPushButton* blue_button_;
     QPushButton* yellow_button_;
     QPushButton* purple_button_;
+    QLabel* red_bulb_red_;
+    QLabel* green_bulb_red_;
+    QLabel* blue_bulb_red_;
+    QLabel* yellow_bulb_red_;
+    QLabel* red_bulb_purple_;
+    QLabel* green_bulb_purple_;
+    QLabel* blue_bulb_purple_;
+    QLabel* yellow_bulb_purple_;
+    QLabel* red_bulb_green_;
+    QLabel* green_bulb_green_;
+    QLabel* blue_bulb_green_;
+    QLabel* yellow_bulb_green_;
+    QLabel* red_bulb_blue_;
+    QLabel* green_bulb_blue_;
+    QLabel* blue_bulb_blue_;
+    QLabel* yellow_bulb_blue_;
     void SetIcons();
     void SetButtonsGeometry();
     void SetButtonsSize();
     void SetBackground();
     void ButtonClicked();
-    void ButtonHovered();
+    void SetBulbsIcons();
+    void SetBulbsSize();
+    void SetBulbsGeometry();
+//    void mouseMoveEvent(QMouseEvent* event) override;
 };
 
 

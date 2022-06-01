@@ -81,11 +81,11 @@ void MainWidget::SetIcons() {
 void MainWidget::SetButtonsSize() {
     double width = QApplication::screens()[0]->size().width();
     double height = QApplication::screens()[0]->size().height();
-    blue_button_->setFixedSize(width / 1920 * 378, height / 1080 * 120);
-    green_button_->setFixedSize(width / 1920 * 295, height / 1080 * 120);
-    red_button_->setFixedSize(width / 1920 * 220, height / 1080 * 175);
-    yellow_button_->setFixedSize(width / 1920 * 316, height / 1080 * 130);
-    purple_button_->setFixedSize(width / 1920 * 225, height / 1080 * 150);
+    blue_button_->setFixedSize(width / 1920 * 380, height / 1080 * 122);
+    green_button_->setFixedSize(width / 1920 * 297, height / 1080 * 122);
+    red_button_->setFixedSize(width / 1920 * 222, height / 1080 * 177);
+    yellow_button_->setFixedSize(width / 1920 * 318, height / 1080 * 132);
+    purple_button_->setFixedSize(width / 1920 * 227, height / 1080 * 152);
 
 }
 
@@ -206,28 +206,28 @@ void MainWidget::SetBulbsIcons() {
 }
 
 void MainWidget::SetBulbsSize() {
-    double width = QApplication::screens()[0]->size().width() / 1920 * 40;
-    double height = QApplication::screens()[0]->size().height() / 1080 * 31;
+    double width = QApplication::screens()[0]->size().width();
+    double height = QApplication::screens()[0]->size().height();
 
-    yellow_bulb_red_->setFixedSize(width, height);
-    red_bulb_red_->setFixedSize(width, height);
-    blue_bulb_red_->setFixedSize(width, height);
-    green_bulb_red_->setFixedSize(width, height);
+    yellow_bulb_red_->setFixedSize(width / 1920 * 41, height / 1080 * 33);
+    red_bulb_red_->setFixedSize(width / 1920 * 41, height / 1080 * 33);
+    blue_bulb_red_->setFixedSize(width / 1920 * 41, height / 1080 * 33);
+    green_bulb_red_->setFixedSize(width / 1920 * 41, height / 1080 * 33);
 
-    yellow_bulb_purple_->setFixedSize(width, height);
-    red_bulb_purple_->setFixedSize(width, height);
-    blue_bulb_purple_->setFixedSize(width, height);
-    green_bulb_purple_->setFixedSize(width, height);
+    yellow_bulb_purple_->setFixedSize(width / 1920 * 41, height / 1080 * 33);
+    red_bulb_purple_->setFixedSize(width / 1920 * 41, height / 1080 * 33);
+    blue_bulb_purple_->setFixedSize(width / 1920 * 41, height / 1080 * 33);
+    green_bulb_purple_->setFixedSize(width / 1920 * 41, height / 1080 * 33);
 
-    yellow_bulb_green_->setFixedSize(width, height);
-    red_bulb_green_->setFixedSize(width, height);
-    blue_bulb_green_->setFixedSize(width, height);
-    green_bulb_green_->setFixedSize(width, height);
+    yellow_bulb_green_->setFixedSize(width / 1920 * 41, height / 1080 * 33);
+    red_bulb_green_->setFixedSize(width / 1920 * 41, height / 1080 * 33);
+    blue_bulb_green_->setFixedSize(width / 1920 * 41, height / 1080 * 33);
+    green_bulb_green_->setFixedSize(width / 1920 * 41, height / 1080 * 33);
 
-    yellow_bulb_blue_->setFixedSize(width, height);
-    red_bulb_blue_->setFixedSize(width, height);
-    blue_bulb_blue_->setFixedSize(width, height);
-    green_bulb_blue_->setFixedSize(width, height);
+    yellow_bulb_blue_->setFixedSize(width / 1920 * 41, height / 1080 * 33);
+    red_bulb_blue_->setFixedSize(width / 1920 * 41, height / 1080 * 33);
+    blue_bulb_blue_->setFixedSize(width / 1920 * 41, height / 1080 * 33);
+    green_bulb_blue_->setFixedSize(width / 1920 * 41, height / 1080 * 33);
 
 }
 
@@ -235,25 +235,25 @@ void MainWidget::SetBulbsGeometry() {
     double width = QApplication::screens()[0]->size().width();
     double height = QApplication::screens()[0]->size().height();
 
-    yellow_bulb_red_->setGeometry(width / 1920 * 487, height / 1080 * 825, 1, 1);
-    green_bulb_red_->setGeometry(width / 1920 * 532, height / 1080 * 825, 1, 1);
-    blue_bulb_red_->setGeometry(width / 1920 * 577, height / 1080 * 825, 1, 1);
-    red_bulb_red_->setGeometry(width / 1920 * 622, height / 1080 * 825, 1, 1);
+    yellow_bulb_red_->setGeometry(width / 1920 * 487, height / 1080 * 824, 1, 1);
+    green_bulb_red_->setGeometry(width / 1920 * 532, height / 1080 * 824, 1, 1);
+    blue_bulb_red_->setGeometry(width / 1920 * 577, height / 1080 * 824, 1, 1);
+    red_bulb_red_->setGeometry(width / 1920 * 622, height / 1080 * 824, 1, 1);
 
-    yellow_bulb_purple_->setGeometry(width / 1920 * 1095, height / 1080 * 847, 1, 1);
-    green_bulb_purple_->setGeometry(width / 1920 * 1147, height / 1080 * 847, 1, 1);
-    blue_bulb_purple_->setGeometry(width / 1920 * 1200, height / 1080 * 847, 1, 1);
-    red_bulb_purple_->setGeometry(width / 1920 * 1252, height / 1080 * 847, 1, 1);
+    yellow_bulb_purple_->setGeometry(width / 1920 * 1095, height / 1080 * 846, 1, 1);
+    green_bulb_purple_->setGeometry(width / 1920 * 1147, height / 1080 * 846, 1, 1);
+    blue_bulb_purple_->setGeometry(width / 1920 * 1200, height / 1080 * 846, 1, 1);
+    red_bulb_purple_->setGeometry(width / 1920 * 1252, height / 1080 * 846, 1, 1);
 
-    yellow_bulb_green_->setGeometry(width / 1920 * 82, height / 1080 * 892, 1, 1);
-    green_bulb_green_->setGeometry(width / 1920 * 142, height / 1080 * 892, 1, 1);
-    blue_bulb_green_->setGeometry(width / 1920 * 202, height / 1080 * 892, 1, 1);
-    red_bulb_green_->setGeometry(width / 1920 * 263, height / 1080 * 892, 1, 1);
+    yellow_bulb_green_->setGeometry(width / 1920 * 82, height / 1080 * 891, 1, 1);
+    green_bulb_green_->setGeometry(width / 1920 * 142, height / 1080 * 891, 1, 1);
+    blue_bulb_green_->setGeometry(width / 1920 * 202, height / 1080 * 891, 1, 1);
+    red_bulb_green_->setGeometry(width / 1920 * 263, height / 1080 * 891, 1, 1);
 
-    yellow_bulb_blue_->setGeometry(width / 1920 * 1575, height / 1080 * 892, 1, 1);
-    green_bulb_blue_->setGeometry(width / 1920 * 1627, height / 1080 * 892, 1, 1);
-    blue_bulb_blue_->setGeometry(width / 1920 * 1680, height / 1080 * 892, 1, 1);
-    red_bulb_blue_->setGeometry(width / 1920 * 1733, height / 1080 * 892, 1, 1);
+    yellow_bulb_blue_->setGeometry(width / 1920 * 1575, height / 1080 * 891, 1, 1);
+    green_bulb_blue_->setGeometry(width / 1920 * 1627, height / 1080 * 891, 1, 1);
+    blue_bulb_blue_->setGeometry(width / 1920 * 1680, height / 1080 * 891, 1, 1);
+    red_bulb_blue_->setGeometry(width / 1920 * 1733, height / 1080 * 891, 1, 1);
 }
 
 void MainWidget::mouseMoveEvent(QMouseEvent* event) {

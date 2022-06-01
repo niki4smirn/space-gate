@@ -145,11 +145,7 @@ void RoomController::GameEndedEvent(uint64_t score) {
 
   AddEventToSend(event);
 
-  QTimer::singleShot(constants::kTickTime, [&]() {
-    // всё ломается, если сразу это сделать, потому что после этого момента в
-    // game_controller всё ещё может происходить обработка очереди
-    room_model_.DeleteGameController();
-  });
+  room_model_.DeleteGameController();
 }
 
 void RoomController::SendEventToGame(const events::EventWrapper& event) {

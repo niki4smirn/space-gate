@@ -50,6 +50,8 @@ class GameModel : public QObject {
                      std::shared_ptr<AbstractMinigame>>&
                      GetAllMinigames() const;
 
+  void SetProgress(uint64_t progress);
+
  signals:
   void SendGameInfo();
   void StartMinigame(MinigameType type);

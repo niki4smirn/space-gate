@@ -11,9 +11,6 @@ GameModel::GameModel(const std::vector<std::shared_ptr<User>>& players) {
     players_[player_id] = player;
     free_users_ids_.insert(player_id);
   }
-
-  // just let it be :)
-  progress_ = constants::kScoreToFinish / 2;
   emit SendGameInfo();
 }
 
@@ -140,4 +137,8 @@ const std::unordered_map<MinigameType,
                          std::shared_ptr<AbstractMinigame>>&
                          GameModel::GetAllMinigames() const {
   return minigames_;
+}
+
+void GameModel::SetProgress(uint64_t progress) {
+  progress_ = progress;
 }

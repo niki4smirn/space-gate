@@ -6,7 +6,7 @@ const uint64_t SampleMinigame::players_count = 4;
 
 SampleMinigame::SampleMinigame(
     const std::vector<std::shared_ptr<User>>& players)
-    : AbstractMinigame(players, 5, 1000) {
+    : AbstractMinigame(players, kMaxScore, kDuration) {
   StartMinigame();
 }
 
@@ -21,9 +21,7 @@ void SampleMinigame::OnTick() {
 
   if (is_completed) {
     emit MinigameEnded(MinigameType::kSample, max_score_);
-  }
-
-  if (ticks_ == duration_) {
+  } else if (ticks_ == duration_) {
     emit MinigameEnded(MinigameType::kSample, 0);
   }
 }
@@ -36,8 +34,6 @@ void SampleMinigame::Handle(const events::EventWrapper& event) {
 
   answers_[role_id_by_player_id_[event.client_event().sender_id()]] =
       QString::fromStdString(action.str());
-
-  IsCompleted();
 }
 
 void SampleMinigame::StartMinigame() {
@@ -103,6 +99,9 @@ events::EventWrapper SampleMinigame::GenerateResponseMessage(UserId user_id) {
 }
 
 void SampleMinigame::SendResponseMessages() {
+  if (ticks_ > duration_) {
+    return;
+  }
   for (const auto& [id, _] : players_) {
     AddEventToSend(GenerateResponseMessage(id));
   }

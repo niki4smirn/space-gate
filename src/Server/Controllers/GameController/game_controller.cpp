@@ -10,7 +10,12 @@ GameController::GameController(
   connect(&model_, &GameModel::StartMinigame,
           this, &GameController::StartMinigameEvent);
 
-  StartTicking();
+  // just let it be :)
+  model_.SetProgress(constants::kScoreToFinish / 2);
+
+  QTimer::singleShot(constants::kStartAnimationDuration, [&]() {
+    StartTicking();
+  });
 }
 
 QString GameController::GetControllerName() const {

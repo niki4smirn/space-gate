@@ -6,7 +6,7 @@ const uint64_t SampleMinigame::players_count = 4;
 
 SampleMinigame::SampleMinigame(
     const std::vector<std::shared_ptr<User>>& players)
-    : AbstractMinigame(players, 5, 3000) {
+    : AbstractMinigame(players, 5, 1000) {
   StartMinigame();
 }
 
@@ -17,8 +17,14 @@ QString SampleMinigame::GetControllerName() const {
 void SampleMinigame::OnTick() {
   AbstractMinigame::OnTick();
 
-  if (ticks_ == duration_ && !IsCompleted()) {
-      emit MinigameEnded(MinigameType::kSample, 0);
+  bool is_completed = IsCompleted();
+
+  if (is_completed) {
+    emit MinigameEnded(MinigameType::kSample, max_score_);
+  }
+
+  if (ticks_ == duration_) {
+    emit MinigameEnded(MinigameType::kSample, 0);
   }
 }
 
@@ -51,13 +57,11 @@ bool SampleMinigame::IsCompleted() {
 
   SendResponseMessages();
 
-  if (temp == right_answer_) {
-    emit MinigameEnded(MinigameType::kSample, max_score_);
-
-    return true;
+  if (temp != right_answer_) {
+    return false;
   }
 
-  return false;
+  return true;
 }
 
 void SampleMinigame::Send(const events::EventWrapper& event) {
@@ -102,9 +106,4 @@ void SampleMinigame::SendResponseMessages() {
   for (const auto& [id, _] : players_) {
     AddEventToSend(GenerateResponseMessage(id));
   }
-}
-
-void SampleMinigame::ForceEnd() {
-  // when somebody left minigame
-  emit MinigameEnded(MinigameType::kSample, 0);
 }

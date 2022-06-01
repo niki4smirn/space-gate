@@ -41,9 +41,14 @@ class GameModel : public QObject {
   void DeleteMinigame(MinigameType type);
 
   void AddScore(uint64_t score);
+  void DecreaseProgress();
 
   void AddPlayerToMinigameQueue(UserId player_id, MinigameType type);
-  void DeletePlayer(UserId id);
+  void DeleteMinigamePlayer(UserId id);
+
+  const std::unordered_map<MinigameType,
+                     std::shared_ptr<AbstractMinigame>>&
+                     GetAllMinigames() const;
 
  signals:
   void SendGameInfo();

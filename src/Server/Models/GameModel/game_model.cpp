@@ -11,6 +11,9 @@ GameModel::GameModel(const std::vector<std::shared_ptr<User>>& players) {
     players_[player_id] = player;
     free_users_ids_.insert(player_id);
   }
+
+  // just let it be :)
+  progress_ = constants::kScoreToFinish / 2;
   emit SendGameInfo();
 }
 
@@ -114,7 +117,7 @@ bool GameModel::IsPlayerBusy(UserId id) {
   return !free_users_ids_.contains(id);
 }
 
-void GameModel::DeletePlayer(UserId id) {
+void GameModel::DeleteMinigamePlayer(UserId id) {
   if (!IsPlayerBusy(id)) {
     return;
   }
@@ -122,8 +125,19 @@ void GameModel::DeletePlayer(UserId id) {
   auto minigame_type = minigame_type_by_player_id_[id];
   players_by_minigame_.erase(minigame_type);
   if (minigames_.contains(minigame_type)) {
-    auto minigame = minigames_[minigame_type];
-    minigame->ForceEnd();
+    DeleteMinigame(minigame_type);
   }
   emit SendGameInfo();
+}
+
+void GameModel::DecreaseProgress() {
+  --progress_;
+
+  emit SendGameInfo();
+}
+
+const std::unordered_map<MinigameType,
+                         std::shared_ptr<AbstractMinigame>>&
+                         GameModel::GetAllMinigames() const {
+  return minigames_;
 }

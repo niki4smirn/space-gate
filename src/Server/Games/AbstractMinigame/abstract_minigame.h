@@ -15,8 +15,6 @@ class AbstractMinigame : public AbstractController {
       uint64_t max_score,
       uint64_t duration);
 
-  virtual void ForceEnd() = 0;
-
   ~AbstractMinigame() override = default;
 
  signals:

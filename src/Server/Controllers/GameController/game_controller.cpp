@@ -1,7 +1,5 @@
 #include "game_controller.h"
 
-#include <QRandomGenerator64>
-
 #include "src/Helpers/Constants/constants.h"
 
 GameController::GameController(
@@ -47,7 +45,7 @@ void GameController::Handle(const events::EventWrapper& event) {
       break;
     }
     case client_events::EventToGame::kLeaveMinigame: {
-      model_.DeletePlayer(user_id);
+      model_.DeleteMinigamePlayer(user_id);
       break;
     }
     default: {}
@@ -57,16 +55,25 @@ void GameController::Handle(const events::EventWrapper& event) {
 void GameController::OnTick() {
   ++ticks_;
 
-  if (ticks_ == constants::kMinigamesAddingFrequency
-      && model_.GetMinigamesCount() < constants::kMinigamesCount) {
-    MinigameType type =
-        static_cast<MinigameType>(
-            QRandomGenerator64::global()->bounded(1,
-                                                  constants::kMinigamesCount));
+  if (ticks_ % constants::kMinigamesAddingTickFrequency == 0
+      && model_.GetMinigamesCount() < constants::kMaxMinigamesCount) {
+    auto range = helpers::Range(MinigameType::kSample, MinigameType::kLast);
+    auto type = helpers::GetRandomInRange<MinigameType>(range);
 
     model_.AddMinigame(type);
 
-    ticks_ = 0;
+  }
+
+  if (ticks_ % constants::kGameDecreaseTickFrequency == 0) {
+    model_.DecreaseProgress();
+  }
+
+  if (model_.GetProgress() == 0) {
+    auto minigames = model_.GetAllMinigames();
+    for (const auto& [minigame_type, minigame] : minigames) {
+      MinigameEndedEvent(minigame_type, 0);
+    }
+    emit GameEnded(0);
   }
 }
 
@@ -121,6 +128,11 @@ void GameController::StartMinigameEvent(MinigameType type) {
 }
 
 void GameController::MinigameEndedEvent(MinigameType type, uint64_t score) {
+  disconnect(model_.GetMinigameByType(type).get(),
+          &AbstractMinigame::MinigameEnded,
+          this,
+          &GameController::MinigameEndedEvent);
+
   model_.AddScore(score);
   model_.DeleteMinigame(type);
 }

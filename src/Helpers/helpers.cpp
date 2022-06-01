@@ -13,6 +13,22 @@ uint64_t GetMinigamePlayersCountByType(MinigameType type) {
   }
 }
 
+int32_t Range::GetLeftInclusive() const {
+  return left_;
+}
+
+int32_t Range::GetRightInclusive() const {
+  return right_;
+}
+
+int32_t Range::GetLeftExclusive() const {
+  return left_ + 1;
+}
+
+int32_t Range::GetRightExclusive() const {
+  return right_ - 1;
+}
+
 }  // namespace helpers
 
 QDebug& operator<<(QDebug& os, const std::string& string) {

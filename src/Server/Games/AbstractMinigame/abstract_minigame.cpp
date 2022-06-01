@@ -33,4 +33,3 @@ void AbstractMinigame::StartMinigame() {
   SendResponseMessages();
   StartTicking();
 }
-

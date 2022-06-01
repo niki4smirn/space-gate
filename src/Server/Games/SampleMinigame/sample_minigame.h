@@ -10,8 +10,6 @@ class SampleMinigame final : public AbstractMinigame {
 
   static const uint64_t players_count;
 
-  void ForceEnd() override;
-
   ~SampleMinigame() override = default;
 
  private:

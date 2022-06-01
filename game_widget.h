@@ -49,6 +49,7 @@ private:
     void SetBulbsGeometry();
     void SetTracking();
     void mouseMoveEvent(QMouseEvent* event) override;
+    void MiniGameChosen();
 };
 
 

@@ -47,7 +47,8 @@ private:
     void SetBulbsIcons();
     void SetBulbsSize();
     void SetBulbsGeometry();
-//    void mouseMoveEvent(QMouseEvent* event) override;
+    void SetTracking();
+    void mouseMoveEvent(QMouseEvent* event) override;
 };
 
 

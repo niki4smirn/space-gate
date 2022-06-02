@@ -15,6 +15,12 @@ RUN apt -y install python3-venv python3-pip
 RUN pip install cmake --upgrade
 RUN apt-get -y install software-properties-common
 RUN add-apt-repository ppa:beineri/opt-qt-5.15.2-focal -y
+RUN apt install -y libglu1-mesa-dev 
+RUN apt install -y libgl1-mesa-dev 
+RUN apt install -y qt515base 
+RUN apt install -y qt515multimedia 
+RUN apt install -y qt515websockets 
+RUN apt install -y qt515svg 
 RUN apt install -y protobuf-compiler
 
 RUN mkdir -p /root/SpaceGate/
@@ -28,6 +34,8 @@ RUN chmod 400 /root/.ssh/id_rsa
 
 RUN touch /root/.ssh/known_hosts
 RUN ssh-keyscan github.com >> /root/.ssh/known_hosts
+
+RUN protoc --version
 
 RUN git init
 RUN git remote add origin git@github.com:niki4smirn/space-gate.git

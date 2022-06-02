@@ -49,5 +49,5 @@ message GameResult {
 message GameInfo {
   uint64 progress = 1;
   repeated MinigameInfo minigames_info = 2;
-  uint64 joined_minigame = 3;
+  optional uint64 joined_minigame = 3;
 }

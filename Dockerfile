@@ -21,7 +21,15 @@ RUN apt install -y qt515base
 RUN apt install -y qt515multimedia 
 RUN apt install -y qt515websockets 
 RUN apt install -y qt515svg 
-RUN apt install -y protobuf-compiler
+
+RUN apt-get install -y autoconf automake libtool curl make g++ unzip wget
+RUN wget https://github.com/protocolbuffers/protobuf/releases/download/v3.15.5/protobuf-cpp-3.15.5.tar.gz
+RUN tar -xf protobuf-cpp-3.15.5.tar.gz
+WORKDIR protobuf-3.15.5
+RUN ./configure
+RUN make 
+RUN make install 
+RUN ldconfig 
 
 ARG SSH_PRIVATE_KEY
 RUN mkdir /root/.ssh/
@@ -31,7 +39,7 @@ RUN chmod 400 /root/.ssh/id_rsa
 RUN touch /root/.ssh/known_hosts
 RUN ssh-keyscan github.com >> /root/.ssh/known_hosts
 
-WORKDIR root
+WORKDIR /root
 RUN git clone git@github.com:niki4smirn/space-gate.git
 WORKDIR space-gate
 RUN git checkout origin/deployment

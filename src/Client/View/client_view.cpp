@@ -4,6 +4,7 @@
 ClientView::ClientView() :
     stacked_widget_(new QStackedWidget(this)),
     main_menu_(new ClientMainMenu(this)),
+    game_widget_(new GameWidget(this)),
     input_controller_(new InputController) {
   AddWidgets();
   stacked_widget_->setCurrentWidget(main_menu_);
@@ -50,10 +51,18 @@ void ClientView::Connect() {
   connect(input_controller_.get(),
           &InputController::MouseKeyToServer,
           [this](input::Name key) { emit KeyEventToServer(key); });
+  connect(game_widget_, &GameWidget::JoinMinigame,
+          [this](int minigame_index) {
+    emit JoinMinigame(minigame_index);
+  });
+  connect(game_widget_, &GameWidget::LeaveMinigame, [&]() {
+    emit LeaveMinigame();
+  });
 }
 
 void ClientView::AddWidgets() {
   stacked_widget_->addWidget(main_menu_);
+  stacked_widget_->addWidget(game_widget_);
 }
 
 void ClientView::UpdateRoomInfoMenu(
@@ -70,6 +79,9 @@ void ClientView::UpdateRoomsListMenu(
 
 void ClientView::PlayStartEffect() {
   main_menu_->PlayStartEffect();
+  QTimer::singleShot(constants::kStartAnimationDuration, [&]() {
+    OpenGame();
+  });
 }
 
 void ClientView::keyPressEvent(QKeyEvent* event) {
@@ -84,4 +96,15 @@ void ClientView::mousePressEvent(QMouseEvent* event) {
 
 void ClientView::mouseReleaseEvent(QMouseEvent* event) {
   input_controller_->MousePosStopTracking();
+}
+
+void ClientView::OpenGame() {
+  stacked_widget_->setCurrentWidget(game_widget_);
+}
+
+void ClientView::UpdateProgress(uint64_t progress) {}
+
+void ClientView::UpdateMinigame(
+    const server_events::MinigameInfo& minigame_info) {
+  LOG << "Update Minigame";
 }

@@ -1,7 +1,5 @@
 #include "game_controller.h"
 
-#include <QRandomGenerator64>
-
 #include "src/Helpers/Constants/constants.h"
 
 GameController::GameController(
@@ -12,7 +10,12 @@ GameController::GameController(
   connect(&model_, &GameModel::StartMinigame,
           this, &GameController::StartMinigameEvent);
 
-  StartTicking();
+  // just let it be :)
+  model_.SetProgress(constants::kScoreToFinish - 1);
+
+  QTimer::singleShot(constants::kStartAnimationDuration, [&]() {
+    StartTicking();
+  });
 }
 
 QString GameController::GetControllerName() const {
@@ -25,20 +28,30 @@ void GameController::Handle(const events::EventWrapper& event) {
   const auto& client_event = event.client_event();
   const auto& game_event = client_event.event_to_game();
 
+  UserId user_id = client_event.sender_id();
+
   switch (game_event.type_case()) {
     case client_events::EventToGame::kJoinMinigame: {
       if (!model_.IsPlayerBusy(client_event.sender_id())) {
-        model_.AddPlayerToMinigame(client_event.sender_id(),
-                                   game_event.join_minigame().minigame_id());
+        MinigameId minigame_id = game_event.join_minigame().minigame_id();
+        model_.AddPlayerToMinigameQueue(client_event.sender_id(),
+                                        static_cast<MinigameType>(minigame_id));
       }
 
       break;
     }
     case client_events::EventToGame::kMinigameAction: {
-      AbstractMinigame* minigame =
-          model_.GetMinigameById(game_event.minigame_action().minigame_id());
+      MinigameId minigame_id = game_event.join_minigame().minigame_id();
+      auto minigame =
+          model_.GetMinigameByType(static_cast<MinigameType>(minigame_id));
 
       minigame->AddEventToHandle(event);
+
+      break;
+    }
+    case client_events::EventToGame::kLeaveMinigame: {
+      model_.DeleteMinigamePlayer(user_id);
+      break;
     }
     default: {}
   }
@@ -47,16 +60,21 @@ void GameController::Handle(const events::EventWrapper& event) {
 void GameController::OnTick() {
   ++ticks_;
 
-  if (ticks_ == constants::kMinigamesAddingFrequency
-      && model_.GetMinigamesCount() < constants::kMinigamesCount) {
-    MinigameType type =
-        static_cast<MinigameType>(
-            QRandomGenerator64::global()->bounded(1,
-                                                  constants::kMinigamesCount));
+  if (ticks_ % constants::kMinigamesAddingTickFrequency == 0
+      && model_.GetMinigamesCount() < constants::kMaxMinigamesCount) {
+    auto range = helpers::Range(MinigameType::kSample, MinigameType::kLast);
+    auto type = helpers::GetRandomInRange<MinigameType>(range);
 
     model_.AddMinigame(type);
+  }
 
-    ticks_ = 0;
+  if (ticks_ % constants::kGameDecreaseTickFrequency == 0) {
+    model_.DecreaseProgress();
+  }
+
+  auto progress = model_.GetProgress();
+  if (progress == 0 || progress >= constants::kScoreToFinish) {
+    FinishGame(progress);
   }
 }
 
@@ -91,14 +109,12 @@ void GameController::SendGameInfoEvent() {
 }
 
 void GameController::StartMinigameEvent(MinigameType type) {
-  AbstractMinigame* minigame;
+  std::shared_ptr<AbstractMinigame> minigame;
   auto& players = model_.GetPlayersForMinigame(type);
-
-  model_.MakePlayersBusy(players);
 
   switch (type) {
     case MinigameType::kSample: {
-      minigame = new SampleMinigame(players);
+      minigame = std::make_shared<SampleMinigame>(players);
       break;
     }
     default: {}
@@ -106,13 +122,20 @@ void GameController::StartMinigameEvent(MinigameType type) {
 
   model_.AddCreatedMinigame(type, minigame);
 
-  connect(minigame,
+  connect(minigame.get(),
           &AbstractMinigame::MinigameEnded,
           this,
           &GameController::MinigameEndedEvent);
 }
 
 void GameController::MinigameEndedEvent(MinigameType type, uint64_t score) {
+  disconnect(model_.GetMinigameByType(type).get(),
+          &AbstractMinigame::MinigameEnded,
+          this,
+          &GameController::MinigameEndedEvent);
+
+  SendMinigameEndedEvent(type, score);
+
   model_.AddScore(score);
   model_.DeleteMinigame(type);
 }
@@ -142,4 +165,37 @@ events::EventWrapper GameController::GetGameInfo(UserId player_id) const {
   event.set_allocated_server_event(server_event);
 
   return event;
+}
+
+void GameController::FinishGame(uint64_t score) {
+  auto minigames = model_.GetAllMinigames();
+  for (const auto& [minigame_type, minigame] : minigames) {
+    MinigameEndedEvent(minigame_type, 0);
+  }
+  emit GameEnded(score);
+}
+
+void GameController::SendMinigameEndedEvent(MinigameType type, uint64_t score) {
+  events::EventWrapper event;
+
+  auto* server_event = new server_events::ServerEventWrapper;
+
+  auto* game_response = new minigame_responses::MinigameResponse;
+  minigame_responses::MinigameResponse::Result result;
+  if (score == 0) {
+    result = minigame_responses::MinigameResponse::kFailed;
+  } else {
+    result = minigame_responses::MinigameResponse::kCompleted;
+  }
+  game_response->set_result(result);
+
+  server_event->set_allocated_game_response(game_response);
+
+  event.set_allocated_server_event(server_event);
+
+  const auto& players = model_.GetPlayersByMinigame().at(type);
+  for (const auto& player : players) {
+    server_event->set_receiver_id(player->GetId());
+    AddEventToSend(event);
+  }
 }

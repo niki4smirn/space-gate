@@ -19,6 +19,8 @@ class AbstractController : public QObject {
   void AddEventToHandle(const events::EventWrapper& event);
   void AddEventToSend(const events::EventWrapper& event);
 
+  virtual void PrepareToClose();
+
  protected:
   AbstractController();
 
@@ -31,6 +33,7 @@ class AbstractController : public QObject {
                 logging::Type log_type) const;
 
   void StartTicking();
+  void HandleAndSend();
 
  private:
   void Tick();

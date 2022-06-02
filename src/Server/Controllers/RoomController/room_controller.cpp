@@ -1,6 +1,7 @@
 #include "room_controller.h"
 
 #include "src/Server/Models/User/user.h"
+#include "src/Helpers/Constants/constants.h"
 
 RoomController::RoomController(
     RoomId room_id,
@@ -148,5 +149,8 @@ void RoomController::GameEndedEvent(uint64_t score) {
 }
 
 void RoomController::SendEventToGame(const events::EventWrapper& event) {
-  room_model_.GetGameController()->AddEventToHandle(event);
+  auto game_controller = room_model_.GetGameController();
+  if (game_controller) {
+    game_controller->AddEventToHandle(event);
+  }
 }

@@ -27,6 +27,8 @@ class ClientController : public AbstractController {
   void SendStartGameEvent();
   void SendKeyEvent(input::Name key);
   void SendMouseMoveEvent(const QPoint& pos);
+  void SendJoinMinigame(int minigame_index);
+  void SendLeaveMinigame();
 
  protected:
   void OnTick() override;

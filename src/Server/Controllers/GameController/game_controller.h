@@ -18,9 +18,13 @@ class GameController : public AbstractController {
 
  private:
   void SendGameInfoEvent();
+  void SendStartMinigameEvent();
   void StartMinigameEvent(MinigameType type);
   void MinigameEndedEvent(MinigameType type, uint64_t score);
   events::EventWrapper GetGameInfo(UserId player_id) const;
+  void SendMinigameEndedEvent(MinigameType type, uint64_t score);
+
+  void FinishGame(uint64_t score);
 
   void OnTick() override;
 

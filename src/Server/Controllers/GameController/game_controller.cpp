@@ -11,7 +11,7 @@ GameController::GameController(
           this, &GameController::StartMinigameEvent);
 
   // just let it be :)
-  model_.SetProgress(constants::kScoreToFinish / 2);
+  model_.SetProgress(constants::kScoreToFinish - 1);
 
   QTimer::singleShot(constants::kStartAnimationDuration, [&]() {
     StartTicking();
@@ -66,19 +66,15 @@ void GameController::OnTick() {
     auto type = helpers::GetRandomInRange<MinigameType>(range);
 
     model_.AddMinigame(type);
-
   }
 
   if (ticks_ % constants::kGameDecreaseTickFrequency == 0) {
     model_.DecreaseProgress();
   }
 
-  if (model_.GetProgress() == 0) {
-    auto minigames = model_.GetAllMinigames();
-    for (const auto& [minigame_type, minigame] : minigames) {
-      MinigameEndedEvent(minigame_type, 0);
-    }
-    emit GameEnded(0);
+  auto progress = model_.GetProgress();
+  if (progress == 0 || progress >= constants::kScoreToFinish) {
+    FinishGame(progress);
   }
 }
 
@@ -138,6 +134,8 @@ void GameController::MinigameEndedEvent(MinigameType type, uint64_t score) {
           this,
           &GameController::MinigameEndedEvent);
 
+  SendMinigameEndedEvent(type, score);
+
   model_.AddScore(score);
   model_.DeleteMinigame(type);
 }
@@ -167,4 +165,37 @@ events::EventWrapper GameController::GetGameInfo(UserId player_id) const {
   event.set_allocated_server_event(server_event);
 
   return event;
+}
+
+void GameController::FinishGame(uint64_t score) {
+  auto minigames = model_.GetAllMinigames();
+  for (const auto& [minigame_type, minigame] : minigames) {
+    MinigameEndedEvent(minigame_type, 0);
+  }
+  emit GameEnded(score);
+}
+
+void GameController::SendMinigameEndedEvent(MinigameType type, uint64_t score) {
+  events::EventWrapper event;
+
+  auto* server_event = new server_events::ServerEventWrapper;
+
+  auto* game_response = new minigame_responses::MinigameResponse;
+  minigame_responses::MinigameResponse::Result result;
+  if (score == 0) {
+    result = minigame_responses::MinigameResponse::kFailed;
+  } else {
+    result = minigame_responses::MinigameResponse::kCompleted;
+  }
+  game_response->set_result(result);
+
+  server_event->set_allocated_game_response(game_response);
+
+  event.set_allocated_server_event(server_event);
+
+  const auto& players = model_.GetPlayersByMinigame().at(type);
+  for (const auto& player : players) {
+    server_event->set_receiver_id(player->GetId());
+    AddEventToSend(event);
+  }
 }

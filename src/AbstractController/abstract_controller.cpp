@@ -18,6 +18,20 @@ void AbstractController::StartTicking() {
 }
 
 void AbstractController::Tick() {
+  HandleAndSend();
+
+  this->OnTick();
+}
+
+void AbstractController::AddEventToHandle(const events::EventWrapper& event) {
+  events_to_handle_.push(event);
+}
+
+void AbstractController::AddEventToSend(const events::EventWrapper& event) {
+  events_to_send_.push(event);
+}
+
+void AbstractController::HandleAndSend() {
   while (!events_to_handle_.empty()) {
     auto& cur_event = events_to_handle_.front();
     this->Handle(cur_event);
@@ -31,14 +45,8 @@ void AbstractController::Tick() {
     cur_event.Clear();
     events_to_send_.pop();
   }
-
-  this->OnTick();
 }
 
-void AbstractController::AddEventToHandle(const events::EventWrapper& event) {
-  events_to_handle_.push(event);
-}
-
-void AbstractController::AddEventToSend(const events::EventWrapper& event) {
-  events_to_send_.push(event);
+void AbstractController::PrepareToClose() {
+  HandleAndSend();
 }

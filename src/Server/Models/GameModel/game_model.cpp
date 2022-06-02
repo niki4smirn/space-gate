@@ -76,6 +76,9 @@ std::vector<UserId> GameModel::GetFreePlayersIds() const {
 }
 
 void GameModel::DeleteMinigame(MinigameType type) {
+  auto& minigame = minigames_[type];
+  minigame->PrepareToClose();
+
   minigames_.erase(type);
 
   for (const auto& player : players_by_minigame_[type]) {

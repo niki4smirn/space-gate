@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.19)
 project(space-gate)
 
+
 set(CMAKE_CXX_FLAGS"{$CMAKE_CXX_FLAGS} -Wall")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=address,leak,undefined")
 
@@ -8,6 +9,8 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_CXX_STANDARD 20)
+
+set(CMAKE_PREFIX_PATH "~/Qt/5.15.2/gcc_64/lib/cmake")
 
 find_package(Qt5 COMPONENTS
         Core
@@ -17,6 +20,10 @@ find_package(Qt5 COMPONENTS
         WebSockets
         REQUIRED
         )
+
+include_directories(Buttons)
+include_directories(Bulbs)
+include_directories(Background)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
@@ -84,6 +91,9 @@ set(REQUIRED_QT_PARTS
 foreach (executable server; client)
     target_link_libraries(${executable} ${REQUIRED_QT_PARTS})
     target_link_libraries(${executable} protobuf::libprotobuf)
-    protobuf_generate(TARGET ${executable} PROTOC_OUT_DIR ../ PROTOS ${scheme_PROTOS})
+
+    protobuf_generate(TARGET ${executable}  PROTOC_OUT_DIR  ../ PROTOS  ${scheme_PROTOS})
+
+
 endforeach()
 

@@ -10,9 +10,14 @@ extern const int kTickTime;
 extern const int kKeyTickTime;
 
 extern const int kScoreToFinish;
-extern const int kMinigamesCount;
-extern const int kMinigamesAddingFrequency;
-extern const int kMaxMinigames;
+extern const int kMaxMinigamesCount;
+
+extern const int kMinigamesAddingTimeFrequency;
+extern const int kMinigamesAddingTickFrequency;
+extern const int kGameDecreaseTimeFrequency;
+extern const int kGameDecreaseTickFrequency;
+
+extern const int kStartAnimationDuration;
 
 }  // namespace constants
 

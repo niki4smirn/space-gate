@@ -73,6 +73,8 @@ std::vector<std::shared_ptr<User>> RoomModel::GetVectorOfUsers() const {
 }
 
 void RoomModel::DeleteGameController() {
+  game_controller_->PrepareToClose();
+
   game_controller_.reset();
 }
 

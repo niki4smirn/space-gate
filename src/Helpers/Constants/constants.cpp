@@ -2,7 +2,7 @@
 
 namespace constants {
 
-const QString kDefaultServerIp = "localhost";
+const QString kDefaultServerIp = "176.53.160.34";
 constexpr int kDefaultPort = 1337;
 constexpr int kTickTime = 50;
 constexpr int kKeyTickTime = 15;

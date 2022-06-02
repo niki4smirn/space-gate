@@ -23,10 +23,6 @@ RUN apt install -y qt515websockets
 RUN apt install -y qt515svg 
 RUN apt install -y protobuf-compiler
 
-RUN mkdir -p /root/SpaceGate/
-RUN mkdir 1
-WORKDIR /root/SpaceGate
-
 ARG SSH_PRIVATE_KEY
 RUN mkdir /root/.ssh/
 RUN echo "${SSH_PRIVATE_KEY}" > /root/.ssh/id_rsa
@@ -35,14 +31,14 @@ RUN chmod 400 /root/.ssh/id_rsa
 RUN touch /root/.ssh/known_hosts
 RUN ssh-keyscan github.com >> /root/.ssh/known_hosts
 
-RUN protoc --version
-
-RUN git init
-RUN git remote add origin git@github.com:niki4smirn/space-gate.git
-RUN git pull origin deployment
+WORKDIR root
+RUN git clone git@github.com:niki4smirn/space-gate.git
+WORKDIR space-gate
+RUN git checkout origin/deployment
 RUN mkdir cmake-build-release
-RUN cmake -S/root/SpaceGate -B /root/SpaceGate/cmake-build-release
-RUN cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_COMPILER=clang++ -G "CodeBlocks - Unix Makefiles" /root/SpaceGate/cmake-build-release
-RUN cmake --build /root/SpaceGate/cmake-build-release --target server -j 8
-WORKDIR /root/SpaceGate/cmake-build-release
+
+RUN cmake -S /root/space-gate -B /root/space-gate/cmake-build-release
+RUN cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_COMPILER=clang++ -G "CodeBlocks - Unix Makefiles" /root/space-gate/cmake-build-release
+RUN cmake --build /root/space-gate/cmake-build-release --target server -j 8
+WORKDIR /root/space-gate/cmake-build-release
 CMD ./server

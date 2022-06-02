@@ -30,6 +30,7 @@ MainWidget::MainWidget(QWidget* parent) : QWidget(parent) {
     green_bulb_blue_ = new QLabel(this);
     blue_bulb_blue_ = new QLabel(this);
     yellow_bulb_blue_ = new QLabel(this);
+    painter_ = new QPainter(this);
     SetButtonsSize();
     SetIcons();
     SetButtonsGeometry();
@@ -356,7 +357,7 @@ void MainWidget::SetTracking() {
 }
 
 void MainWidget::MiniGameChosen() {
-    int player_number = 4;
+    int player_number = 3;
     connect(green_button_, &QPushButton::clicked, this, [=] {
         if (player_number == 1) {
             QPixmap pixmap_yellow(":/home/ekkatrina_hottova/SpaceGatePics/Bulbs/yellow_bulb_on.png");
@@ -439,6 +440,24 @@ void MainWidget::MiniGameChosen() {
 
 
 }
+
+void MainWidget::paintEvent(QPaintEvent *event) {
+    QWidget::paintEvent(event);
+    painter_->begin(this);
+    painter_->setPen(QPen(Qt::green, 68));
+    painter_->drawLine(700, 86, 1130, 86);
+    painter_->end();
+}
+
+//void MainWidget::SetReady() {
+//    QPixmap pixmap_yel(":/home/ekkatrina_hottova/SpaceGatePics/Buttons/yellow_button_ready.png");
+//    pixmap_yel = pixmap_yel.scaled(yellow_button_->size());
+//    yellow_button_->setIcon(QIcon(pixmap_yel));
+//    yellow_button_->setIconSize(pixmap_yel.size());
+//    setMouseTracking(0);
+//}
+
+
 
 
 

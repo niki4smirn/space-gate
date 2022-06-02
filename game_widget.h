@@ -5,6 +5,7 @@
 #include "QImage"
 #include "QLabel"
 #include "QMainWindow"
+#include "QPainter"
 #include <QPicture>
 #include "QPixmap"
 #include <QPushButton>
@@ -39,6 +40,9 @@ private:
     QLabel* green_bulb_blue_;
     QLabel* blue_bulb_blue_;
     QLabel* yellow_bulb_blue_;
+    QPainter* painter_;
+
+private:
     void SetIcons();
     void SetButtonsGeometry();
     void SetButtonsSize();
@@ -50,6 +54,8 @@ private:
     void SetTracking();
     void mouseMoveEvent(QMouseEvent* event) override;
     void MiniGameChosen();
+    void paintEvent(QPaintEvent *event) override;
+//    void SetReady();
 };
 
 

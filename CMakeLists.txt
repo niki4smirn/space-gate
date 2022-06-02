@@ -72,6 +72,8 @@ add_executable(client
         ${SYSTEM_DEPENDENT_SOURCES}
         )
 
+set(CMAKE_PREFIX_PATH ${Qt_DIR})
+
 set(REQUIRED_QT_PARTS
         Qt::Core
         Qt::Gui

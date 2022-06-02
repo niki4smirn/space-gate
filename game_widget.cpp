@@ -357,7 +357,7 @@ void MainWidget::SetTracking() {
 }
 
 void MainWidget::MiniGameChosen() {
-    int player_number = 3;
+    int player_number = GetPlayerNumber();
     connect(green_button_, &QPushButton::clicked, this, [=] {
         if (player_number == 1) {
             QPixmap pixmap_yellow(":/home/ekkatrina_hottova/SpaceGatePics/Bulbs/yellow_bulb_on.png");
@@ -442,11 +442,31 @@ void MainWidget::MiniGameChosen() {
 }
 
 void MainWidget::paintEvent(QPaintEvent *event) {
+    double width = QApplication::screens()[0]->size().width();
+    double height = QApplication::screens()[0]->size().height();
+    int score = GetCurrentProgress();
+    int max_progress = GetMaxProgress();
+    double start_pos_x = width / 1920 * 700;
+    double end_pos_x = width / 1920 * 1130;
+    double point_length = (end_pos_x - start_pos_x) / max_progress;
     QWidget::paintEvent(event);
     painter_->begin(this);
     painter_->setPen(QPen(Qt::green, 68));
-    painter_->drawLine(700, 86, 1130, 86);
+    painter_->drawLine(start_pos_x,height / 1080 * 86,
+                       start_pos_x + point_length,height / 1080 * 86);
     painter_->end();
+}
+
+int MainWidget::GetMaxProgress() {
+    return 100;
+}
+
+int MainWidget::GetCurrentProgress() {
+    return 10;
+}
+
+int MainWidget::GetPlayerNumber() {
+    return 2;
 }
 
 //void MainWidget::SetReady() {

@@ -55,6 +55,9 @@ private:
     void mouseMoveEvent(QMouseEvent* event) override;
     void MiniGameChosen();
     void paintEvent(QPaintEvent *event) override;
+    int GetMaxProgress();
+    int GetCurrentProgress();
+    int GetPlayerNumber();
 //    void SetReady();
 };
 

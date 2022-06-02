@@ -48,31 +48,31 @@ MainWidget::~MainWidget() {
 }
 
 void MainWidget::SetIcons() {
-    QPixmap pixmap_yel(":/home/ekkatrina_hottova/SpaceGatePics/Buttons/yellow_button.png");
+    QPixmap pixmap_yel(":Buttons/yellow_button.png");
     pixmap_yel = pixmap_yel.scaled(yellow_button_->size());
     yellow_button_->setIcon(QIcon(pixmap_yel));
     yellow_button_->setIconSize(pixmap_yel.size());
     yellow_button_->setVisible(1);
 
-    QPixmap pixmap_gr(":/home/ekkatrina_hottova/SpaceGatePics/Buttons/green_button.png");
+    QPixmap pixmap_gr(":Buttons/green_button.png");
     pixmap_gr = pixmap_gr.scaled(green_button_->size());
     green_button_->setIcon(QIcon(pixmap_gr));
     green_button_->setIconSize(pixmap_gr.size());
     green_button_->setVisible(1);
 
-    QPixmap pixmap_bl(":/home/ekkatrina_hottova/SpaceGatePics/Buttons/blue_button.png");
+    QPixmap pixmap_bl(":Buttons/blue_button.png");
     pixmap_bl = pixmap_bl.scaled(blue_button_->size());
     blue_button_->setIcon(QIcon(pixmap_bl));
     blue_button_->setIconSize(pixmap_bl.size());
     blue_button_->setVisible(1);
 
-    QPixmap pixmap_pr(":/home/ekkatrina_hottova/SpaceGatePics/Buttons/purple_button.png");
+    QPixmap pixmap_pr(":Buttons/purple_button.png");
     pixmap_pr = pixmap_pr.scaled(purple_button_->size());
     purple_button_->setIcon(QIcon(pixmap_pr));
     purple_button_->setIconSize(QSize(pixmap_pr.size()));
     purple_button_->setVisible(1);
 
-    QPixmap pixmap_red(":/home/ekkatrina_hottova/SpaceGatePics/Buttons/red_button.png");
+    QPixmap pixmap_red(":Buttons/red_button.png");
     pixmap_red = pixmap_red.scaled(QSize(220, 175), Qt::IgnoreAspectRatio);
     red_button_->setIcon(QIcon(pixmap_red));
     red_button_->setIconSize(pixmap_red.size());
@@ -102,7 +102,7 @@ void MainWidget::SetButtonsGeometry() {
 }
 
 void MainWidget::SetBackground() {
-    QPixmap background(":/home/ekkatrina_hottova/SpaceGatePics/display.png");
+    QPixmap background(":Background/display.png");
     background = background.scaled(QApplication::screens()[0]->size(), Qt::IgnoreAspectRatio);
     QPalette palette;
     palette.setBrush(QPalette::Window, background);
@@ -111,65 +111,65 @@ void MainWidget::SetBackground() {
 
 void MainWidget::ButtonClicked() {
     connect(blue_button_, &QPushButton::pressed, this, [=] {
-        QPixmap pixmap_bl(":/home/ekkatrina_hottova/SpaceGatePics/Buttons/blue_button_clicked.png");
+        QPixmap pixmap_bl(":Buttons/blue_button_clicked.png");
         pixmap_bl = pixmap_bl.scaled(blue_button_->size());
         blue_button_->setIcon(QIcon(pixmap_bl));
         blue_button_->setIconSize(pixmap_bl.size());
     });
     connect(blue_button_, &QPushButton::released, this, [=] {
-        QPixmap pixmap_bl(":/home/ekkatrina_hottova/SpaceGatePics/Buttons/blue_button.png");
+        QPixmap pixmap_bl(":Buttons/blue_button.png");
         pixmap_bl = pixmap_bl.scaled(blue_button_->size());
         blue_button_->setIcon(QIcon(pixmap_bl));
         blue_button_->setIconSize(pixmap_bl.size());
     });
 
     connect(red_button_, &QPushButton::pressed, this, [=] {
-        QPixmap pixmap_red(":/home/ekkatrina_hottova/SpaceGatePics/Buttons/red_button_clicked.png");
+        QPixmap pixmap_red(":Buttons/red_button_clicked.png");
         pixmap_red = pixmap_red.scaled(red_button_->size());
         red_button_->setIcon(QIcon(pixmap_red));
         red_button_->setIconSize(pixmap_red.size());
     });
     connect(red_button_, &QPushButton::released, this, [=] {
-        QPixmap pixmap_red(":/home/ekkatrina_hottova/SpaceGatePics/Buttons/red_button.png");
+        QPixmap pixmap_red(":Buttons/red_button.png");
         pixmap_red = pixmap_red.scaled(red_button_->size());
         red_button_->setIcon(QIcon(pixmap_red));
         red_button_->setIconSize(pixmap_red.size());
     });
 
     connect(green_button_, &QPushButton::pressed, this, [=] {
-        QPixmap pixmap_gr(":/home/ekkatrina_hottova/SpaceGatePics/Buttons/green_button_clicked.png");
+        QPixmap pixmap_gr(":Buttons/green_button_clicked.png");
         pixmap_gr = pixmap_gr.scaled(green_button_->size());
         green_button_->setIcon(QIcon(pixmap_gr));
         green_button_->setIconSize(pixmap_gr.size());
     });
     connect(green_button_, &QPushButton::released, this, [=] {
-        QPixmap pixmap_gr(":/home/ekkatrina_hottova/SpaceGatePics/Buttons/green_button.png");
+        QPixmap pixmap_gr(":Buttons/green_button.png");
         pixmap_gr = pixmap_gr.scaled(green_button_->size());
         green_button_->setIcon(QIcon(pixmap_gr));
         green_button_->setIconSize(pixmap_gr.size());
     });
 
     connect(purple_button_, &QPushButton::pressed, this, [=] {
-        QPixmap pixmap_pr(":/home/ekkatrina_hottova/SpaceGatePics/Buttons/purple_button_clicked.png");
+        QPixmap pixmap_pr(":Buttons/purple_button_clicked.png");
         pixmap_pr = pixmap_pr.scaled(purple_button_->size());
         purple_button_->setIcon(QIcon(pixmap_pr));
         purple_button_->setIconSize(pixmap_pr.size());
     });
     connect(purple_button_, &QPushButton::released, this, [=] {
-        QPixmap pixmap_pr(":/home/ekkatrina_hottova/SpaceGatePics/Buttons/purple_button.png");
+        QPixmap pixmap_pr(":Buttons/purple_button.png");
         pixmap_pr = pixmap_pr.scaled(purple_button_->size());
         purple_button_->setIcon(QIcon(pixmap_pr));
         purple_button_->setIconSize(pixmap_pr.size());
     });
 
     connect(yellow_button_, &QPushButton::pressed, this, [=] {
-        QPixmap pixmap_yel(":/home/ekkatrina_hottova/SpaceGatePics/Buttons/yellow_button_clicked.png");
+        QPixmap pixmap_yel(":Buttons/yellow_button_clicked.png");
         pixmap_yel = pixmap_yel.scaled(yellow_button_->size());
         yellow_button_->setIcon(QIcon(pixmap_yel));
         yellow_button_->setIconSize(pixmap_yel.size());
     });
     connect(yellow_button_, &QPushButton::released, this, [=] {
-        QPixmap pixmap_yel(":/home/ekkatrina_hottova/SpaceGatePics/Buttons/yellow_button.png");
+        QPixmap pixmap_yel(":Buttons/yellow_button.png");
         pixmap_yel = pixmap_yel.scaled(yellow_button_->size());
         yellow_button_->setIcon(QIcon(pixmap_yel));
         yellow_button_->setIconSize(pixmap_yel.size());
@@ -177,28 +177,28 @@ void MainWidget::ButtonClicked() {
 }
 
 void MainWidget::SetBulbsIcons() {
-    QPixmap pixmap_yel(":/home/ekkatrina_hottova/SpaceGatePics/Bulbs/yellow_bulb_off.png");
+    QPixmap pixmap_yel(":Bulbs/yellow_bulb_off.png");
     pixmap_yel = pixmap_yel.scaled(yellow_bulb_red_->size());
     yellow_bulb_red_->setPixmap(pixmap_yel);
     yellow_bulb_purple_->setPixmap(pixmap_yel);
     yellow_bulb_green_->setPixmap(pixmap_yel);
     yellow_bulb_blue_->setPixmap(pixmap_yel);
 
-    QPixmap pixmap_bl(":/home/ekkatrina_hottova/SpaceGatePics/Bulbs/blue_bulb_off.png");
+    QPixmap pixmap_bl(":Bulbs/blue_bulb_off.png");
     pixmap_bl = pixmap_bl.scaled(blue_bulb_red_->size());
     blue_bulb_red_->setPixmap(pixmap_bl);
     blue_bulb_purple_->setPixmap(pixmap_bl);
     blue_bulb_green_->setPixmap(pixmap_bl);
     blue_bulb_blue_->setPixmap(pixmap_bl);
 
-    QPixmap pixmap_gr(":/home/ekkatrina_hottova/SpaceGatePics/Bulbs/green_bulb_off.png");
+    QPixmap pixmap_gr(":Bulbs/green_bulb_off.png");
     pixmap_gr = pixmap_gr.scaled(green_bulb_red_->size());
     green_bulb_red_->setPixmap(pixmap_gr);
     green_bulb_purple_->setPixmap(pixmap_gr);
     green_bulb_green_->setPixmap(pixmap_gr);
     green_bulb_blue_->setPixmap(pixmap_gr);
 
-    QPixmap pixmap_red(":/home/ekkatrina_hottova/SpaceGatePics/Bulbs/red_bulb_off.png");
+    QPixmap pixmap_red(":Bulbs/red_bulb_off.png");
     pixmap_red = pixmap_red.scaled(red_bulb_red_->size());
     red_bulb_red_->setPixmap(pixmap_red);
     red_bulb_purple_->setPixmap(pixmap_red);
@@ -287,60 +287,60 @@ void MainWidget::mouseMoveEvent(QMouseEvent* event) {
     double red_bottom = red_top + red_button_->size().height();
 
     if ((rx >= yel_left && rx <= yel_right) && (ry >= yel_top && ry <= yel_bottom)) {
-        QPixmap pixmap_yel(":/home/ekkatrina_hottova/SpaceGatePics/Buttons/yellow_button_pointed.png");
+        QPixmap pixmap_yel(":Buttons/yellow_button_pointed.png");
         pixmap_yel = pixmap_yel.scaled(yellow_button_->size());
         yellow_button_->setIcon(QIcon(pixmap_yel));
         yellow_button_->setIconSize(pixmap_yel.size());
     } else {
-        QPixmap pixmap_yel(":/home/ekkatrina_hottova/SpaceGatePics/Buttons/yellow_button.png");
+        QPixmap pixmap_yel(":Buttons/yellow_button.png");
         pixmap_yel = pixmap_yel.scaled(yellow_button_->size());
         yellow_button_->setIcon(QIcon(pixmap_yel));
         yellow_button_->setIconSize(pixmap_yel.size());
     }
 
     if ((rx >= blue_left && rx <= blue_right) && (ry >= blue_top && ry <= blue_bottom)) {
-        QPixmap pixmap_blue(":/home/ekkatrina_hottova/SpaceGatePics/Buttons/blue_button_pointed.png");
+        QPixmap pixmap_blue(":Buttons/blue_button_pointed.png");
         pixmap_blue = pixmap_blue.scaled(blue_button_->size());
         blue_button_->setIcon(QIcon(pixmap_blue));
         blue_button_->setIconSize(pixmap_blue.size());
     } else {
-        QPixmap pixmap_blue(":/home/ekkatrina_hottova/SpaceGatePics/Buttons/blue_button.png");
+        QPixmap pixmap_blue(":Buttons/blue_button.png");
         pixmap_blue = pixmap_blue.scaled(blue_button_->size());
         blue_button_->setIcon(QIcon(pixmap_blue));
         blue_button_->setIconSize(pixmap_blue.size());
     }
 
     if ((rx >= purple_left && rx <= purple_right) && (ry >= purple_top && ry <= purple_bottom)) {
-        QPixmap pixmap_pr(":/home/ekkatrina_hottova/SpaceGatePics/Buttons/purple_button_pointed.png");
+        QPixmap pixmap_pr(":Buttons/purple_button_pointed.png");
         pixmap_pr = pixmap_pr.scaled(purple_button_->size());
         purple_button_->setIcon(QIcon(pixmap_pr));
         purple_button_->setIconSize(pixmap_pr.size());
     } else {
-        QPixmap pixmap_pr(":/home/ekkatrina_hottova/SpaceGatePics/Buttons/purple_button.png");
+        QPixmap pixmap_pr(":Buttons/purple_button.png");
         pixmap_pr = pixmap_pr.scaled(purple_button_->size());
         purple_button_->setIcon(QIcon(pixmap_pr));
         purple_button_->setIconSize(pixmap_pr.size());
     }
 
     if ((rx >= green_left && rx <= green_right) && (ry >= green_top && ry <= green_bottom)) {
-        QPixmap pixmap_gr(":/home/ekkatrina_hottova/SpaceGatePics/Buttons/green_button_pointed.png");
+        QPixmap pixmap_gr(":Buttons/green_button_pointed.png");
         pixmap_gr = pixmap_gr.scaled(green_button_->size());
         green_button_->setIcon(QIcon(pixmap_gr));
         green_button_->setIconSize(pixmap_gr.size());
     } else {
-        QPixmap pixmap_gr(":/home/ekkatrina_hottova/SpaceGatePics/Buttons/green_button.png");
+        QPixmap pixmap_gr(":Buttons/green_button.png");
         pixmap_gr = pixmap_gr.scaled(green_button_->size());
         green_button_->setIcon(QIcon(pixmap_gr));
         green_button_->setIconSize(pixmap_gr.size());
     }
 
     if ((rx >= red_left && rx <= red_right) && (ry >= red_top && ry <= red_bottom)) {
-        QPixmap pixmap_red(":/home/ekkatrina_hottova/SpaceGatePics/Buttons/red_button_pointed.png");
+        QPixmap pixmap_red(":Buttons/red_button_pointed.png");
         pixmap_red = pixmap_red.scaled(red_button_->size());
         red_button_->setIcon(QIcon(pixmap_red));
         red_button_->setIconSize(pixmap_red.size());
     } else {
-        QPixmap pixmap_red(":/home/ekkatrina_hottova/SpaceGatePics/Buttons/red_button.png");
+        QPixmap pixmap_red(":Buttons/red_button.png");
         pixmap_red = pixmap_red.scaled(red_button_->size());
         red_button_->setIcon(QIcon(pixmap_red));
         red_button_->setIconSize(pixmap_red.size());
@@ -357,82 +357,81 @@ void MainWidget::SetTracking() {
 }
 
 void MainWidget::MiniGameChosen() {
-    int player_number = GetPlayerNumber();
     connect(green_button_, &QPushButton::clicked, this, [=] {
-        if (player_number == 1) {
-            QPixmap pixmap_yellow(":/home/ekkatrina_hottova/SpaceGatePics/Bulbs/yellow_bulb_on.png");
+        if (player_number_ == 1) {
+            QPixmap pixmap_yellow(":Bulbs/yellow_bulb_on.png");
             pixmap_yellow = pixmap_yellow.scaled(yellow_bulb_green_->size());
             yellow_bulb_green_->setPixmap(pixmap_yellow);
-        } else if (player_number == 2) {
-            QPixmap pixmap_gr(":/home/ekkatrina_hottova/SpaceGatePics/Bulbs/green_bulb_on.png");
+        } else if (player_number_ == 2) {
+            QPixmap pixmap_gr(":Bulbs/green_bulb_on.png");
             pixmap_gr = pixmap_gr.scaled(green_bulb_green_->size());
             green_bulb_green_->setPixmap(pixmap_gr);
-        } else if (player_number == 3) {
-            QPixmap pixmap_bl(":/home/ekkatrina_hottova/SpaceGatePics/Bulbs/blue_bulb_on.png");
+        } else if (player_number_ == 3) {
+            QPixmap pixmap_bl(":Bulbs/blue_bulb_on.png");
             pixmap_bl = pixmap_bl.scaled(blue_bulb_green_->size());
             blue_bulb_green_->setPixmap(pixmap_bl);
-        } else if (player_number == 4) {
-            QPixmap pixmap_red(":/home/ekkatrina_hottova/SpaceGatePics/Bulbs/red_bulb_on.png");
+        } else if (player_number_ == 4) {
+            QPixmap pixmap_red(":Bulbs/red_bulb_on.png");
             pixmap_red = pixmap_red.scaled(red_bulb_green_->size());
             red_bulb_green_->setPixmap(pixmap_red);
         }
     });
 
     connect(red_button_, &QPushButton::clicked, this, [=] {
-        if (player_number == 1) {
-            QPixmap pixmap_yellow(":/home/ekkatrina_hottova/SpaceGatePics/Bulbs/yellow_bulb_on.png");
+        if (player_number_ == 1) {
+            QPixmap pixmap_yellow(":Bulbs/yellow_bulb_on.png");
             pixmap_yellow = pixmap_yellow.scaled(yellow_bulb_red_->size());
             yellow_bulb_red_->setPixmap(pixmap_yellow);
-        } else if (player_number == 2) {
-            QPixmap pixmap_gr(":/home/ekkatrina_hottova/SpaceGatePics/Bulbs/green_bulb_on.png");
+        } else if (player_number_ == 2) {
+            QPixmap pixmap_gr(":Bulbs/green_bulb_on.png");
             pixmap_gr = pixmap_gr.scaled(green_bulb_red_->size());
             green_bulb_red_->setPixmap(pixmap_gr);
-        } else if (player_number == 3) {
-            QPixmap pixmap_bl(":/home/ekkatrina_hottova/SpaceGatePics/Bulbs/blue_bulb_on.png");
+        } else if (player_number_ == 3) {
+            QPixmap pixmap_bl(":Bulbs/blue_bulb_on.png");
             pixmap_bl = pixmap_bl.scaled(blue_bulb_red_->size());
             blue_bulb_red_->setPixmap(pixmap_bl);
-        } else if (player_number == 4) {
-            QPixmap pixmap_red(":/home/ekkatrina_hottova/SpaceGatePics/Bulbs/red_bulb_on.png");
+        } else if (player_number_ == 4) {
+            QPixmap pixmap_red(":Bulbs/red_bulb_on.png");
             pixmap_red = pixmap_red.scaled(red_bulb_red_->size());
             red_bulb_red_->setPixmap(pixmap_red);
         }
     });
 
     connect(purple_button_, &QPushButton::clicked, this, [=] {
-        if (player_number == 1) {
-            QPixmap pixmap_yellow(":/home/ekkatrina_hottova/SpaceGatePics/Bulbs/yellow_bulb_on.png");
+        if (player_number_ == 1) {
+            QPixmap pixmap_yellow(":Bulbs/yellow_bulb_on.png");
             pixmap_yellow = pixmap_yellow.scaled(yellow_bulb_purple_->size());
             yellow_bulb_purple_->setPixmap(pixmap_yellow);
-        } else if (player_number == 2) {
-            QPixmap pixmap_gr(":/home/ekkatrina_hottova/SpaceGatePics/Bulbs/green_bulb_on.png");
+        } else if (player_number_ == 2) {
+            QPixmap pixmap_gr(":Bulbs/green_bulb_on.png");
             pixmap_gr = pixmap_gr.scaled(green_bulb_purple_->size());
             green_bulb_purple_->setPixmap(pixmap_gr);
-        } else if (player_number == 3) {
-            QPixmap pixmap_bl(":/home/ekkatrina_hottova/SpaceGatePics/Bulbs/blue_bulb_on.png");
+        } else if (player_number_ == 3) {
+            QPixmap pixmap_bl(":Bulbs/blue_bulb_on.png");
             pixmap_bl = pixmap_bl.scaled(blue_bulb_purple_->size());
             blue_bulb_purple_->setPixmap(pixmap_bl);
-        } else if (player_number == 4) {
-            QPixmap pixmap_red(":/home/ekkatrina_hottova/SpaceGatePics/Bulbs/red_bulb_on.png");
+        } else if (player_number_ == 4) {
+            QPixmap pixmap_red(":Bulbs/red_bulb_on.png");
             pixmap_red = pixmap_red.scaled(red_bulb_purple_->size());
             red_bulb_purple_->setPixmap(pixmap_red);
         }
     });
 
     connect(blue_button_, &QPushButton::clicked, this, [=] {
-        if (player_number == 1) {
-            QPixmap pixmap_yellow(":/home/ekkatrina_hottova/SpaceGatePics/Bulbs/yellow_bulb_on.png");
+        if (player_number_ == 1) {
+            QPixmap pixmap_yellow(":Bulbs/yellow_bulb_on.png");
             pixmap_yellow = pixmap_yellow.scaled(yellow_bulb_blue_->size());
             yellow_bulb_blue_->setPixmap(pixmap_yellow);
-        } else if (player_number == 2) {
-            QPixmap pixmap_gr(":/home/ekkatrina_hottova/SpaceGatePics/Bulbs/green_bulb_on.png");
+        } else if (player_number_ == 2) {
+            QPixmap pixmap_gr(":Bulbs/green_bulb_on.png");
             pixmap_gr = pixmap_gr.scaled(green_bulb_blue_->size());
             green_bulb_blue_->setPixmap(pixmap_gr);
-        } else if (player_number == 3) {
-            QPixmap pixmap_bl(":/home/ekkatrina_hottova/SpaceGatePics/Bulbs/blue_bulb_on.png");
+        } else if (player_number_ == 3) {
+            QPixmap pixmap_bl(":Bulbs/blue_bulb_on.png");
             pixmap_bl = pixmap_bl.scaled(blue_bulb_blue_->size());
             blue_bulb_blue_->setPixmap(pixmap_bl);
-        } else if (player_number == 4) {
-            QPixmap pixmap_red(":/home/ekkatrina_hottova/SpaceGatePics/Bulbs/red_bulb_on.png");
+        } else if (player_number_ == 4) {
+            QPixmap pixmap_red(":Bulbs/red_bulb_on.png");
             pixmap_red = pixmap_red.scaled(red_bulb_blue_->size());
             red_bulb_blue_->setPixmap(pixmap_red);
         }
@@ -442,40 +441,33 @@ void MainWidget::MiniGameChosen() {
 }
 
 void MainWidget::paintEvent(QPaintEvent *event) {
-    double width = QApplication::screens()[0]->size().width();
-    double height = QApplication::screens()[0]->size().height();
-    int score = GetCurrentProgress();
-    int max_progress = GetMaxProgress();
-    double start_pos_x = width / 1920 * 700;
-    double end_pos_x = width / 1920 * 1130;
-    double point_length = (end_pos_x - start_pos_x) / max_progress;
-    QWidget::paintEvent(event);
-    painter_->begin(this);
-    painter_->setPen(QPen(Qt::green, 68));
-    painter_->drawLine(start_pos_x,height / 1080 * 86,
-                       start_pos_x + point_length,height / 1080 * 86);
-    painter_->end();
+    if (progress_ != 0) {
+        double width = QApplication::screens()[0]->size().width();
+        double height = QApplication::screens()[0]->size().height();
+
+        double start_pos_x = width / 1920 * 700;
+        double end_pos_x = width / 1920 * 1130;
+        double point_length = (end_pos_x - start_pos_x) / max_progress_;
+        QWidget::paintEvent(event);
+        painter_->begin(this);
+        painter_->setPen(QPen(Qt::green, 68));
+        painter_->drawLine(start_pos_x, height / 1080 * 86,
+                           start_pos_x + point_length * progress_, height / 1080 * 86);
+        painter_->end();
+    }
 }
 
-int MainWidget::GetMaxProgress() {
-    return 100;
+void MainWidget::SetProgress(int progress, int max_progress) {
+    progress_ = progress;
+    max_progress_ = max_progress;
 }
 
-int MainWidget::GetCurrentProgress() {
-    return 10;
+void MainWidget::SetPlayerNumber(int player_number) {
+    player_number_ = player_number;
 }
 
-int MainWidget::GetPlayerNumber() {
-    return 2;
-}
 
-//void MainWidget::SetReady() {
-//    QPixmap pixmap_yel(":/home/ekkatrina_hottova/SpaceGatePics/Buttons/yellow_button_ready.png");
-//    pixmap_yel = pixmap_yel.scaled(yellow_button_->size());
-//    yellow_button_->setIcon(QIcon(pixmap_yel));
-//    yellow_button_->setIconSize(pixmap_yel.size());
-//    setMouseTracking(0);
-//}
+
 
 
 

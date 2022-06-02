@@ -41,6 +41,9 @@ private:
     QLabel* blue_bulb_blue_;
     QLabel* yellow_bulb_blue_;
     QPainter* painter_;
+    int progress_;
+    int max_progress_;
+    int player_number_;
 
 private:
     void SetIcons();
@@ -55,10 +58,8 @@ private:
     void mouseMoveEvent(QMouseEvent* event) override;
     void MiniGameChosen();
     void paintEvent(QPaintEvent *event) override;
-    int GetMaxProgress();
-    int GetCurrentProgress();
-    int GetPlayerNumber();
-//    void SetReady();
+    void SetProgress(int progress, int max_progress);
+    void SetPlayerNumber(int player_number);
 };
 
 

@@ -51,6 +51,7 @@ class GameModel : public QObject {
                      GetAllMinigames() const;
 
   void SetProgress(uint64_t progress);
+  int GetPlayersCount() const;
 
  signals:
   void SendGameInfo();

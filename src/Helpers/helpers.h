@@ -9,11 +9,10 @@ namespace helpers {
 
 uint64_t GetMinigamePlayersCountByType(MinigameType type);
 
-
 class Range {
  public:
-  template<typename T>
-  Range(T left, T right);
+  template<typename T1, typename T2>
+  Range(T1 left, T2 right);
 
   int32_t GetLeftInclusive() const;
   int32_t GetRightInclusive() const;
@@ -27,8 +26,8 @@ class Range {
   int32_t right_;
 };
 
-template<typename T>
-Range::Range(T left, T right) :
+template<typename T1, typename T2>
+Range::Range(T1 left, T2 right) :
   left_(static_cast<int32_t>(left)),
   right_(static_cast<int32_t>(right)) {}
 
@@ -42,3 +41,10 @@ T GetRandomInRange(const Range& range) {
 }  // namespace helpers
 
 QDebug& operator<<(QDebug& os, const std::string& string);
+
+// loop for [begin, end)
+#define ENUM_LOOP(begin, end, element) \
+                            decltype(begin) (element); \
+                            for(int _ = static_cast<int>(begin); \
+                            _ < static_cast<int>(end);           \
+                            ++_, (element) = static_cast<decltype(begin)>(_))

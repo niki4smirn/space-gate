@@ -128,10 +128,18 @@ void ServerController::Handle(const events::EventWrapper& event) {
     }
     case client_events::EventToServer::kEnterRoom: {
       auto room_id = event_to_server.enter_room().room_id();
-      if (server_model_.ExistsRoom(room_id) &&
-          !server_model_.IsInSomeRoom(user_id)) {
-        server_model_.AddUserToRoom(user_id, room_id);
+      if (!server_model_.ExistsRoom(room_id)) {
+        break;
       }
+      auto room = server_model_.GetRoomById(room_id);
+      if (room->IsInGame() ||
+          room->GetPlayersCount() >= constants::kMaxRoomPlayersCount) {
+        break;
+      }
+      if (server_model_.IsInSomeRoom(user_id)) {
+        break;
+      }
+      server_model_.AddUserToRoom(user_id, room_id);
       break;
     }
     case client_events::EventToServer::kLeaveRoom: {
@@ -153,7 +161,10 @@ void ServerController::SendEventToRoom(
 void ServerController::SendRoomsListEvent() {
   auto* rooms_list = new server_events::RoomsList;
   for (const auto& [room_id, room_ptr] : server_model_.GetRooms()) {
-    rooms_list->add_ids(room_id);
+    if (!room_ptr->IsInGame() &&
+        room_ptr->GetPlayersCount() < constants::kMaxRoomPlayersCount) {
+      rooms_list->add_ids(room_id);
+    }
   }
   auto* server_event = new server_events::ServerEventWrapper;
   server_event->set_allocated_rooms_list(rooms_list);

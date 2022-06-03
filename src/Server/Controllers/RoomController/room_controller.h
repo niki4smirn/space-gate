@@ -13,6 +13,9 @@ class RoomController : public AbstractController {
   void DeleteUser(UserId id);
 
   bool IsEmpty() const;
+  bool IsInGame() const;
+
+  int GetPlayersCount() const;
 
   void SendEventToGame(const events::EventWrapper& event);
 

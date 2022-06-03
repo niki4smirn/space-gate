@@ -8,7 +8,7 @@ NetworkProblemWidget::NetworkProblemWidget(QWidget* parent) :
     interface_(new QWidget(this)),
     interface_layout_(new QGridLayout()),
     text_(new QLabel("Network problems", this)),
-    reconnect_button_(new QPushButton("Reconnect",this)) {
+    reconnect_button_(new QPushButton("Reconnect", this)) {
   QString family =
       QFontDatabase::applicationFontFamilies(QFontDatabase::addApplicationFont(
           "../Resources/Fonts/Paladins.otf")).at(0);

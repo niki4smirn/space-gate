@@ -10,11 +10,6 @@ ClientController::ClientController(const QUrl& url) :
           &ClientController::OnDisconnect);
   connect(&socket_, &QWebSocket::binaryMessageReceived, this,
           &ClientController::OnByteArrayReceived);
-  connect(&socket_, QOverload<QAbstractSocket::SocketError>::of(
-      &QWebSocket::error), [&](QAbstractSocket::SocketError error) {
-    LOG << error;
-    OnDisconnect();
-  });
   ConnectToServer();
   StartTicking();
   ConnectView();

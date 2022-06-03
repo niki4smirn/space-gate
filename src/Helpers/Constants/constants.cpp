@@ -15,6 +15,7 @@ constexpr int kGameDecreaseTimeFrequency = 2000;
 constexpr int kGameDecreaseTickFrequency =
     kGameDecreaseTimeFrequency / kTickTime;
 constexpr int kMaxMinigamesCount = 4;
+constexpr int kMaxRoomPlayersCount = 4;
 
 constexpr int kStartAnimationDuration = 5000;
 

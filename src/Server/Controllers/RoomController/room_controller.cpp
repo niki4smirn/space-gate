@@ -63,7 +63,9 @@ void RoomController::Handle(const events::EventWrapper& event) {
       break;
     }
     case client_events::EventToRoom::kStartGame: {
-      if (user_id != room_model_.GetChiefId() || !IsEverybodyReady()) {
+      if (user_id != room_model_.GetChiefId() ||
+          !IsEverybodyReady() ||
+          GetPlayersCount() == 1) {
         break;
       }
       SendStartGameEvent();
@@ -73,6 +75,7 @@ void RoomController::Handle(const events::EventWrapper& event) {
               this, &RoomController::GameEndedEvent);
 
       room_model_.SetGameController(std::move(controller));
+      emit SendRoomsList();
       break;
     }
     default: {}
@@ -153,4 +156,12 @@ void RoomController::SendEventToGame(const events::EventWrapper& event) {
   if (game_controller) {
     game_controller->AddEventToHandle(event);
   }
+}
+
+bool RoomController::IsInGame() const {
+  return room_model_.HasGameController();
+}
+
+int RoomController::GetPlayersCount() const {
+  return room_model_.GetUsers().size();
 }

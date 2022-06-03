@@ -73,7 +73,7 @@ add_executable(client
         src/Client/View/GameWidget/game_widget.cpp
         src/Client/View/GameWidget/MainGameWidget/main_game_widget.cpp
         src/Client/View/GameWidget/WaitingScreen/waiting_screen.cpp
-        src/final_screen.cpp
+        src/Client/View/FinalScreen/final_screen.cpp
         )
 
 set(REQUIRED_QT_PARTS

@@ -5,6 +5,7 @@ ClientView::ClientView() :
     stacked_widget_(new QStackedWidget(this)),
     main_menu_(new ClientMainMenu(this)),
     game_widget_(new GameWidget(this)),
+    final_screen_(new FinalScreen(this)),
     input_controller_(new InputController) {
   AddWidgets();
   stacked_widget_->setCurrentWidget(main_menu_);
@@ -14,6 +15,7 @@ ClientView::ClientView() :
   setMouseTracking(true);
   stacked_widget_->setMouseTracking(true);
   main_menu_->setMouseTracking(true);
+  ShowFinalScreen();
 }
 
 void ClientView::mouseMoveEvent(QMouseEvent* event) {
@@ -58,11 +60,19 @@ void ClientView::Connect() {
   connect(game_widget_, &GameWidget::LeaveMinigame, [&]() {
     emit LeaveMinigame();
   });
+  connect(final_screen_, &FinalScreen::MenuPressed, [this]() {
+    stacked_widget_->setCurrentWidget(main_menu_);
+  });
+  connect(final_screen_, &FinalScreen::LobbyPressed, [this]() {
+    stacked_widget_->setCurrentWidget(main_menu_);
+  });
+
 }
 
 void ClientView::AddWidgets() {
   stacked_widget_->addWidget(main_menu_);
   stacked_widget_->addWidget(game_widget_);
+  stacked_widget_->addWidget(final_screen_);
 }
 
 void ClientView::UpdateRoomInfoMenu(
@@ -108,3 +118,7 @@ void ClientView::UpdateMinigame(
     const server_events::MinigameInfo& minigame_info) {
   LOG << "Update Minigame";
 }
+void ClientView::ShowFinalScreen() {
+  stacked_widget_->setCurrentWidget(final_screen_);
+}
+

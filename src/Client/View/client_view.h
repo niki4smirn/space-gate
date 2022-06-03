@@ -4,6 +4,7 @@
 #include "src/Client/InputController/input_controller.h"
 #include "src/Server/Models/RoomModel/room_model.h"
 #include "src/Client/View/GameWidget/game_widget.h"
+#include "src/Client/View/FinalScreen/final_screen.h"
 
 #include <QWidget>
 #include <QStackedWidget>
@@ -30,11 +31,13 @@ class ClientView : public QMainWindow {
   void keyPressEvent(QKeyEvent* event) override;
   void mousePressEvent(QMouseEvent* event) override;
   void mouseReleaseEvent(QMouseEvent* event) override;
+  void ShowFinalScreen();
 
  private:
   std::unique_ptr<InputController> input_controller_;
   ClientMainMenu* main_menu_;
   GameWidget* game_widget_;
+  FinalScreen* final_screen_;
   QStackedWidget* stacked_widget_;
 
  signals:

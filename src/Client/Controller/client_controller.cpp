@@ -127,7 +127,9 @@ void ClientController::ConnectView() {
           &ClientView::JoinMinigame,
           [&](int minigame_menu_pos) {
             int minigame_id = MinigameIdByPos(minigame_menu_pos);
-            SendJoinMinigame(minigame_id);
+            if (minigame_id != 0) {
+              SendJoinMinigame(minigame_id);
+            }
   });
   connect(view_,
           &ClientView::LeaveMinigame,

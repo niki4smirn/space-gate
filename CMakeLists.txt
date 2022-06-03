@@ -21,9 +21,9 @@ find_package(Qt5 COMPONENTS
         REQUIRED
         )
 
-include_directories(Buttons)
-include_directories(Bulbs)
-include_directories(Background)
+include_directories(Resources/Images/Buttons)
+include_directories(Resources/Images/Bulbs)
+include_directories(Resources/Images/Background)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
@@ -78,7 +78,7 @@ add_executable(client
         src/Client/InputController/input_controller.cpp
         ${SYSTEM_DEPENDENT_SOURCES}
         src/Client/View/FinalGameWidget/game_widget.cpp
-        resources.qrc
+        Resources/Images/resources.qrc
 #        src/Client/View/GameWidget/game_widget.cpp
         src/Client/View/GameWidget/MainGameWidget/main_game_widget.cpp
         src/Client/View/GameWidget/WaitingScreen/waiting_screen.cpp

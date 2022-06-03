@@ -67,10 +67,9 @@ class GameWidget : public QWidget {
   QLabel* green_bulb_blue_;
   QLabel* blue_bulb_blue_;
   QLabel* yellow_bulb_blue_;
-  QPainter* painter_;
   QTimer* shining_timer_;
   QTimer* loss_timer_;
-  QPixmap main_image_;
+  QPixmap* main_image_;
   QPixmap* images_shining[2];
   QPixmap* images_crack[6];
   int progress_ = 0;

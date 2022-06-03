@@ -3,7 +3,9 @@
 #include "src/Helpers/logging.h"
 
 #include <QApplication>
+#include <QDesktopWidget>
 #include <QScreen>
+#include <QBrush>
 
 GameWidget::GameWidget(QWidget* parent) : QWidget(parent) {
   if (parent) {
@@ -30,9 +32,8 @@ GameWidget::GameWidget(QWidget* parent) : QWidget(parent) {
   green_bulb_blue_ = new QLabel(this);
   blue_bulb_blue_ = new QLabel(this);
   yellow_bulb_blue_ = new QLabel(this);
-  painter_ = new QPainter(this);
   loss_timer_ = new QTimer(this);
-  loss_timer_->setInterval(1500);
+  loss_timer_->setInterval(500);
   loss_timer_->setSingleShot(0);
   shining_timer_ = new QTimer(this);
   shining_timer_->setInterval(300);
@@ -43,7 +44,6 @@ GameWidget::GameWidget(QWidget* parent) : QWidget(parent) {
   SetButtonsGeometry();
   SetMainAnimations();
   SetCrackAnimation();
-  SetBackground();
   ButtonClicked();
   SetBulbsSize();
   SetBulbsIcons();
@@ -52,7 +52,11 @@ GameWidget::GameWidget(QWidget* parent) : QWidget(parent) {
   MiniGameChosen();
   BackgroundShines();
   Loss();
-//    SetProgress(50,100);
+
+  // QTimer::singleShot(6000, [&](){
+  //   EndGame();
+  // });
+  // SetProgress(50,100);
 }
 
 void GameWidget::SetIcons() {
@@ -107,15 +111,6 @@ void GameWidget::SetButtonsGeometry() {
   red_button_->setGeometry(width / 1920 * 472, height / 1080 * 878, 1, 1);
   yellow_button_->setGeometry(width / 1920 * 727, height / 1080 * 810, 1, 1);
   purple_button_->setGeometry(width / 1920 * 1080, height / 1080 * 885, 1, 1);
-}
-
-void GameWidget::SetBackground() {
-  QPixmap background = main_image_;
-  background = background.scaled(QApplication::screens()[0]->size(),
-                                 Qt::IgnoreAspectRatio);
-  QPalette palette;
-  palette.setBrush(QPalette::Window, background);
-  this->setPalette(palette);
 }
 
 void GameWidget::ButtonClicked() {
@@ -387,90 +382,97 @@ void GameWidget::SetTracking() {
 }
 
 void GameWidget::MiniGameChosen() {
-  connect(green_button_, &QPushButton::clicked, this, [&] {
-    if (player_number_ == 1) {
-      QPixmap pixmap_yellow(":Bulbs/yellow_bulb_on.png");
-      pixmap_yellow = pixmap_yellow.scaled(yellow_bulb_green_->size());
-      yellow_bulb_green_->setPixmap(pixmap_yellow);
-    } else if (player_number_ == 2) {
-      QPixmap pixmap_gr(":Bulbs/green_bulb_on.png");
-      pixmap_gr = pixmap_gr.scaled(green_bulb_green_->size());
-      green_bulb_green_->setPixmap(pixmap_gr);
-    } else if (player_number_ == 3) {
-      QPixmap pixmap_bl(":Bulbs/blue_bulb_on.png");
-      pixmap_bl = pixmap_bl.scaled(blue_bulb_green_->size());
-      blue_bulb_green_->setPixmap(pixmap_bl);
-    } else if (player_number_ == 4) {
-      QPixmap pixmap_red(":Bulbs/red_bulb_on.png");
-      pixmap_red = pixmap_red.scaled(red_bulb_green_->size());
-      red_bulb_green_->setPixmap(pixmap_red);
-    }
-  });
-
-  connect(red_button_, &QPushButton::clicked, this, [&] {
-    if (player_number_ == 1) {
-      QPixmap pixmap_yellow(":Bulbs/yellow_bulb_on.png");
-      pixmap_yellow = pixmap_yellow.scaled(yellow_bulb_red_->size());
-      yellow_bulb_red_->setPixmap(pixmap_yellow);
-    } else if (player_number_ == 2) {
-      QPixmap pixmap_gr(":Bulbs/green_bulb_on.png");
-      pixmap_gr = pixmap_gr.scaled(green_bulb_red_->size());
-      green_bulb_red_->setPixmap(pixmap_gr);
-    } else if (player_number_ == 3) {
-      QPixmap pixmap_bl(":Bulbs/blue_bulb_on.png");
-      pixmap_bl = pixmap_bl.scaled(blue_bulb_red_->size());
-      blue_bulb_red_->setPixmap(pixmap_bl);
-    } else if (player_number_ == 4) {
-      QPixmap pixmap_red(":Bulbs/red_bulb_on.png");
-      pixmap_red = pixmap_red.scaled(red_bulb_red_->size());
-      red_bulb_red_->setPixmap(pixmap_red);
-    }
-  });
-
-  connect(purple_button_, &QPushButton::clicked, this, [&] {
-    if (player_number_ == 1) {
-      QPixmap pixmap_yellow(":Bulbs/yellow_bulb_on.png");
-      pixmap_yellow = pixmap_yellow.scaled(yellow_bulb_purple_->size());
-      yellow_bulb_purple_->setPixmap(pixmap_yellow);
-    } else if (player_number_ == 2) {
-      QPixmap pixmap_gr(":Bulbs/green_bulb_on.png");
-      pixmap_gr = pixmap_gr.scaled(green_bulb_purple_->size());
-      green_bulb_purple_->setPixmap(pixmap_gr);
-    } else if (player_number_ == 3) {
-      QPixmap pixmap_bl(":Bulbs/blue_bulb_on.png");
-      pixmap_bl = pixmap_bl.scaled(blue_bulb_purple_->size());
-      blue_bulb_purple_->setPixmap(pixmap_bl);
-    } else if (player_number_ == 4) {
-      QPixmap pixmap_red(":Bulbs/red_bulb_on.png");
-      pixmap_red = pixmap_red.scaled(red_bulb_purple_->size());
-      red_bulb_purple_->setPixmap(pixmap_red);
-    }
-  });
-
-  connect(blue_button_, &QPushButton::clicked, this, [&] {
-    if (player_number_ == 1) {
-      QPixmap pixmap_yellow(":Bulbs/yellow_bulb_on.png");
-      pixmap_yellow = pixmap_yellow.scaled(yellow_bulb_blue_->size());
-      yellow_bulb_blue_->setPixmap(pixmap_yellow);
-    } else if (player_number_ == 2) {
-      QPixmap pixmap_gr(":Bulbs/green_bulb_on.png");
-      pixmap_gr = pixmap_gr.scaled(green_bulb_blue_->size());
-      green_bulb_blue_->setPixmap(pixmap_gr);
-    } else if (player_number_ == 3) {
-      QPixmap pixmap_bl(":Bulbs/blue_bulb_on.png");
-      pixmap_bl = pixmap_bl.scaled(blue_bulb_blue_->size());
-      blue_bulb_blue_->setPixmap(pixmap_bl);
-    } else if (player_number_ == 4) {
-      QPixmap pixmap_red(":Bulbs/red_bulb_on.png");
-      pixmap_red = pixmap_red.scaled(red_bulb_blue_->size());
-      red_bulb_blue_->setPixmap(pixmap_red);
-    }
-  });
+  // connect(green_button_, &QPushButton::clicked, this, [&] {
+  //   if (player_number_ == 1) {
+  //     QPixmap pixmap_yellow(":Bulbs/yellow_bulb_on.png");
+  //     pixmap_yellow = pixmap_yellow.scaled(yellow_bulb_green_->size());
+  //     yellow_bulb_green_->setPixmap(pixmap_yellow);
+  //   } else if (player_number_ == 2) {
+  //     QPixmap pixmap_gr(":Bulbs/green_bulb_on.png");
+  //     pixmap_gr = pixmap_gr.scaled(green_bulb_green_->size());
+  //     green_bulb_green_->setPixmap(pixmap_gr);
+  //   } else if (player_number_ == 3) {
+  //     QPixmap pixmap_bl(":Bulbs/blue_bulb_on.png");
+  //     pixmap_bl = pixmap_bl.scaled(blue_bulb_green_->size());
+  //     blue_bulb_green_->setPixmap(pixmap_bl);
+  //   } else if (player_number_ == 4) {
+  //     QPixmap pixmap_red(":Bulbs/red_bulb_on.png");
+  //     pixmap_red = pixmap_red.scaled(red_bulb_green_->size());
+  //     red_bulb_green_->setPixmap(pixmap_red);
+  //   }
+  // });
+  //
+  // connect(red_button_, &QPushButton::clicked, this, [&] {
+  //   if (player_number_ == 1) {
+  //     QPixmap pixmap_yellow(":Bulbs/yellow_bulb_on.png");
+  //     pixmap_yellow = pixmap_yellow.scaled(yellow_bulb_red_->size());
+  //     yellow_bulb_red_->setPixmap(pixmap_yellow);
+  //   } else if (player_number_ == 2) {
+  //     QPixmap pixmap_gr(":Bulbs/green_bulb_on.png");
+  //     pixmap_gr = pixmap_gr.scaled(green_bulb_red_->size());
+  //     green_bulb_red_->setPixmap(pixmap_gr);
+  //   } else if (player_number_ == 3) {
+  //     QPixmap pixmap_bl(":Bulbs/blue_bulb_on.png");
+  //     pixmap_bl = pixmap_bl.scaled(blue_bulb_red_->size());
+  //     blue_bulb_red_->setPixmap(pixmap_bl);
+  //   } else if (player_number_ == 4) {
+  //     QPixmap pixmap_red(":Bulbs/red_bulb_on.png");
+  //     pixmap_red = pixmap_red.scaled(red_bulb_red_->size());
+  //     red_bulb_red_->setPixmap(pixmap_red);
+  //   }
+  // });
+  //
+  // connect(purple_button_, &QPushButton::clicked, this, [&] {
+  //   if (player_number_ == 1) {
+  //     QPixmap pixmap_yellow(":Bulbs/yellow_bulb_on.png");
+  //     pixmap_yellow = pixmap_yellow.scaled(yellow_bulb_purple_->size());
+  //     yellow_bulb_purple_->setPixmap(pixmap_yellow);
+  //   } else if (player_number_ == 2) {
+  //     QPixmap pixmap_gr(":Bulbs/green_bulb_on.png");
+  //     pixmap_gr = pixmap_gr.scaled(green_bulb_purple_->size());
+  //     green_bulb_purple_->setPixmap(pixmap_gr);
+  //   } else if (player_number_ == 3) {
+  //     QPixmap pixmap_bl(":Bulbs/blue_bulb_on.png");
+  //     pixmap_bl = pixmap_bl.scaled(blue_bulb_purple_->size());
+  //     blue_bulb_purple_->setPixmap(pixmap_bl);
+  //   } else if (player_number_ == 4) {
+  //     QPixmap pixmap_red(":Bulbs/red_bulb_on.png");
+  //     pixmap_red = pixmap_red.scaled(red_bulb_purple_->size());
+  //     red_bulb_purple_->setPixmap(pixmap_red);
+  //   }
+  // });
+  //
+  // connect(blue_button_, &QPushButton::clicked, this, [&] {
+  //   if (player_number_ == 1) {
+  //     QPixmap pixmap_yellow(":Bulbs/yellow_bulb_on.png");
+  //     pixmap_yellow = pixmap_yellow.scaled(yellow_bulb_blue_->size());
+  //     yellow_bulb_blue_->setPixmap(pixmap_yellow);
+  //   } else if (player_number_ == 2) {
+  //     QPixmap pixmap_gr(":Bulbs/green_bulb_on.png");
+  //     pixmap_gr = pixmap_gr.scaled(green_bulb_blue_->size());
+  //     green_bulb_blue_->setPixmap(pixmap_gr);
+  //   } else if (player_number_ == 3) {
+  //     QPixmap pixmap_bl(":Bulbs/blue_bulb_on.png");
+  //     pixmap_bl = pixmap_bl.scaled(blue_bulb_blue_->size());
+  //     blue_bulb_blue_->setPixmap(pixmap_bl);
+  //   } else if (player_number_ == 4) {
+  //     QPixmap pixmap_red(":Bulbs/red_bulb_on.png");
+  //     pixmap_red = pixmap_red.scaled(red_bulb_blue_->size());
+  //     red_bulb_blue_->setPixmap(pixmap_red);
+  //   }
+  // });
 
 }
 
 void GameWidget::paintEvent(QPaintEvent* event) {
   QWidget::paintEvent(event);
+  QPainter painter(this);
+  QPixmap background = *main_image_;
+  background = background.scaled(QApplication::screens()[0]->size(),
+                                 Qt::IgnoreAspectRatio);
+  QBrush brush(Qt::TexturePattern, background);
+  painter.setBrush(brush);
+  painter.drawRect(QApplication::desktop()->rect());
   if (progress_ != 0) {
     double width = QApplication::screens()[0]->size().width();
     double height = QApplication::screens()[0]->size().height();
@@ -478,14 +480,11 @@ void GameWidget::paintEvent(QPaintEvent* event) {
     double start_pos_x = width / 1920 * 700;
     double end_pos_x = width / 1920 * 1130;
     double point_length = (end_pos_x - start_pos_x) / max_progress_;
-    QWidget::paintEvent(event);
-    painter_->begin(this);
-    painter_->setPen(QPen(Qt::green, 68));
-    painter_->drawLine(start_pos_x,
+    painter.setPen(QPen(Qt::green, 68));
+    painter.drawLine(start_pos_x,
                        height / 1080 * 86,
                        start_pos_x + point_length * progress_,
                        height / 1080 * 86);
-    painter_->end();
   }
 }
 
@@ -501,8 +500,9 @@ void GameWidget::SetPlayerNumber(int player_number) {
 void GameWidget::BackgroundShines() {
   connect(shining_timer_, &QTimer::timeout, this, [&] {
     index_ = (index_ + 1) % 2;
-    main_image_ = *images_shining[index_];
-    SetBackground();
+    main_image_ = images_shining[index_];
+
+    repaint();
   });
 }
 
@@ -517,15 +517,15 @@ void GameWidget::SetCrackAnimation() {
 void GameWidget::SetMainAnimations() {
   images_shining[0] = new QPixmap(":Background/background_shines.png");
   images_shining[1] = new QPixmap(":Background/display.png");
-  main_image_ = *images_shining[1];
+  main_image_ = images_shining[0];
 }
 
 void GameWidget::Loss() {
   connect(loss_timer_, &QTimer::timeout, this, [&] {
     index_ = (index_ + 1) % 5;
-    main_image_ = *images_crack[index_];
+    main_image_ = images_crack[index_];
 
-    SetBackground();
+    repaint();
     if (index_ == 4) {
       loss_timer_->stop();
     }

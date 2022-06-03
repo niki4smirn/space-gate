@@ -3,7 +3,25 @@
         <file>Background/space.png</file>
     </qresource>
     <qresource>
+        <file>Background/background_crack_1.png</file>
+    </qresource>
+    <qresource>
+        <file>Background/background_crack_2.png</file>
+    </qresource>
+    <qresource>
+        <file>Background/background_crack_3.png</file>
+    </qresource>
+    <qresource>
+        <file>Background/background_crack_4.png</file>
+    </qresource>
+    <qresource>
+        <file>Background/background_crack_5.png</file>
+    </qresource>
+    <qresource>
         <file>Background/display.png</file>
+    </qresource>
+    <qresource>
+        <file>Background/background_shines.png</file>
     </qresource>
     <qresource>
         <file>Buttons/green_button.png</file>

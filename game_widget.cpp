@@ -31,9 +31,18 @@ MainWidget::MainWidget(QWidget* parent) : QWidget(parent) {
     blue_bulb_blue_ = new QLabel(this);
     yellow_bulb_blue_ = new QLabel(this);
     painter_ = new QPainter(this);
+    loss_timer_ = new QTimer(this);
+    loss_timer_->setInterval(1500);
+    loss_timer_->setSingleShot(0);
+    shining_timer_ = new QTimer(this);
+    shining_timer_->setInterval(300);
+    shining_timer_->setSingleShot(0);
+    shining_timer_->start();
     SetButtonsSize();
     SetIcons();
     SetButtonsGeometry();
+    SetMainAnimations();
+    SetCrackAnimation();
     SetBackground();
     ButtonClicked();
     SetBulbsSize();
@@ -41,6 +50,9 @@ MainWidget::MainWidget(QWidget* parent) : QWidget(parent) {
     SetBulbsGeometry();
     SetTracking();
     MiniGameChosen();
+    BackgroundShines();
+    Loss();
+//    SetProgress(50,100);
 }
 
 MainWidget::~MainWidget() {
@@ -102,7 +114,7 @@ void MainWidget::SetButtonsGeometry() {
 }
 
 void MainWidget::SetBackground() {
-    QPixmap background(":Background/display.png");
+    QPixmap background = main_image_;
     background = background.scaled(QApplication::screens()[0]->size(), Qt::IgnoreAspectRatio);
     QPalette palette;
     palette.setBrush(QPalette::Window, background);
@@ -466,6 +478,75 @@ void MainWidget::SetPlayerNumber(int player_number) {
     player_number_ = player_number;
 }
 
+void MainWidget::BackgroundShines() {
+    connect(shining_timer_, &QTimer::timeout, this, [&] {
+        index_ = (index_ + 1) % 2 ;
+        main_image_ = *images_shining[index_];
+        SetBackground();
+    });
+}
+
+void MainWidget::SetCrackAnimation() {
+    images_crack[0] = new QPixmap(":Background/background_crack_1.png");
+    images_crack[1] = new QPixmap(":Background/background_crack_2.png");
+    images_crack[2] = new QPixmap(":Background/background_crack_3.png");
+    images_crack[3] = new QPixmap(":Background/background_crack_4.png");
+    images_crack[4] = new QPixmap(":Background/background_crack_5.png");
+}
+
+void MainWidget::SetMainAnimations() {
+    images_shining[0] = new QPixmap(":Background/background_shines.png");
+    images_shining[1] = new QPixmap(":Background/display.png");
+    main_image_ = *images_shining[1];
+}
+
+void MainWidget::Loss() {
+    connect(loss_timer_, &QTimer::timeout, this, [&] {
+        index_ = (index_ + 1) % 5;
+        main_image_ = *images_crack[index_];
+
+        SetBackground();
+        if (index_ == 4) {
+            loss_timer_->stop();
+        }
+    });
+}
+
+void MainWidget::EndGame() {
+    index_ = 0;
+    shining_timer_->stop();
+    blue_button_->pressed();
+    red_button_->pressed();
+    green_button_->pressed();
+    purple_button_->pressed();
+    yellow_button_->pressed();
+    setMouseTracking(0);
+    loss_timer_->start();
+    QPixmap pixmap_yellow(":Bulbs/yellow_bulb_on.png");
+    pixmap_yellow = pixmap_yellow.scaled(yellow_bulb_red_->size());
+    yellow_bulb_red_->setPixmap(pixmap_yellow);
+    yellow_bulb_green_->setPixmap(pixmap_yellow);
+    yellow_bulb_blue_->setPixmap(pixmap_yellow);
+    yellow_bulb_purple_->setPixmap(pixmap_yellow);
+    QPixmap pixmap_gr(":Bulbs/green_bulb_on.png");
+    pixmap_gr = pixmap_gr.scaled(green_bulb_red_->size());
+    green_bulb_red_->setPixmap(pixmap_gr);
+    green_bulb_green_->setPixmap(pixmap_gr);
+    green_bulb_blue_->setPixmap(pixmap_gr);
+    green_bulb_purple_->setPixmap(pixmap_gr);
+    QPixmap pixmap_bl(":Bulbs/blue_bulb_on.png");
+    pixmap_bl = pixmap_bl.scaled(blue_bulb_red_->size());
+    blue_bulb_red_->setPixmap(pixmap_bl);
+    blue_bulb_green_->setPixmap(pixmap_bl);
+    blue_bulb_blue_->setPixmap(pixmap_bl);
+    blue_bulb_purple_->setPixmap(pixmap_bl);
+    QPixmap pixmap_red(":Bulbs/red_bulb_on.png");
+    pixmap_red = pixmap_red.scaled(red_bulb_red_->size());
+    red_bulb_red_->setPixmap(pixmap_red);
+    red_bulb_green_->setPixmap(pixmap_red);
+    red_bulb_blue_->setPixmap(pixmap_red);
+    red_bulb_purple_->setPixmap(pixmap_red);
+}
 
 
 

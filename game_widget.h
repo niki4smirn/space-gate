@@ -9,6 +9,7 @@
 #include <QPicture>
 #include "QPixmap"
 #include <QPushButton>
+#include "QTimer"
 #include "QWidget"
 
 class MainWidget : public QWidget {
@@ -41,9 +42,16 @@ private:
     QLabel* blue_bulb_blue_;
     QLabel* yellow_bulb_blue_;
     QPainter* painter_;
-    int progress_;
+    QTimer* shining_timer_;
+    QTimer* loss_timer_;
+    QPixmap main_image_ ;
+    QPixmap* images_shining[2];
+    QPixmap* images_crack[6];
+    int progress_ = 0;
     int max_progress_;
     int player_number_;
+    int index_ = 0;
+
 
 private:
     void SetIcons();
@@ -60,6 +68,11 @@ private:
     void paintEvent(QPaintEvent *event) override;
     void SetProgress(int progress, int max_progress);
     void SetPlayerNumber(int player_number);
+    void BackgroundShines();
+    void SetMainAnimations();
+    void SetCrackAnimation();
+    void Loss();
+    void EndGame();
 };
 
 

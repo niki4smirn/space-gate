@@ -52,8 +52,8 @@ void ClientView::Connect() {
           &InputController::MouseKeyToServer,
           [this](input::Name key) { emit KeyEventToServer(key); });
   connect(game_widget_, &GameWidget::JoinMinigame,
-          [this](int minigame_index) {
-    emit JoinMinigame(minigame_index);
+          [this](int minigame_menu_pos) {
+    emit JoinMinigame(minigame_menu_pos);
   });
   connect(game_widget_, &GameWidget::LeaveMinigame, [&]() {
     emit LeaveMinigame();
@@ -104,7 +104,8 @@ void ClientView::OpenGame() {
 
 void ClientView::UpdateProgress(uint64_t progress) {}
 
-void ClientView::UpdateMinigame(
-    const server_events::MinigameInfo& minigame_info) {
+void ClientView::UpdateMinigameBulbs(
+    int minigame_pos, int waiting_count) {
   LOG << "Update Minigame";
+  game_widget_->SetBulbsCount(minigame_pos, waiting_count);
 }

@@ -77,9 +77,9 @@ add_executable(client
         src/Client/View/MainMenu/Background/star.cpp
         src/Client/InputController/input_controller.cpp
         ${SYSTEM_DEPENDENT_SOURCES}
-        game_widget.cpp
+        src/Client/View/FinalGameWidget/game_widget.cpp
         resources.qrc
-        src/Client/View/GameWidget/game_widget.cpp
+#        src/Client/View/GameWidget/game_widget.cpp
         src/Client/View/GameWidget/MainGameWidget/main_game_widget.cpp
         src/Client/View/GameWidget/WaitingScreen/waiting_screen.cpp
         )

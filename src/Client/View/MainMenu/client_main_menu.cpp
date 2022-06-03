@@ -267,6 +267,9 @@ void ClientMainMenu::UpdatePlayersList(
                                [](const auto& user){
     return user.ready_status() == server_events::RoomUser::kReady;
   });
+  if (users.size() < 2) {
+    can_start = false;
+  }
   start_game_->setEnabled(can_start);
 }
 

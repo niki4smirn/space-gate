@@ -23,7 +23,7 @@ class ClientMainMenu : public QWidget {
   void UpdatePlayersList(const server_events::RoomInfo& room_info);
   void SetCenterPos(QPoint pos);
   void PlayStartEffect();
-  void UpdateInterface(bool is_chief);
+  void UpdateInterface(bool new_is_chief);
 
  private:
   void RemoveAllWidgets();
@@ -61,6 +61,8 @@ class ClientMainMenu : public QWidget {
   QLabel* nothing_here_;
   QWidget* interface_;
   QFont font_;
+
+  bool is_chief_{true};
 
   static QColor StatusToColor(server_events::RoomUser::Status status);
 

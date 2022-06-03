@@ -325,8 +325,11 @@ QColor ClientMainMenu::StatusToColor(server_events::RoomUser::Status status) {
   return result;
 }
 
-void ClientMainMenu::UpdateInterface(bool is_chief) {
-  if (is_chief) {
+void ClientMainMenu::UpdateInterface(bool new_is_chief) {
+  if (is_chief_ == new_is_chief) {
+    return;
+  }
+  if (new_is_chief) {
     ShowRoomChiefInterface();
   } else {
     ShowRoomGuestInterface();
@@ -334,6 +337,7 @@ void ClientMainMenu::UpdateInterface(bool is_chief) {
 }
 
 void ClientMainMenu::ShowRoomChiefInterface() {
+  is_chief_ = true;
   RemoveAllWidgets();
   player_list_->setVisible(true);
   ready_status_->setVisible(true);
@@ -351,8 +355,8 @@ void ClientMainMenu::ShowRoomChiefInterface() {
 }
 
 void ClientMainMenu::ShowRoomGuestInterface() {
+  is_chief_ = false;
   RemoveAllWidgets();
-
   player_list_->setVisible(true);
   ready_status_->setVisible(true);
   back_to_game_option_->setVisible(true);

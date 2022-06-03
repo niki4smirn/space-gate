@@ -62,7 +62,7 @@ void GameController::OnTick() {
 
   if (ticks_ % constants::kMinigamesAddingTickFrequency == 0
       && model_.GetMinigamesCount() < constants::kMaxMinigamesCount) {
-    auto range = helpers::Range(MinigameType::kSample, MinigameType::kLast);
+    auto range = helpers::Range(MinigameType::kTerminal, MinigameType::kLast);
     auto type = helpers::GetRandomInRange<MinigameType>(range);
 
     model_.AddMinigame(type);
@@ -113,8 +113,8 @@ void GameController::StartMinigameEvent(MinigameType type) {
   auto& players = model_.GetPlayersForMinigame(type);
 
   switch (type) {
-    case MinigameType::kSample: {
-      minigame = std::make_shared<SampleMinigame>(players);
+    case MinigameType::kTerminal: {
+      minigame = std::make_shared<TerminalMinigame>(players);
       break;
     }
     default: {}

@@ -1,3 +1,3 @@
 #pragma once
 
-#include "SampleMinigame/sample_minigame.h"
+#include "TerminalMinigame/terminal_minigame.h"

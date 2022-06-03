@@ -49,7 +49,7 @@ add_executable(server
         src/Server/Models/RoomModel/room_model.cpp
         src/Server/Models/GameModel/game_model.cpp
         src/Server/Games/AbstractMinigame/abstract_minigame.cpp
-        src/Server/Games/SampleMinigame/sample_minigame.cpp
+        src/Server/Games/TerminalMinigame/terminal_minigame.cpp
         )
 
 if (WIN32)

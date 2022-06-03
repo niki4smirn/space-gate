@@ -23,6 +23,8 @@ class ClientView : public QMainWindow {
   void UpdateProgress(uint64_t progress);
   void UpdateMinigame(const server_events::MinigameInfo& minigame_info);
 
+  void ShowFinalScreen(bool is_win);
+
  private:
   void CloseWindow();
   void AddWidgets();
@@ -31,7 +33,6 @@ class ClientView : public QMainWindow {
   void keyPressEvent(QKeyEvent* event) override;
   void mousePressEvent(QMouseEvent* event) override;
   void mouseReleaseEvent(QMouseEvent* event) override;
-  void ShowFinalScreen();
 
  private:
   std::unique_ptr<InputController> input_controller_;

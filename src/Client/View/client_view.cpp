@@ -15,7 +15,6 @@ ClientView::ClientView() :
   setMouseTracking(true);
   stacked_widget_->setMouseTracking(true);
   main_menu_->setMouseTracking(true);
-  ShowFinalScreen();
 }
 
 void ClientView::mouseMoveEvent(QMouseEvent* event) {
@@ -62,9 +61,11 @@ void ClientView::Connect() {
   });
   connect(final_screen_, &FinalScreen::MenuPressed, [this]() {
     stacked_widget_->setCurrentWidget(main_menu_);
+    main_menu_->BackToStart();
   });
   connect(final_screen_, &FinalScreen::LobbyPressed, [this]() {
     stacked_widget_->setCurrentWidget(main_menu_);
+    main_menu_->BackToStart();
   });
 
 }
@@ -118,7 +119,9 @@ void ClientView::UpdateMinigame(
     const server_events::MinigameInfo& minigame_info) {
   LOG << "Update Minigame";
 }
-void ClientView::ShowFinalScreen() {
+
+void ClientView::ShowFinalScreen(bool is_win) {
+  final_screen_->SetResult(is_win);
   stacked_widget_->setCurrentWidget(final_screen_);
 }
 

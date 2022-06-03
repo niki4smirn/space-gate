@@ -16,9 +16,9 @@
 class FinalScreen : public QWidget {
   Q_OBJECT
  public:
-  FinalScreen(QWidget* parent = nullptr);
+  explicit FinalScreen(QWidget* parent = nullptr);
 
-  ~FinalScreen();
+  ~FinalScreen() override = default;
 
   void SetResult(bool victory);
 
@@ -26,7 +26,7 @@ class FinalScreen : public QWidget {
   void SetSize();
   void SetName();
   void SetLayout();
-  void SetInfo();
+  void UpdateInfo();
   void MenuPressedEvent();
   void LobbyPressedEvent();
   void Connect();
@@ -39,9 +39,9 @@ class FinalScreen : public QWidget {
   QLabel* info_;
   QLabel* game_name_;
   QFont font_;
-  bool victory_;
+  bool victory_{false};
 
-  signals:
+ signals:
   void MenuPressed();
   void LobbyPressed();
 };

@@ -13,12 +13,8 @@ FinalScreen::FinalScreen(QWidget* parent) : QWidget(parent) {
   SetName();
   SetSize();
   SetLayout();
-  SetInfo();
+  UpdateInfo();
   Connect();
-}
-
-FinalScreen::~FinalScreen() {
-
 }
 
 void FinalScreen::SetSize() {
@@ -59,7 +55,7 @@ void FinalScreen::SetLayout() {
   this->setLayout(layout_);
 }
 
-void FinalScreen::SetInfo() {
+void FinalScreen::UpdateInfo() {
   info_->setVisible(1);
   if (victory_ == 1) {
     info_->setText("It did was a success");
@@ -85,4 +81,9 @@ void FinalScreen::Connect() {
           this, &FinalScreen::MenuPressedEvent);
   connect(to_lobby_button_, &QPushButton::clicked,
           this, &FinalScreen::LobbyPressedEvent);
+}
+
+void FinalScreen::SetResult(bool victory) {
+  victory_ = victory;
+  UpdateInfo();
 }

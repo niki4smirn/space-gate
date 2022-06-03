@@ -10,17 +10,19 @@ ClientController::ClientController(const QUrl& url) :
           &ClientController::OnDisconnect);
   connect(&socket_, &QWebSocket::binaryMessageReceived, this,
           &ClientController::OnByteArrayReceived);
-  socket_.open(url);
+  ConnectToServer();
   StartTicking();
   ConnectView();
 }
 
 void ClientController::OnConnect() {
-  LOG << "Connected to " << server_url_;
+  LOG << "Successful connection to " << server_url_;
+  view_->ShowMainMenu();
 }
 
 void ClientController::OnDisconnect() {
-  LOG << "Disconnected from " << server_url_;
+  LOG << "Failed connection to " << server_url_;
+  view_->ShowNetworkProblemWidget();
 }
 
 QString ClientController::GetControllerName() const {
@@ -133,6 +135,11 @@ void ClientController::ConnectView() {
           &ClientView::LeaveMinigame,
           this,
           &ClientController::SendLeaveMinigame);
+  connect(view_,
+          &ClientView::Reconnect,
+          [&]() {
+            ConnectToServer();
+  });
 }
 
 void ClientController::SendReadyStatus() {
@@ -250,4 +257,8 @@ std::optional<int> ClientController::MinigamePosById(int minigame_id) {
     return std::nullopt;
   }
   return {minigame_index_to_pos[minigame_id]};
+}
+
+void ClientController::ConnectToServer() {
+  socket_.open(server_url_);
 }

@@ -25,12 +25,12 @@ void FinalScreen::SetSize() {
   background_->setFixedSize(QApplication::screens()[0]->size().width(),
                             QApplication::screens()[0]->size().height());
 
-  to_menu_button_->setFixedSize(350, 200);
+  to_menu_button_->setFixedSize(350, 250);
   to_menu_button_->setText("Menu");
   to_menu_button_->setFont(font_);
   to_menu_button_->setStyleSheet("background-color: rgb(136, 247, 255);font-size: 40px;");
 
-  to_lobby_button_->setFixedSize(350, 200);
+  to_lobby_button_->setFixedSize(350, 250);
   to_lobby_button_->setText("Lobby");
   to_lobby_button_->setFont(font_);
   to_lobby_button_->setStyleSheet("background-color: rgb(136, 247, 255);font-size: 40px;");
@@ -51,10 +51,11 @@ void FinalScreen::SetName() {
 
 void FinalScreen::SetLayout() {
   layout_->addWidget(game_name_, 0, 0, 1, 2,Qt::AlignHCenter);
-  layout_->addWidget(to_menu_button_, 1, 0,Qt::AlignRight | Qt::AlignVCenter);
-  layout_->addWidget(to_lobby_button_, 1, 1, Qt::AlignLeft | Qt::AlignVCenter);
+  layout_->addWidget(to_menu_button_, 1, 0, Qt::AlignRight | Qt::AlignVCenter);
+  layout_->addWidget(to_lobby_button_, 1, 1,  Qt::AlignLeft | Qt::AlignVCenter);
   layout_->addWidget(info_, 2, 0, 1, 2,
                      Qt::AlignHCenter | Qt::AlignVCenter);
+  layout_->setSpacing(50);
   this->setLayout(layout_);
 }
 

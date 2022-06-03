@@ -10,8 +10,7 @@
 #include "QScreen"
 #include "QGroupBox"
 #include "QPushButton"
-#include "QHBoxLayout"
-#include "QVBoxLayout"
+#include "QGridLayout"
 
 class MainWidget : public QWidget {
   Q_OBJECT
@@ -19,7 +18,12 @@ class MainWidget : public QWidget {
   MainWidget(QWidget* parent = nullptr);
 
   ~MainWidget();
+
  private:
+  QGroupBox* buttons_;
+  QGridLayout* layout_;
+  QPushButton* to_menu_button_;
+  QPushButton* to_lobby_button_;
   BackgroundWidget* background_;
   QLabel* info_;
 };

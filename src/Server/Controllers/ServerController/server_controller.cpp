@@ -121,8 +121,11 @@ void ServerController::Handle(const events::EventWrapper& event) {
   switch (event_to_server.type_case()) {
     case client_events::EventToServer::kCreateRoom: {
       RoomId new_room_id = server_model_.GetUnusedRoomId();
-      server_model_.AddRoom(
-          std::make_shared<RoomController>(new_room_id, user));
+      auto new_room = std::make_shared<RoomController>(new_room_id, user);
+      server_model_.AddRoom(new_room);
+      connect(new_room.get(), &RoomController::SendRoomsList, [&]() {
+        emit SendRoomsListEvent();
+      });
       server_model_.AddUserToRoom(user_id, new_room_id);
       break;
     }

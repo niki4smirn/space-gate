@@ -44,7 +44,7 @@ QDebug& operator<<(QDebug& os, const std::string& string);
 
 // loop for [begin, end)
 #define ENUM_LOOP(begin, end, element) \
-                            decltype(begin) (element); \
-                            for(int _ = static_cast<int>(begin); \
+                            decltype(begin) (element) = begin; \
+                            for (int _ = static_cast<int>(begin); \
                             _ < static_cast<int>(end);           \
                             ++_, (element) = static_cast<decltype(begin)>(_))

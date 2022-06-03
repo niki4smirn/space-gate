@@ -75,6 +75,7 @@ void RoomController::Handle(const events::EventWrapper& event) {
               this, &RoomController::GameEndedEvent);
 
       room_model_.SetGameController(std::move(controller));
+      emit SendRoomsList();
       break;
     }
     default: {}

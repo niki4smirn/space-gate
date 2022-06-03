@@ -37,7 +37,13 @@ class ClientController : public AbstractController {
   void ConnectView();
 
  private:
+  int MinigameIdByPos(int minigame_pos);
+  std::optional<int> MinigamePosById(int minigame_id);
+
   QUrl server_url_;
   QWebSocket socket_;
   ClientView* view_;
+
+  std::unordered_map<int, int> minigame_index_to_pos;
+  std::unordered_map<int, int> minigame_pos_to_index;
 };

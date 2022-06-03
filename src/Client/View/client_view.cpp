@@ -14,6 +14,7 @@ ClientView::ClientView() :
   setMouseTracking(true);
   stacked_widget_->setMouseTracking(true);
   main_menu_->setMouseTracking(true);
+  game_widget_->setMouseTracking(true);
 }
 
 void ClientView::mouseMoveEvent(QMouseEvent* event) {
@@ -52,8 +53,8 @@ void ClientView::Connect() {
           &InputController::MouseKeyToServer,
           [this](input::Name key) { emit KeyEventToServer(key); });
   connect(game_widget_, &GameWidget::JoinMinigame,
-          [this](int minigame_index) {
-    emit JoinMinigame(minigame_index);
+          [this](int minigame_menu_pos) {
+    emit JoinMinigame(minigame_menu_pos);
   });
   connect(game_widget_, &GameWidget::LeaveMinigame, [&]() {
     emit LeaveMinigame();
@@ -102,9 +103,11 @@ void ClientView::OpenGame() {
   stacked_widget_->setCurrentWidget(game_widget_);
 }
 
-void ClientView::UpdateProgress(uint64_t progress) {}
+void ClientView::UpdateProgress(uint64_t progress) {
+  game_widget_->SetProgress(progress, constants::kScoreToFinish);
+}
 
-void ClientView::UpdateMinigame(
-    const server_events::MinigameInfo& minigame_info) {
-  LOG << "Update Minigame";
+void ClientView::UpdateMinigameBulbs(
+    int minigame_pos, int waiting_count) {
+  game_widget_->SetBulbsCount(minigame_pos, waiting_count);
 }

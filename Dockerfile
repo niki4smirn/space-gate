@@ -10,7 +10,6 @@ RUN apt-get -y update
 RUN apt-get -y upgrade
 RUN apt -y update
 RUN apt -y upgrade
-RUN apt -y update
 RUN apt -y install python3-venv python3-pip
 RUN pip install cmake --upgrade
 RUN apt-get -y install software-properties-common

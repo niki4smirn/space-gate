@@ -20,7 +20,6 @@ class GameWidget : public QWidget {
   ~GameWidget() override = default;
 
   void SetProgress(int progress, int max_progress);
-  void SetPlayerNumber(int player_number);
   void SetBulbsCount(int minigame_pos, int count);
 
  signals:
@@ -31,14 +30,12 @@ class GameWidget : public QWidget {
   void SetIcons();
   void SetButtonsGeometry();
   void SetButtonsSize();
-  void SetBackground();
   void ButtonClicked();
   void SetBulbsIcons();
   void SetBulbsSize();
   void SetBulbsGeometry();
   void SetTracking();
   void mouseMoveEvent(QMouseEvent* event) override;
-  void MiniGameChosen();
   void paintEvent(QPaintEvent* event) override;
   void BackgroundShines();
   void SetMainAnimations();
@@ -74,7 +71,6 @@ class GameWidget : public QWidget {
   QPixmap* images_crack[6];
   int progress_ = 0;
   int max_progress_;
-  int player_number_;
   int index_ = 0;
 };
 

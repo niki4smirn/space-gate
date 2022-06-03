@@ -65,13 +65,11 @@ void ClientController::Handle(const events::EventWrapper& event) {
             ++minigame_menu_pos;
           }
           view_->UpdateProgress(game_info.progress());
-          if (game_info.has_joined_minigame()) {
-            for (const auto& minigame_info : game_info.minigames_info()) {
-              auto minigame_pos = MinigamePosById(minigame_info.id());
-              if (minigame_pos) {
-                view_->UpdateMinigameBulbs(minigame_pos.value(),
-                                           minigame_info.num_of_joined());
-              }
+          for (const auto& minigame_info : game_info.minigames_info()) {
+            auto minigame_pos = MinigamePosById(minigame_info.id());
+            if (minigame_pos) {
+              view_->UpdateMinigameBulbs(minigame_pos.value(),
+                                         minigame_info.num_of_joined());
             }
           }
           break;

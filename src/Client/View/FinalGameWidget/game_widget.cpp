@@ -49,7 +49,6 @@ GameWidget::GameWidget(QWidget* parent) : QWidget(parent) {
   SetBulbsIcons();
   SetBulbsGeometry();
   SetTracking();
-  MiniGameChosen();
   BackgroundShines();
   Loss();
 
@@ -381,89 +380,6 @@ void GameWidget::SetTracking() {
   purple_button_->setMouseTracking(1);
 }
 
-void GameWidget::MiniGameChosen() {
-  // connect(green_button_, &QPushButton::clicked, this, [&] {
-  //   if (player_number_ == 1) {
-  //     QPixmap pixmap_yellow(":Bulbs/yellow_bulb_on.png");
-  //     pixmap_yellow = pixmap_yellow.scaled(yellow_bulb_green_->size());
-  //     yellow_bulb_green_->setPixmap(pixmap_yellow);
-  //   } else if (player_number_ == 2) {
-  //     QPixmap pixmap_gr(":Bulbs/green_bulb_on.png");
-  //     pixmap_gr = pixmap_gr.scaled(green_bulb_green_->size());
-  //     green_bulb_green_->setPixmap(pixmap_gr);
-  //   } else if (player_number_ == 3) {
-  //     QPixmap pixmap_bl(":Bulbs/blue_bulb_on.png");
-  //     pixmap_bl = pixmap_bl.scaled(blue_bulb_green_->size());
-  //     blue_bulb_green_->setPixmap(pixmap_bl);
-  //   } else if (player_number_ == 4) {
-  //     QPixmap pixmap_red(":Bulbs/red_bulb_on.png");
-  //     pixmap_red = pixmap_red.scaled(red_bulb_green_->size());
-  //     red_bulb_green_->setPixmap(pixmap_red);
-  //   }
-  // });
-  //
-  // connect(red_button_, &QPushButton::clicked, this, [&] {
-  //   if (player_number_ == 1) {
-  //     QPixmap pixmap_yellow(":Bulbs/yellow_bulb_on.png");
-  //     pixmap_yellow = pixmap_yellow.scaled(yellow_bulb_red_->size());
-  //     yellow_bulb_red_->setPixmap(pixmap_yellow);
-  //   } else if (player_number_ == 2) {
-  //     QPixmap pixmap_gr(":Bulbs/green_bulb_on.png");
-  //     pixmap_gr = pixmap_gr.scaled(green_bulb_red_->size());
-  //     green_bulb_red_->setPixmap(pixmap_gr);
-  //   } else if (player_number_ == 3) {
-  //     QPixmap pixmap_bl(":Bulbs/blue_bulb_on.png");
-  //     pixmap_bl = pixmap_bl.scaled(blue_bulb_red_->size());
-  //     blue_bulb_red_->setPixmap(pixmap_bl);
-  //   } else if (player_number_ == 4) {
-  //     QPixmap pixmap_red(":Bulbs/red_bulb_on.png");
-  //     pixmap_red = pixmap_red.scaled(red_bulb_red_->size());
-  //     red_bulb_red_->setPixmap(pixmap_red);
-  //   }
-  // });
-  //
-  // connect(purple_button_, &QPushButton::clicked, this, [&] {
-  //   if (player_number_ == 1) {
-  //     QPixmap pixmap_yellow(":Bulbs/yellow_bulb_on.png");
-  //     pixmap_yellow = pixmap_yellow.scaled(yellow_bulb_purple_->size());
-  //     yellow_bulb_purple_->setPixmap(pixmap_yellow);
-  //   } else if (player_number_ == 2) {
-  //     QPixmap pixmap_gr(":Bulbs/green_bulb_on.png");
-  //     pixmap_gr = pixmap_gr.scaled(green_bulb_purple_->size());
-  //     green_bulb_purple_->setPixmap(pixmap_gr);
-  //   } else if (player_number_ == 3) {
-  //     QPixmap pixmap_bl(":Bulbs/blue_bulb_on.png");
-  //     pixmap_bl = pixmap_bl.scaled(blue_bulb_purple_->size());
-  //     blue_bulb_purple_->setPixmap(pixmap_bl);
-  //   } else if (player_number_ == 4) {
-  //     QPixmap pixmap_red(":Bulbs/red_bulb_on.png");
-  //     pixmap_red = pixmap_red.scaled(red_bulb_purple_->size());
-  //     red_bulb_purple_->setPixmap(pixmap_red);
-  //   }
-  // });
-  //
-  // connect(blue_button_, &QPushButton::clicked, this, [&] {
-  //   if (player_number_ == 1) {
-  //     QPixmap pixmap_yellow(":Bulbs/yellow_bulb_on.png");
-  //     pixmap_yellow = pixmap_yellow.scaled(yellow_bulb_blue_->size());
-  //     yellow_bulb_blue_->setPixmap(pixmap_yellow);
-  //   } else if (player_number_ == 2) {
-  //     QPixmap pixmap_gr(":Bulbs/green_bulb_on.png");
-  //     pixmap_gr = pixmap_gr.scaled(green_bulb_blue_->size());
-  //     green_bulb_blue_->setPixmap(pixmap_gr);
-  //   } else if (player_number_ == 3) {
-  //     QPixmap pixmap_bl(":Bulbs/blue_bulb_on.png");
-  //     pixmap_bl = pixmap_bl.scaled(blue_bulb_blue_->size());
-  //     blue_bulb_blue_->setPixmap(pixmap_bl);
-  //   } else if (player_number_ == 4) {
-  //     QPixmap pixmap_red(":Bulbs/red_bulb_on.png");
-  //     pixmap_red = pixmap_red.scaled(red_bulb_blue_->size());
-  //     red_bulb_blue_->setPixmap(pixmap_red);
-  //   }
-  // });
-
-}
-
 void GameWidget::paintEvent(QPaintEvent* event) {
   QWidget::paintEvent(event);
   QPainter painter(this);
@@ -491,10 +407,7 @@ void GameWidget::paintEvent(QPaintEvent* event) {
 void GameWidget::SetProgress(int progress, int max_progress) {
   progress_ = progress;
   max_progress_ = max_progress;
-}
-
-void GameWidget::SetPlayerNumber(int player_number) {
-  player_number_ = player_number;
+  repaint();
 }
 
 void GameWidget::BackgroundShines() {
@@ -568,4 +481,112 @@ void GameWidget::EndGame() {
   red_bulb_purple_->setPixmap(pixmap_red);
 }
 
-void GameWidget::SetBulbsCount(int minigame_pos, int count) {}
+void GameWidget::SetBulbsCount(int minigame_pos, int count) {
+  switch (minigame_pos) {
+    case 0: {
+      switch (count) {
+        case 4: {
+          QPixmap pixmap_red(":Bulbs/red_bulb_on.png");
+          pixmap_red = pixmap_red.scaled(red_bulb_green_->size());
+          red_bulb_green_->setPixmap(pixmap_red);
+        }
+        case 3: {
+          QPixmap pixmap_bl(":Bulbs/blue_bulb_on.png");
+          pixmap_bl = pixmap_bl.scaled(blue_bulb_green_->size());
+          blue_bulb_green_->setPixmap(pixmap_bl);
+        }
+        case 2: {
+          QPixmap pixmap_gr(":Bulbs/green_bulb_on.png");
+          pixmap_gr = pixmap_gr.scaled(green_bulb_green_->size());
+          green_bulb_green_->setPixmap(pixmap_gr);
+        }
+        case 1: {
+          QPixmap pixmap_yellow(":Bulbs/yellow_bulb_on.png");
+          pixmap_yellow = pixmap_yellow.scaled(yellow_bulb_green_->size());
+          yellow_bulb_green_->setPixmap(pixmap_yellow);
+        }
+        default: {}
+      }
+      break;
+    }
+    case 1: {
+      switch (count) {
+        case 4: {
+          QPixmap pixmap_red(":Bulbs/red_bulb_on.png");
+          pixmap_red = pixmap_red.scaled(red_bulb_red_->size());
+          red_bulb_red_->setPixmap(pixmap_red);
+        }
+        case 3: {
+          QPixmap pixmap_bl(":Bulbs/blue_bulb_on.png");
+          pixmap_bl = pixmap_bl.scaled(blue_bulb_red_->size());
+          blue_bulb_red_->setPixmap(pixmap_bl);
+        }
+        case 2: {
+          QPixmap pixmap_gr(":Bulbs/green_bulb_on.png");
+          pixmap_gr = pixmap_gr.scaled(green_bulb_red_->size());
+          green_bulb_red_->setPixmap(pixmap_gr);
+        }
+        case 1: {
+          QPixmap pixmap_yellow(":Bulbs/yellow_bulb_on.png");
+          pixmap_yellow = pixmap_yellow.scaled(yellow_bulb_red_->size());
+          yellow_bulb_red_->setPixmap(pixmap_yellow);
+        }
+        default: {}
+      }
+      break;
+    }
+    case 2: {
+      switch (count) {
+        case 4: {
+          QPixmap pixmap_red(":Bulbs/red_bulb_on.png");
+          pixmap_red = pixmap_red.scaled(red_bulb_purple_->size());
+          red_bulb_purple_->setPixmap(pixmap_red);
+        }
+        case 3: {
+          QPixmap pixmap_bl(":Bulbs/blue_bulb_on.png");
+          pixmap_bl = pixmap_bl.scaled(blue_bulb_purple_->size());
+          blue_bulb_purple_->setPixmap(pixmap_bl);
+        }
+        case 2: {
+          QPixmap pixmap_gr(":Bulbs/green_bulb_on.png");
+          pixmap_gr = pixmap_gr.scaled(green_bulb_purple_->size());
+          green_bulb_purple_->setPixmap(pixmap_gr);
+        }
+        case 1: {
+          QPixmap pixmap_yellow(":Bulbs/yellow_bulb_on.png");
+          pixmap_yellow = pixmap_yellow.scaled(yellow_bulb_purple_->size());
+          yellow_bulb_purple_->setPixmap(pixmap_yellow);
+        }
+        default: {}
+      }
+      break;
+    }
+    case 3: {
+      switch (count) {
+        case 4: {
+          QPixmap pixmap_red(":Bulbs/red_bulb_on.png");
+          pixmap_red = pixmap_red.scaled(red_bulb_blue_->size());
+          red_bulb_blue_->setPixmap(pixmap_red);
+        }
+        case 3: {
+          QPixmap pixmap_bl(":Bulbs/blue_bulb_on.png");
+          pixmap_bl = pixmap_bl.scaled(blue_bulb_blue_->size());
+          blue_bulb_blue_->setPixmap(pixmap_bl);
+        }
+        case 2: {
+          QPixmap pixmap_gr(":Bulbs/green_bulb_on.png");
+          pixmap_gr = pixmap_gr.scaled(green_bulb_blue_->size());
+          green_bulb_blue_->setPixmap(pixmap_gr);
+        }
+        case 1: {
+          QPixmap pixmap_yellow(":Bulbs/yellow_bulb_on.png");
+          pixmap_yellow = pixmap_yellow.scaled(yellow_bulb_blue_->size());
+          yellow_bulb_blue_->setPixmap(pixmap_yellow);
+        }
+        default: {}
+      }
+      break;
+    }
+    default: {}
+  }
+}

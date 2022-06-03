@@ -25,6 +25,7 @@ class ClientMainMenu : public QWidget {
   void PlayStartEffect();
   void UpdateInterface(bool is_chief);
   void BackToStart();
+  void BackToLobby();
 
  private:
   void RemoveAllWidgets();

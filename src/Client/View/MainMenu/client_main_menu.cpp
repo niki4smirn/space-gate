@@ -363,8 +363,13 @@ void ClientMainMenu::ShowRoomGuestInterface() {
 }
 
 void ClientMainMenu::ResetAllWidgets() {
+  background_->SetLightEffect(false);
   RemoveAllWidgets();
 
   ready_status_->setText("READY");
   player_list_->clear();
+}
+
+void ClientMainMenu::BackToLobby() {
+  ShowRoomGuestInterface();
 }

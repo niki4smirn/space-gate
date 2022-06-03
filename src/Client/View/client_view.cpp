@@ -62,10 +62,12 @@ void ClientView::Connect() {
   connect(final_screen_, &FinalScreen::MenuPressed, [this]() {
     stacked_widget_->setCurrentWidget(main_menu_);
     main_menu_->BackToStart();
+    emit LeaveRoom();
   });
   connect(final_screen_, &FinalScreen::LobbyPressed, [this]() {
     stacked_widget_->setCurrentWidget(main_menu_);
-    main_menu_->BackToStart();
+    main_menu_->BackToLobby();
+
   });
 
 }

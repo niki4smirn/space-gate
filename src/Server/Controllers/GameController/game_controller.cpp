@@ -92,8 +92,12 @@ void GameController::Send(const events::EventWrapper& event) {
 void GameController::SendGameInfoEvent() {
   switch (model_.GetStatus()) {
     case GameStatus::kGoing: {
-      for (const auto& player_id : model_.GetFreePlayersIds()) {
-        AddEventToSend(GetGameInfo(player_id));
+      for (const auto& [player_id, _] : model_.GetPlayers()) {
+        if (!model_.IsPlayerBusy(player_id) ||
+            model_.IsWaitingForStart(
+                model_.GetMinigameTypeByPlayerId(player_id).value())) {
+          AddEventToSend(GetGameInfo(player_id));
+        }
       }
 
       break;
@@ -199,7 +203,8 @@ void GameController::TryAddMinigame() {
   ENUM_LOOP(MinigameType::kSample, MinigameType::kLast, cur_type) {
     if (!model_.GetMinigameByType(cur_type) &&
         helpers::GetMinigamePlayersCountByType(cur_type)
-            <= model_.GetPlayersCount()) {
+            <= model_.GetPlayersCount() &&
+        !model_.IsWaitingForStart(cur_type)) {
       possible_types.push_back(cur_type);
     }
   }

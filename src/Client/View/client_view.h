@@ -1,8 +1,9 @@
 #pragma once
 
 #include "src/Client/View/MainMenu/client_main_menu.h"
-#include "src/Helpers/InputController/input_controller.h"
+#include "src/Client/InputController/input_controller.h"
 #include "src/Server/Models/RoomModel/room_model.h"
+#include "src/Client/View/GameWidget/game_widget.h"
 
 #include <QWidget>
 #include <QStackedWidget>
@@ -13,8 +14,13 @@ class ClientView : public QMainWindow {
 
  public:
   ClientView();
-  void MenuUpdatePlayerList(const server_events::RoomInfo& room_info);
-  void MenuUpdateRoomList(const server_events::RoomsList& room_list);
+  void UpdateRoomInfoMenu(const server_events::RoomInfo& room_info,
+                          uint64_t client_id);
+  void UpdateRoomsListMenu(const server_events::RoomsList& room_list);
+  void PlayStartEffect();
+  void OpenGame();
+  void UpdateProgress(uint64_t progress);
+  void UpdateMinigame(const server_events::MinigameInfo& minigame_info);
 
  private:
   void CloseWindow();
@@ -28,6 +34,7 @@ class ClientView : public QMainWindow {
  private:
   std::unique_ptr<InputController> input_controller_;
   ClientMainMenu* main_menu_;
+  GameWidget* game_widget_;
   QStackedWidget* stacked_widget_;
 
  signals:
@@ -35,6 +42,9 @@ class ClientView : public QMainWindow {
   void CreateRoom();
   void LeaveRoom();
   void JoinRoom(uint64_t room_id);
-  void KeyEventToServer(key_names::keys key);
+  void StartGame();
+  void KeyEventToServer(input::Name key);
   void MouseMoveToServer(const QPoint& pos);
+  void JoinMinigame(int minigame_index);
+  void LeaveMinigame();
 };

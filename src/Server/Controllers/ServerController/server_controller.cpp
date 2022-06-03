@@ -1,6 +1,6 @@
 #include "server_controller.h"
 
-#include "Constants/constants.h"
+#include "src/Helpers/Constants/constants.h"
 
 ServerController::ServerController()
   :  web_socket_server_("", QWebSocketServer::NonSecureMode) {
@@ -22,16 +22,15 @@ void ServerController::OnByteArrayReceived(const QByteArray& message) {
     return;
   }
 
-  auto* client_event = received_event.mutable_client_event();
-
   auto message_socket = qobject_cast<QWebSocket*>(sender());
   auto user = server_model_.GetUserBySocket(message_socket);
   UserId user_id = user->GetId();
+
+  auto* client_event = received_event.mutable_client_event();
   client_event->set_sender_id(user_id);
 
   LogEvent(received_event, logging::Type::kReceive);
 
-  // TODO(niki4smirn): try to make this check prettier
   if (client_event->has_event_to_server()) {
     AddEventToHandle(received_event);
   } else {
@@ -46,9 +45,6 @@ void ServerController::OnSocketConnect() {
   UserId new_user_id = server_model_.GetUnusedUserId();
   auto new_user = std::make_shared<User>(new_user_id,
                                          current_socket);
-  // TODO(Everyone): replace with adding to handle queue
-  // so, this TODO is not really relevant, because it may cause some
-  // security problems
   server_model_.AddUser(new_user);
 
   connect(new_user->GetSocket().get(),
@@ -68,9 +64,6 @@ void ServerController::OnSocketDisconnect() {
   if (web_socket) {
     auto user = server_model_.GetUserBySocket(web_socket);
     UserId user_id = user->GetId();
-    // TODO(Everyone): replace with adding to handle queue
-    // so, this TODO is not really relevant, because it may cause some
-    // security problems
     if (server_model_.IsInSomeRoom(user_id)) {
       auto room = server_model_.GetRoomByUserId(user_id);
       room->DeleteUser(user_id);
@@ -95,11 +88,7 @@ void ServerController::Send(const events::EventWrapper& event) {
       if (!users.empty()) {
         LogEvent(event, logging::Type::kSend);
       }
-      for (const auto& [user_id, user_ptr] : users) {
-        auto serialized = event.SerializeAsString();
-        QByteArray byte_array(serialized.data(), serialized.size());
-        user_ptr->GetSocket()->sendBinaryMessage(byte_array);
-      }
+      SendEveryUser(event);
       break;
     }
     case events::EventWrapper::kClientEvent: {
@@ -171,4 +160,14 @@ void ServerController::SendRoomsListEvent() {
   events::EventWrapper event_wrapper;
   event_wrapper.set_allocated_server_event(server_event);
   AddEventToSend(event_wrapper);
+}
+
+void ServerController::SendEveryUser(events::EventWrapper event) const {
+  const auto& users = server_model_.GetUsers();
+  for (const auto& [user_id, user_ptr] : users) {
+    event.mutable_server_event()->set_receiver_id(user_id);
+    auto serialized = event.SerializeAsString();
+    QByteArray byte_array(serialized.data(), serialized.size());
+    user_ptr->GetSocket()->sendBinaryMessage(byte_array);
+  }
 }

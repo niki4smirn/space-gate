@@ -2,7 +2,7 @@
 
 #include "src/AbstractController/abstract_controller.h"
 #include "src/Server/Models/User/user.h"
-#include "src/Helpers/minigames_types.h"
+#include "src/Client/Games/minigames_types.h"
 
 using RoleId = uint64_t;
 
@@ -34,6 +34,7 @@ class AbstractMinigame : public AbstractController {
 
   uint64_t max_score_;
 
+  // move to minigame model
   std::unordered_map<UserId, std::shared_ptr<User>> players_;
   std::unordered_map<UserId, RoleId> role_id_by_player_id_;
   std::unordered_map<RoleId, UserId> player_id_by_role_id_;

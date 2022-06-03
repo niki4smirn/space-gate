@@ -36,14 +36,14 @@ ClientMainMenu::ClientMainMenu(QWidget* parent) :
 
   SetMouseTracking();
   SetLayouts();
-  SetStartWidgetsPos();
+  ShowStartWidget();
   Connect();
 }
 void ClientMainMenu::SetCenterPos(QPoint pos) {
   background_->SetCenterPos(pos);
 }
 
-void ClientMainMenu::SetStartWidgetsPos() {
+void ClientMainMenu::ShowStartWidget() {
   RemoveAllWidgets();
 
   game_name_->setVisible(true);
@@ -131,7 +131,7 @@ void ClientMainMenu::Connect() {
           &QPushButton::clicked,
           this,
           &ClientMainMenu::CreateRoom);
-  connect(start_game_, &QPushButton::clicked, this, &ClientMainMenu::StartGame);
+  connect(start_game_, &QPushButton::clicked, [&]() {emit StartGame();});
   connect(join_room_, &QPushButton::clicked, this, &ClientMainMenu::JoinRoom);
   connect(back_to_game_option_,
           &QPushButton::clicked,
@@ -145,17 +145,8 @@ void ClientMainMenu::Connect() {
           this,
           &ClientMainMenu::BackToStart);
   connect(settings_, &QPushButton::clicked, this, &ClientMainMenu::Settings);
-  connect(this,
-          &ClientMainMenu::StartEffect,
-          background_,
-          &BackgroundWidget::SetLightEffect);
   connect(ready_status_,
           &QPushButton::clicked, this, &ClientMainMenu::ReadyButtonPressEvent);
-}
-
-void ClientMainMenu::StartGame() {
-  RemoveAllWidgets();
-  emit StartEffect(true);
 }
 
 void ClientMainMenu::ChooseRoomOption() {
@@ -184,7 +175,8 @@ void ClientMainMenu::BackToGameOption() {
 }
 
 void ClientMainMenu::BackToStart() {
-  SetStartWidgetsPos();
+  ResetAllWidgets();
+  ShowStartWidget();
 }
 
 void ClientMainMenu::RemoveAllWidgets() {
@@ -216,22 +208,7 @@ void ClientMainMenu::RemoveAllWidgets() {
 }
 
 void ClientMainMenu::CreateRoom() {
-  player_list_->clear();
-  RemoveAllWidgets();
-
-  player_list_->setVisible(true);
-  start_game_->setVisible(true);
-  ready_status_->setVisible(true);
-  back_to_game_option_->setVisible(true);
-
-  interface_layout_->addWidget(player_list_, 1, 0, 1, 2,
-                               Qt::AlignHCenter | Qt::AlignVCenter);
-  interface_layout_->addWidget(start_game_, 2, 0,
-                               Qt::AlignRight | Qt::AlignVCenter);
-  interface_layout_->addWidget(ready_status_, 2, 1,
-                               Qt::AlignLeft | Qt::AlignVCenter);
-  interface_layout_->addWidget(back_to_game_option_, 3, 0, 1, 2,
-                               Qt::AlignHCenter | Qt::AlignVCenter);
+  ShowRoomChiefInterface();
   emit CreateRoomSignal();
 }
 
@@ -242,18 +219,7 @@ void ClientMainMenu::JoinRoom() {
   RoomId room_id = rooms_list_->currentItem()->text().toInt();
   emit JoinRoomSignal(room_id);
 
-  player_list_->clear();
-  RemoveAllWidgets();
-  player_list_->setVisible(true);
-  ready_status_->setVisible(true);
-  back_to_game_option_->setVisible(true);
-
-  interface_layout_->addWidget(player_list_, 1, 0, 1, 2,
-                               Qt::AlignHCenter | Qt::AlignVCenter);
-  interface_layout_->addWidget(ready_status_, 2, 0, 1, 2,
-                               Qt::AlignHCenter | Qt::AlignVCenter);
-  interface_layout_->addWidget(back_to_game_option_, 3, 0, 1, 2,
-                               Qt::AlignHCenter | Qt::AlignVCenter);
+  ShowRoomGuestInterface();
 }
 
 void ClientMainMenu::Settings() {
@@ -272,7 +238,8 @@ void ClientMainMenu::Settings() {
                                Qt::AlignHCenter | Qt::AlignVCenter);
 }
 
-void ClientMainMenu::UpdateRoomList(const server_events::RoomsList& room_list) {
+void ClientMainMenu::UpdateRoomsList(
+    const server_events::RoomsList& room_list) {
   int current_row = rooms_list_->currentRow();
   rooms_list_->clear();
   for (auto room : room_list.ids()) {
@@ -286,28 +253,21 @@ void ClientMainMenu::UpdateRoomList(const server_events::RoomsList& room_list) {
   }
 }
 
-void ClientMainMenu::UpdatePlayerList(
+void ClientMainMenu::UpdatePlayersList(
     const server_events::RoomInfo& room_info) {
   player_list_->clear();
-  for (int i = 0; i < room_info.users().size(); i++) {
+  const auto& users = room_info.users();
+  for (int i = 0; i < users.size(); i++) {
     player_list_->addItem(
-        QString::fromStdString(room_info.users().at(i).nickname()));
-    switch (room_info.users().at(i).is_ready()) {
-      case server_events::RoomUser::kNotReady: {
-        player_list_->item(i)->setBackground(QColorConstants::Red);
-        break;
-      }
-      case server_events::RoomUser::kReady: {
-        player_list_->item(i)->setBackground(QColorConstants::Green);
-        break;
-      }
-      case server_events::RoomUser::kNone: {
-        player_list_->item(i)->setBackground(QColorConstants::Gray);
-        break;
-      }
-      default: {}
-    }
+        QString::fromStdString(users.at(i).nickname()));
+    auto color = StatusToColor(users.at(i).ready_status());
+    player_list_->item(i)->setBackground(color);
   }
+  bool can_start = std::all_of(users.begin(), users.end(),
+                               [](const auto& user){
+    return user.ready_status() == server_events::RoomUser::kReady;
+  });
+  start_game_->setEnabled(can_start);
 }
 
 void ClientMainMenu::ReadyButtonPressEvent() {
@@ -337,3 +297,74 @@ void ClientMainMenu::SetMouseTracking() {
   interface_->setMouseTracking(true);
 }
 
+void ClientMainMenu::PlayStartEffect() {
+  RemoveAllWidgets();
+  background_->SetLightEffect(true);
+}
+
+QColor ClientMainMenu::StatusToColor(server_events::RoomUser::Status status) {
+  QColor result;
+  switch (status) {
+    case server_events::RoomUser::kNotReady: {
+      result = QColorConstants::Red;
+      break;
+    }
+    case server_events::RoomUser::kReady: {
+      result = QColorConstants::Green;
+      break;
+    }
+    case server_events::RoomUser::kNone: {
+      result = QColorConstants::Gray;
+      break;
+    }
+    default: {}
+  }
+  return result;
+}
+
+void ClientMainMenu::UpdateInterface(bool is_chief) {
+  if (is_chief) {
+    ShowRoomChiefInterface();
+  } else {
+    ShowRoomGuestInterface();
+  }
+}
+
+void ClientMainMenu::ShowRoomChiefInterface() {
+  RemoveAllWidgets();
+  player_list_->setVisible(true);
+  ready_status_->setVisible(true);
+  back_to_game_option_->setVisible(true);
+  start_game_->setVisible(true);
+
+  interface_layout_->addWidget(player_list_, 1, 0, 1, 2,
+                               Qt::AlignHCenter | Qt::AlignVCenter);
+  interface_layout_->addWidget(start_game_, 2, 0,
+                               Qt::AlignRight | Qt::AlignVCenter);
+  interface_layout_->addWidget(ready_status_, 2, 1,
+                               Qt::AlignLeft | Qt::AlignVCenter);
+  interface_layout_->addWidget(back_to_game_option_, 3, 0, 1, 2,
+                               Qt::AlignHCenter | Qt::AlignVCenter);
+}
+
+void ClientMainMenu::ShowRoomGuestInterface() {
+  RemoveAllWidgets();
+
+  player_list_->setVisible(true);
+  ready_status_->setVisible(true);
+  back_to_game_option_->setVisible(true);
+
+  interface_layout_->addWidget(player_list_, 1, 0, 1, 2,
+                               Qt::AlignHCenter | Qt::AlignVCenter);
+  interface_layout_->addWidget(ready_status_, 2, 0, 1, 2,
+                               Qt::AlignHCenter | Qt::AlignVCenter);
+  interface_layout_->addWidget(back_to_game_option_, 3, 0, 1, 2,
+                               Qt::AlignHCenter | Qt::AlignVCenter);
+}
+
+void ClientMainMenu::ResetAllWidgets() {
+  RemoveAllWidgets();
+
+  ready_status_->setText("READY");
+  player_list_->clear();
+}

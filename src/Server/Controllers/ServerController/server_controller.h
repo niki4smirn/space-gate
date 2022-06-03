@@ -15,7 +15,6 @@ class ServerController : public AbstractController {
 
   QString GetControllerName() const override;
 
-  public Q_SLOTS:
   void OnByteArrayReceived(const QByteArray& message);
   void OnSocketConnect();
   void OnSocketDisconnect();
@@ -27,6 +26,7 @@ class ServerController : public AbstractController {
 
  private:
   void SendEventToRoom(const events::EventWrapper& event) const;
+  void SendEveryUser(events::EventWrapper event) const;
 
   void SendRoomsListEvent();
 

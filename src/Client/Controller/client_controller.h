@@ -5,7 +5,7 @@
 #include <QWebSocket>
 
 #include "src/AbstractController/abstract_controller.h"
-#include "src/Helpers/InputController/input_controller.h"
+#include "src/Client/InputController/input_controller.h"
 #include "src/Client/View/client_view.h"
 
 class ClientController : public AbstractController {
@@ -15,18 +15,20 @@ class ClientController : public AbstractController {
 
   QString GetControllerName() const override;
 
-  public Q_SLOTS:
   void OnByteArrayReceived(const QByteArray& message);
   void OnConnect();
   void OnDisconnect();
 
-  private Q_SLOTS:
+ private:
   void SendReadyStatus();
   void SendCreateRoomEvent();
   void SendLeaveRoomEvent();
   void SendJoinRoomEvent(RoomId room_id);
-  void SendKeyEvent(key_names::keys key);
+  void SendStartGameEvent();
+  void SendKeyEvent(input::Name key);
   void SendMouseMoveEvent(const QPoint& pos);
+  void SendJoinMinigame(int minigame_index);
+  void SendLeaveMinigame();
 
  protected:
   void OnTick() override;

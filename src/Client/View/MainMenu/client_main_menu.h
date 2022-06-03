@@ -19,20 +19,21 @@ class ClientMainMenu : public QWidget {
 
  public:
   explicit ClientMainMenu(QWidget* parent = nullptr);
-  void UpdateRoomList(const server_events::RoomsList& room_list);
-  void UpdatePlayerList(const server_events::RoomInfo& room_info);
+  void UpdateRoomsList(const server_events::RoomsList& room_list);
+  void UpdatePlayersList(const server_events::RoomInfo& room_info);
   void SetCenterPos(QPoint pos);
+  void PlayStartEffect();
+  void UpdateInterface(bool is_chief);
 
  private:
   void RemoveAllWidgets();
+  void ResetAllWidgets();
   void Connect();
   void ButtonsConfigure();
-  void SetStartWidgetsPos();
+  void ShowStartWidget();
   void SetLayouts();
   void SetMouseTracking();
 
-  private Q_SLOTS:
-  void StartGame();
   void ChooseRoomOption();
   void BackToStart();
   void BackToGameOption();
@@ -61,6 +62,11 @@ class ClientMainMenu : public QWidget {
   QWidget* interface_;
   QFont font_;
 
+  static QColor StatusToColor(server_events::RoomUser::Status status);
+
+  void ShowRoomChiefInterface();
+  void ShowRoomGuestInterface();
+
  signals:
   void StartEffect(bool state);
   void Close();
@@ -68,5 +74,6 @@ class ClientMainMenu : public QWidget {
   void CreateRoomSignal();
   void LeaveRoom();
   void JoinRoomSignal(RoomId room_id);
+  void StartGame();
 };
 

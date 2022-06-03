@@ -1,6 +1,6 @@
 #pragma once
 
-#include "src/Server/Games/abstract_minigame.h"
+#include "src/Server/Games/AbstractMinigame/abstract_minigame.h"
 
 class SampleMinigame final : public AbstractMinigame {
  public:
@@ -23,6 +23,9 @@ class SampleMinigame final : public AbstractMinigame {
 
   void SendResponseMessages() override;
   events::EventWrapper GenerateResponseMessage(UserId user_id) override;
+
+  static constexpr int kDuration = 100;
+  static constexpr int kMaxScore = 5;
 
   QString right_answer_{"Sample Minigame Test Message"};
   std::unordered_map<RoleId, QString> answers_;

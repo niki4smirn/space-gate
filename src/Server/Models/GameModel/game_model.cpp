@@ -1,13 +1,16 @@
 #include "game_model.h"
 
-#include "Constants/constants.h"
+#include <utility>
+
+#include "src/Helpers/Constants/constants.h"
 #include "src/Helpers/helpers.h"
 
 GameModel::GameModel(const std::vector<std::shared_ptr<User>>& players) {
   for (const auto& player : players) {
-    players_[player->GetId()] = player;
+    auto player_id = player->GetId();
+    players_[player_id] = player;
+    free_users_ids_.insert(player_id);
   }
-
   emit SendGameInfo();
 }
 
@@ -16,25 +19,23 @@ const std::unordered_map<UserId,
   return players_;
 }
 
-AbstractMinigame* GameModel::GetMinigameById(MinigameId id) {
-  auto type = static_cast<MinigameType>(id);
-
+std::shared_ptr<AbstractMinigame> GameModel::GetMinigameByType(
+    MinigameType type) {
   return minigames_[type];
 }
 
-void GameModel::AddPlayerToMinigame(UserId player_id,
-                                    MinigameId minigame_id) {
-  auto type = static_cast<MinigameType>(minigame_id);
-
+void GameModel::AddPlayerToMinigameQueue(UserId player_id,
+                                         MinigameType type) {
   players_by_minigame_[type].push_back(players_[player_id]);
-  minigame_by_player_id_[player_id] = type;
+  free_users_ids_.erase(player_id);
+  minigame_type_by_player_id_[player_id] = type;
+
+  emit SendGameInfo();
 
   if (players_by_minigame_[type].size()
       == helpers::GetMinigamePlayersCountByType(type)) {
     emit StartMinigame(type);
   }
-
-  emit SendGameInfo();
 }
 
 const
@@ -46,11 +47,11 @@ const
 
 std::optional<MinigameType> GameModel::GetMinigameTypeByPlayerId(
     UserId id) const {
-  if (!minigame_by_player_id_.contains(id)) {
+  if (!minigame_type_by_player_id_.contains(id)) {
     return std::nullopt;
   }
 
-  return minigame_by_player_id_.at(id);
+  return minigame_type_by_player_id_.at(id);
 }
 
 uint64_t GameModel::GetProgress() const {
@@ -62,13 +63,6 @@ const std::vector<std::shared_ptr<User>>& GameModel::GetPlayersForMinigame(
   return players_by_minigame_[type];
 }
 
-void GameModel::MakePlayersBusy(
-    const std::vector<std::shared_ptr<User>>& players) {
-  for (const auto& player : players) {
-    is_busy_[player->GetId()] = true;
-  }
-}
-
 void GameModel::AddScore(uint64_t score) {
   progress_ += score;
 
@@ -78,25 +72,19 @@ void GameModel::AddScore(uint64_t score) {
 }
 
 std::vector<UserId> GameModel::GetFreePlayersIds() const {
-  std::vector<UserId> result;
-
-  for (const auto& [id, is_busy] : is_busy_) {
-    if (!is_busy) {
-      result.push_back(id);
-    }
-  }
-
-  return result;
+  return {free_users_ids_.begin(), free_users_ids_.end()};
 }
 
 void GameModel::DeleteMinigame(MinigameType type) {
-  delete minigames_[type];
+  auto& minigame = minigames_[type];
+  minigame->PrepareToClose();
+
   minigames_.erase(type);
 
   for (const auto& player : players_by_minigame_[type]) {
     auto player_id = player->GetId();
-    minigame_by_player_id_.erase(player_id);
-    is_busy_[player_id] = false;
+    minigame_type_by_player_id_.erase(player_id);
+    free_users_ids_.insert(player_id);
   }
 
   players_by_minigame_.erase(type);
@@ -105,8 +93,10 @@ void GameModel::DeleteMinigame(MinigameType type) {
 }
 
 void GameModel::AddCreatedMinigame(
-    MinigameType type, AbstractMinigame* minigame) {
-  minigames_[type] = minigame;
+    MinigameType type, std::shared_ptr<AbstractMinigame> minigame) {
+  minigames_[type] = std::move(minigame);
+
+  emit SendGameInfo();
 }
 
 GameStatus GameModel::GetStatus() const {
@@ -124,5 +114,34 @@ int GameModel::GetMinigamesCount() const {
 }
 
 bool GameModel::IsPlayerBusy(UserId id) {
-  return is_busy_[id];
+  return !free_users_ids_.contains(id);
+}
+
+void GameModel::DeleteMinigamePlayer(UserId id) {
+  if (!IsPlayerBusy(id)) {
+    return;
+  }
+  free_users_ids_.insert(id);
+  auto minigame_type = minigame_type_by_player_id_[id];
+  players_by_minigame_.erase(minigame_type);
+  if (minigames_.contains(minigame_type)) {
+    DeleteMinigame(minigame_type);
+  }
+  emit SendGameInfo();
+}
+
+void GameModel::DecreaseProgress() {
+  --progress_;
+
+  emit SendGameInfo();
+}
+
+const std::unordered_map<MinigameType,
+                         std::shared_ptr<AbstractMinigame>>&
+                         GameModel::GetAllMinigames() const {
+  return minigames_;
+}
+
+void GameModel::SetProgress(uint64_t progress) {
+  progress_ = progress;
 }

@@ -1,6 +1,7 @@
 #include "room_controller.h"
 
 #include "src/Server/Models/User/user.h"
+#include "src/Helpers/Constants/constants.h"
 
 RoomController::RoomController(
     RoomId room_id,
@@ -20,12 +21,11 @@ void RoomController::OnTick() {}
 void RoomController::Send(const events::EventWrapper& event) {
   switch (event.type_case()) {
     case events::EventWrapper::kServerEvent: {
-      LogEvent(event, logging::Type::kSend);
-      for (auto [_, user_ptr] : room_model_.GetUsers()) {
-        auto serialized = event.SerializeAsString();
-        QByteArray byte_array(serialized.data(), serialized.size());
-        user_ptr->GetSocket()->sendBinaryMessage(byte_array);
+      const auto& users = room_model_.GetUsers();
+      if (!users.empty()) {
+        LogEvent(event, logging::Type::kSend);
       }
+      SendEveryUser(event);
       break;
     }
     default: {}
@@ -54,15 +54,19 @@ void RoomController::Handle(const events::EventWrapper& event) {
   LogEvent(event, logging::Type::kHandle);
   const auto& client_event = event.client_event();
   const auto& room_event = client_event.event_to_room();
+  UserId user_id = client_event.sender_id();
   switch (room_event.type_case()) {
     case client_events::EventToRoom::kChangeWaitingStatus: {
-      UserId user_id = client_event.sender_id();
       auto current_status = room_model_.GetUserWaitingStatus(user_id);
       room_model_.SetUserWaitingStatus(user_id,
                                        User::InverseStatus(current_status));
       break;
     }
     case client_events::EventToRoom::kStartGame: {
+      if (user_id != room_model_.GetChiefId() || !IsEverybodyReady()) {
+        break;
+      }
+      SendStartGameEvent();
       auto controller =
           std::make_shared<GameController>(room_model_.GetVectorOfUsers());
       connect(controller.get(), &GameController::GameEnded,
@@ -90,7 +94,7 @@ void RoomController::SendRoomInfoEvent() {
     proto_user->set_allocated_nickname(str);
     auto proto_user_status =
         static_cast<server_events::RoomUser::Status>(user_ptr->GetStatus());
-    proto_user->set_is_ready(proto_user_status);
+    proto_user->set_ready_status(proto_user_status);
   }
 
   auto* server_event = new server_events::ServerEventWrapper;
@@ -99,6 +103,34 @@ void RoomController::SendRoomInfoEvent() {
   events::EventWrapper event;
   event.set_allocated_server_event(server_event);
   AddEventToSend(event);
+}
+
+bool RoomController::IsEverybodyReady() {
+  const auto& users = room_model_.GetUsers();
+  return std::all_of(users.begin(), users.end(), [](const auto& user) {
+    return user.second->GetStatus() == User::WaitingStatus::kReady;
+  });
+}
+
+void RoomController::SendStartGameEvent() {
+  auto* start_game_event = new server_events::StartGame;
+
+  auto* event_wrapper = new server_events::ServerEventWrapper;
+  event_wrapper->set_allocated_start_game(start_game_event);
+
+  events::EventWrapper start_event;
+  start_event.set_allocated_server_event(event_wrapper);
+  AddEventToSend(start_event);
+}
+
+void RoomController::SendEveryUser(events::EventWrapper event) const {
+  const auto& users = room_model_.GetUsers();
+  for (const auto& [user_id, user_ptr] : users) {
+    event.mutable_server_event()->set_receiver_id(user_id);
+    auto serialized = event.SerializeAsString();
+    QByteArray byte_array(serialized.data(), serialized.size());
+    user_ptr->GetSocket()->sendBinaryMessage(byte_array);
+  }
 }
 
 void RoomController::GameEndedEvent(uint64_t score) {
@@ -117,5 +149,8 @@ void RoomController::GameEndedEvent(uint64_t score) {
 }
 
 void RoomController::SendEventToGame(const events::EventWrapper& event) {
-  room_model_.GetGameController()->AddEventToHandle(event);
+  auto game_controller = room_model_.GetGameController();
+  if (game_controller) {
+    game_controller->AddEventToHandle(event);
+  }
 }

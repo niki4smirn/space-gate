@@ -37,6 +37,8 @@ class RoomModel : public QObject {
   std::shared_ptr<GameController> GetGameController() const;
   void DeleteGameController();
 
+  bool HasGameController() const;
+
  signals:
   void SendRoomInfo();
 

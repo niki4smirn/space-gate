@@ -1,6 +1,7 @@
 #include "game_controller.h"
 
 #include "src/Helpers/Constants/constants.h"
+#include "src/Helpers/helpers.h"
 
 GameController::GameController(
     const std::vector<std::shared_ptr<User>>& players)
@@ -15,6 +16,7 @@ GameController::GameController(
 
   QTimer::singleShot(constants::kStartAnimationDuration, [&]() {
     StartTicking();
+    emit SendGameInfoEvent();
   });
 }
 
@@ -58,19 +60,16 @@ void GameController::Handle(const events::EventWrapper& event) {
 }
 
 void GameController::OnTick() {
-  ++ticks_;
-
   if (ticks_ % constants::kMinigamesAddingTickFrequency == 0
       && model_.GetMinigamesCount() < constants::kMaxMinigamesCount) {
-    auto range = helpers::Range(MinigameType::kTerminal, MinigameType::kLast);
-    auto type = helpers::GetRandomInRange<MinigameType>(range);
-
-    model_.AddMinigame(type);
+    TryAddMinigame();
   }
 
   if (ticks_ % constants::kGameDecreaseTickFrequency == 0) {
     model_.DecreaseProgress();
   }
+
+  ++ticks_;
 
   auto progress = model_.GetProgress();
   if (progress == 0 || progress >= constants::kScoreToFinish) {
@@ -129,11 +128,6 @@ void GameController::StartMinigameEvent(MinigameType type) {
 }
 
 void GameController::MinigameEndedEvent(MinigameType type, uint64_t score) {
-  disconnect(model_.GetMinigameByType(type).get(),
-          &AbstractMinigame::MinigameEnded,
-          this,
-          &GameController::MinigameEndedEvent);
-
   SendMinigameEndedEvent(type, score);
 
   model_.AddScore(score);
@@ -198,4 +192,21 @@ void GameController::SendMinigameEndedEvent(MinigameType type, uint64_t score) {
     server_event->set_receiver_id(player->GetId());
     AddEventToSend(event);
   }
+}
+
+void GameController::TryAddMinigame() {
+  std::vector<MinigameType> possible_types;
+  ENUM_LOOP(MinigameType::kTerminal, MinigameType::kLast, cur_type) {
+    if (!model_.GetMinigameByType(cur_type) &&
+        helpers::GetMinigamePlayersCountByType(cur_type)
+            <= model_.GetPlayersCount()) {
+      possible_types.push_back(cur_type);
+    }
+  }
+  if (possible_types.empty()) {
+    return;
+  }
+  auto range = helpers::Range(0, possible_types.size());
+  auto index = helpers::GetRandomInRange<int>(range);
+  model_.AddMinigame(possible_types[index]);
 }

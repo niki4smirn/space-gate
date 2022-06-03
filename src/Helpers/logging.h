@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QString>
+#include <QDebug>
 
 #define LOG qDebug().noquote().nospace()
 #define ERROR_LOG(msg) qFatal("%s", \

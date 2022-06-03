@@ -63,7 +63,6 @@ class ClientMainMenu : public QWidget {
   QFont font_;
 
   bool is_chief_{true};
-
   static QColor StatusToColor(server_events::RoomUser::Status status);
 
   void ShowRoomChiefInterface();

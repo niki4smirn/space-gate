@@ -20,6 +20,8 @@ class FinalScreen : public QWidget {
 
   ~FinalScreen();
 
+  void SetResult(bool victory);
+
  private:
   void SetSize();
   void SetName();
@@ -37,6 +39,7 @@ class FinalScreen : public QWidget {
   QLabel* info_;
   QLabel* game_name_;
   QFont font_;
+  bool victory_;
 
   signals:
   void MenuPressed();

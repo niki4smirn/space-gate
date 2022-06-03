@@ -60,7 +60,11 @@ void FinalScreen::SetLayout() {
 
 void FinalScreen::SetInfo() {
   info_->setVisible(1);
-  info_->setText("Important");
+  if (victory_ == 1) {
+    info_->setText("It did was a success");
+  } else {
+    info_->setText("It didn't was a success");
+  }
   info_->setStyleSheet("QLabel {color : #88bcff; }");
   font_.setPointSize(40);
   font_.setBold(0);

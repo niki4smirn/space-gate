@@ -51,6 +51,7 @@ GameWidget::GameWidget(QWidget* parent) : QWidget(parent) {
   SetTracking();
   BackgroundShines();
   Loss();
+  EndGame();
 
   // QTimer::singleShot(6000, [&](){
   //   EndGame();
@@ -445,38 +446,70 @@ void GameWidget::Loss() {
 
 void GameWidget::EndGame() {
   index_ = 0;
+
+  QPixmap pixmap_gr(":Buttons/green_button_clicked.png");
+  pixmap_gr = pixmap_gr.scaled(green_button_->size());
+  green_button_->setIcon(QIcon(pixmap_gr));
+  green_button_->setIconSize(pixmap_gr.size());
+
+  QPixmap pixmap_red(":Buttons/red_button_clicked.png");
+  pixmap_red = pixmap_red.scaled(red_button_->size());
+  red_button_->setIcon(QIcon(pixmap_red));
+  red_button_->setIconSize(pixmap_red.size());
+
+  QPixmap pixmap_pr(":Buttons/purple_button_clicked.png");
+  pixmap_pr = pixmap_pr.scaled(purple_button_->size());
+  purple_button_->setIcon(QIcon(pixmap_pr));
+  purple_button_->setIconSize(pixmap_pr.size());
+
+  QPixmap pixmap_bl(":Buttons/blue_button_clicked.png");
+  pixmap_bl = pixmap_bl.scaled(blue_button_->size());
+  blue_button_->setIcon(QIcon(pixmap_bl));
+  blue_button_->setIconSize(pixmap_bl.size());
+
+  QPixmap pixmap_yel(":Buttons/yellow_button_clicked.png");
+  pixmap_yel = pixmap_yel.scaled(yellow_button_->size());
+  yellow_button_->setIcon(QIcon(pixmap_yel));
+  yellow_button_->setIconSize(pixmap_yel.size());
+
   shining_timer_->stop();
-  blue_button_->pressed();
-  red_button_->pressed();
-  green_button_->pressed();
-  purple_button_->pressed();
-  yellow_button_->pressed();
+
+  blue_button_->disconnect();
+  yellow_button_->disconnect();
+  purple_button_->disconnect();
+  red_button_->disconnect();
+  green_button_->disconnect();
+
   setMouseTracking(0);
   loss_timer_->start();
+
   QPixmap pixmap_yellow(":Bulbs/yellow_bulb_on.png");
   pixmap_yellow = pixmap_yellow.scaled(yellow_bulb_red_->size());
   yellow_bulb_red_->setPixmap(pixmap_yellow);
   yellow_bulb_green_->setPixmap(pixmap_yellow);
   yellow_bulb_blue_->setPixmap(pixmap_yellow);
   yellow_bulb_purple_->setPixmap(pixmap_yellow);
-  QPixmap pixmap_gr(":Bulbs/green_bulb_on.png");
-  pixmap_gr = pixmap_gr.scaled(green_bulb_red_->size());
-  green_bulb_red_->setPixmap(pixmap_gr);
-  green_bulb_green_->setPixmap(pixmap_gr);
-  green_bulb_blue_->setPixmap(pixmap_gr);
-  green_bulb_purple_->setPixmap(pixmap_gr);
-  QPixmap pixmap_bl(":Bulbs/blue_bulb_on.png");
-  pixmap_bl = pixmap_bl.scaled(blue_bulb_red_->size());
-  blue_bulb_red_->setPixmap(pixmap_bl);
-  blue_bulb_green_->setPixmap(pixmap_bl);
-  blue_bulb_blue_->setPixmap(pixmap_bl);
-  blue_bulb_purple_->setPixmap(pixmap_bl);
-  QPixmap pixmap_red(":Bulbs/red_bulb_on.png");
-  pixmap_red = pixmap_red.scaled(red_bulb_red_->size());
-  red_bulb_red_->setPixmap(pixmap_red);
-  red_bulb_green_->setPixmap(pixmap_red);
-  red_bulb_blue_->setPixmap(pixmap_red);
-  red_bulb_purple_->setPixmap(pixmap_red);
+
+  QPixmap pixmap_green(":Bulbs/green_bulb_on.png");
+  pixmap_green = pixmap_green.scaled(green_bulb_red_->size());
+  green_bulb_red_->setPixmap(pixmap_green);
+  green_bulb_green_->setPixmap(pixmap_green);
+  green_bulb_blue_->setPixmap(pixmap_green);
+  green_bulb_purple_->setPixmap(pixmap_green);
+
+  QPixmap pixmap_blue(":Bulbs/blue_bulb_on.png");
+  pixmap_blue = pixmap_blue.scaled(blue_bulb_red_->size());
+  blue_bulb_red_->setPixmap(pixmap_blue);
+  blue_bulb_green_->setPixmap(pixmap_blue);
+  blue_bulb_blue_->setPixmap(pixmap_blue);
+  blue_bulb_purple_->setPixmap(pixmap_blue);
+
+  QPixmap pixmap_r(":Bulbs/red_bulb_on.png");
+  pixmap_r = pixmap_r.scaled(red_bulb_red_->size());
+  red_bulb_red_->setPixmap(pixmap_r);
+  red_bulb_green_->setPixmap(pixmap_r);
+  red_bulb_blue_->setPixmap(pixmap_r);
+  red_bulb_purple_->setPixmap(pixmap_r);
 }
 
 void GameWidget::SetBulbsCount(int minigame_pos, int count) {

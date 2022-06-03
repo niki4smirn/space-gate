@@ -11,6 +11,8 @@
 #include "QGroupBox"
 #include "QPushButton"
 #include "QGridLayout"
+#include "QFont"
+#include "QFontDatabase"
 
 class MainWidget : public QWidget {
   Q_OBJECT
@@ -20,12 +22,19 @@ class MainWidget : public QWidget {
   ~MainWidget();
 
  private:
+  void SetSize();
+  void SetName();
+  void SetLayout();
+  void SetInfo();
+ private:
   QGroupBox* buttons_;
   QGridLayout* layout_;
   QPushButton* to_menu_button_;
   QPushButton* to_lobby_button_;
   BackgroundWidget* background_;
   QLabel* info_;
+  QLabel* game_name_;
+  QFont font_;
 };
 
 

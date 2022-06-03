@@ -85,3 +85,7 @@ void RoomModel::SetGameController(std::shared_ptr<GameController> controller) {
 std::shared_ptr<GameController> RoomModel::GetGameController() const {
   return game_controller_;
 }
+
+bool RoomModel::HasGameController() const {
+  return game_controller_ != nullptr;
+}

@@ -1,5 +1,4 @@
-#ifndef GAME_WIDGET_H
-#define GAME_WIDGET_H
+#pragma once
 
 #include "QIcon"
 #include "QImage"
@@ -13,7 +12,8 @@
 #include "QWidget"
 
 class GameWidget : public QWidget {
- Q_OBJECT
+  Q_OBJECT
+
  public:
   explicit GameWidget(QWidget* parent = nullptr);
 
@@ -73,5 +73,3 @@ class GameWidget : public QWidget {
   int max_progress_;
   int index_ = 0;
 };
-
-#endif // GAME_WIDGET_H

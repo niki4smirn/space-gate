@@ -98,7 +98,6 @@ void GameWidget::SetButtonsSize() {
   red_button_->setFixedSize(width / 1920 * 222, height / 1080 * 177);
   yellow_button_->setFixedSize(width / 1920 * 318, height / 1080 * 132);
   purple_button_->setFixedSize(width / 1920 * 227, height / 1080 * 152);
-
 }
 
 void GameWidget::SetButtonsGeometry() {
@@ -236,7 +235,6 @@ void GameWidget::SetBulbsSize() {
   red_bulb_blue_->setFixedSize(width / 1920 * 41, height / 1080 * 33);
   blue_bulb_blue_->setFixedSize(width / 1920 * 41, height / 1080 * 33);
   green_bulb_blue_->setFixedSize(width / 1920 * 41, height / 1080 * 33);
-
 }
 
 void GameWidget::SetBulbsGeometry() {

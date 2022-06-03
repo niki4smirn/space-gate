@@ -152,3 +152,8 @@ void GameModel::SetProgress(uint64_t progress) {
 int GameModel::GetPlayersCount() const {
   return players_.size();
 }
+
+bool GameModel::IsWaitingForStart(MinigameType type) {
+  return players_by_minigame_.contains(type) &&
+      !minigames_.contains(type);
+}

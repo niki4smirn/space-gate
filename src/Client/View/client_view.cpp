@@ -5,7 +5,8 @@ ClientView::ClientView() :
     stacked_widget_(new QStackedWidget(this)),
     main_menu_(new ClientMainMenu(this)),
     game_widget_(new GameWidget(this)),
-    input_controller_(new InputController) {
+    input_controller_(new InputController),
+    network_problem_widget_(new NetworkProblemWidget(this)) {
   AddWidgets();
   stacked_widget_->setCurrentWidget(main_menu_);
   setCentralWidget(stacked_widget_);
@@ -19,6 +20,7 @@ ClientView::ClientView() :
 
 void ClientView::mouseMoveEvent(QMouseEvent* event) {
   main_menu_->SetCenterPos(event->pos());
+  network_problem_widget_->SetCenterPos(event->pos());
   input_controller_->MouseMove(event->pos());
 }
 
@@ -59,11 +61,15 @@ void ClientView::Connect() {
   connect(game_widget_, &GameWidget::LeaveMinigame, [&]() {
     emit LeaveMinigame();
   });
+  connect(network_problem_widget_, &NetworkProblemWidget::Reconnect, [&]() {
+    emit Reconnect();
+  });
 }
 
 void ClientView::AddWidgets() {
   stacked_widget_->addWidget(main_menu_);
   stacked_widget_->addWidget(game_widget_);
+  stacked_widget_->addWidget(network_problem_widget_);
 }
 
 void ClientView::UpdateRoomInfoMenu(
@@ -110,4 +116,13 @@ void ClientView::UpdateProgress(uint64_t progress) {
 void ClientView::UpdateMinigameBulbs(
     int minigame_pos, int waiting_count) {
   game_widget_->SetBulbsCount(minigame_pos, waiting_count);
+}
+
+void ClientView::ShowNetworkProblemWidget() {
+  stacked_widget_->setCurrentWidget(network_problem_widget_);
+}
+
+void ClientView::ShowMainMenu() {
+  stacked_widget_->setCurrentWidget(main_menu_);
+  main_menu_->BackToStart();
 }

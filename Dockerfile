@@ -41,7 +41,7 @@ RUN ssh-keyscan github.com >> /root/.ssh/known_hosts
 WORKDIR /root
 RUN git clone git@github.com:niki4smirn/space-gate.git
 WORKDIR space-gate
-RUN git checkout origin/deployment
+RUN git checkout origin/developing
 RUN mkdir cmake-build-release
 
 RUN cmake -S /root/space-gate -B /root/space-gate/cmake-build-release

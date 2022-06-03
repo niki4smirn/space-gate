@@ -5,6 +5,7 @@
 #include "src/Server/Models/RoomModel/room_model.h"
 // #include "src/Client/View/GameWidget/game_widget.h"
 #include "src/Client/View/FinalGameWidget/game_widget.h"
+#include "src/Client/View/NetworkProblemWidget/network_problem_widget.h"
 
 #include <QWidget>
 #include <QStackedWidget>
@@ -23,6 +24,9 @@ class ClientView : public QMainWindow {
   void UpdateProgress(uint64_t progress);
   void UpdateMinigameBulbs(int minigame_pos, int waiting_count);
 
+  void ShowNetworkProblemWidget();
+  void ShowMainMenu();
+
  private:
   void CloseWindow();
   void AddWidgets();
@@ -36,6 +40,7 @@ class ClientView : public QMainWindow {
   std::unique_ptr<InputController> input_controller_;
   ClientMainMenu* main_menu_;
   GameWidget* game_widget_;
+  NetworkProblemWidget* network_problem_widget_;
   QStackedWidget* stacked_widget_;
 
  signals:
@@ -48,4 +53,5 @@ class ClientView : public QMainWindow {
   void MouseMoveToServer(const QPoint& pos);
   void JoinMinigame(int minigame_index);
   void LeaveMinigame();
+  void Reconnect();
 };

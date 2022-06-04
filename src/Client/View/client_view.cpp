@@ -5,7 +5,6 @@ ClientView::ClientView() :
     stacked_widget_(new QStackedWidget(this)),
     main_menu_(new ClientMainMenu(this)),
     game_widget_(new GameWidget(this)),
-    input_controller_(new InputController),
     terminal_minigame_view_(new TerminalMinigameView(this)),
     final_screen_(new FinalScreen(this)),
     input_controller_(new InputController),

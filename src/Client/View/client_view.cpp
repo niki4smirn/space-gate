@@ -5,7 +5,8 @@ ClientView::ClientView() :
     stacked_widget_(new QStackedWidget(this)),
     main_menu_(new ClientMainMenu(this)),
     game_widget_(new GameWidget(this)),
-    input_controller_(new InputController) {
+    input_controller_(new InputController),
+    terminal_minigame_view_(new TerminalMinigameView(this)) {
   AddWidgets();
   stacked_widget_->setCurrentWidget(main_menu_);
   setCentralWidget(stacked_widget_);
@@ -39,10 +40,10 @@ void ClientView::Connect() {
           [this]() { emit LeaveRoom(); });
   connect(main_menu_,
           &ClientMainMenu::JoinRoomSignal,
-          [this](uint64_t room_id){emit JoinRoom(room_id);});
+          [this](uint64_t room_id) { emit JoinRoom(room_id); });
   connect(main_menu_,
           &ClientMainMenu::StartGame,
-          [this]() {emit StartGame();});
+          [this]() { emit StartGame(); });
   connect(input_controller_.get(),
           &InputController::KeyEventToServer,
           [this](input::Name key) { emit KeyEventToServer(key); });
@@ -62,6 +63,7 @@ void ClientView::Connect() {
 }
 
 void ClientView::AddWidgets() {
+  stacked_widget_->addWidget(terminal_minigame_view_);
   stacked_widget_->addWidget(main_menu_);
   stacked_widget_->addWidget(game_widget_);
 }
@@ -110,4 +112,42 @@ void ClientView::UpdateProgress(uint64_t progress) {
 void ClientView::UpdateMinigameBulbs(
     int minigame_pos, int waiting_count) {
   game_widget_->SetBulbsCount(minigame_pos, waiting_count);
+}
+
+void ClientView::UpdateMinigame(
+    const minigame_responses::MinigameResponse& response) {
+
+  switch (response.type_case()) {
+    case minigame_responses::MinigameResponse::kInitialTerminalRespone: {
+      if (stacked_widget_->currentWidget() != terminal_minigame_view_) {
+        stacked_widget_->setCurrentWidget(terminal_minigame_view_);
+      }
+
+      terminal_minigame_view_->InitializeView(response);
+
+      break;
+    }
+    case minigame_responses::MinigameResponse::kTerminalResponse: {
+      if (stacked_widget_->currentWidget() != terminal_minigame_view_) {
+        stacked_widget_->setCurrentWidget(terminal_minigame_view_);
+      }
+
+      terminal_minigame_view_->UpdateView(response);
+
+      break;
+    }
+    case minigame_responses::MinigameResponse::kResult: {
+      stacked_widget_->setCurrentWidget(game_widget_);
+      break;
+    }
+    default: {}
+  }
+}
+
+std::optional<MinigameType> ClientView::IsMinigameStarted() {
+  if (stacked_widget_->currentWidget() == terminal_minigame_view_) {
+    return MinigameType::kTerminal;
+  }
+
+  return std::nullopt;
 }

@@ -11,7 +11,7 @@ constexpr int kScoreToFinish = 20;
 constexpr int kMinigamesAddingTimeFrequency = 30000;
 constexpr int kMinigamesAddingTickFrequency =
     kMinigamesAddingTimeFrequency / kTickTime;
-constexpr int kGameDecreaseTimeFrequency = 2000;
+constexpr int kGameDecreaseTimeFrequency = 20000;
 constexpr int kGameDecreaseTickFrequency =
     kGameDecreaseTimeFrequency / kTickTime;
 constexpr int kMaxMinigamesCount = 4;

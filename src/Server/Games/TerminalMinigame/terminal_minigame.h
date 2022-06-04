@@ -25,7 +25,7 @@ class TerminalMinigame final : public AbstractMinigame {
   void SendResponseMessages() override;
   events::EventWrapper GenerateResponseMessage(UserId user_id) override;
 
-  static constexpr int kDuration = 4000;
+  static constexpr int kDuration = 2000;
   static constexpr int kMaxScore = 5;
 
   QString current_{};

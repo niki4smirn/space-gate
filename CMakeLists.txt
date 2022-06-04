@@ -82,7 +82,7 @@ add_executable(client
 #        src/Client/View/GameWidget/game_widget.cpp
         src/Client/View/GameWidget/MainGameWidget/main_game_widget.cpp
         src/Client/View/GameWidget/WaitingScreen/waiting_screen.cpp
-        )
+        src/Client/Games/TerminalMinigameView/terminal_minigame_view.cpp)
 
 set(REQUIRED_QT_PARTS
         Qt::Core

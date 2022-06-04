@@ -43,7 +43,7 @@ void GameController::Handle(const events::EventWrapper& event) {
       break;
     }
     case client_events::EventToGame::kMinigameAction: {
-      MinigameId minigame_id = game_event.join_minigame().minigame_id();
+      MinigameId minigame_id = game_event.minigame_action().minigame_id();
       auto minigame =
           model_.GetMinigameByType(static_cast<MinigameType>(minigame_id));
 

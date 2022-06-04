@@ -51,16 +51,15 @@ void TerminalMinigame::StartMinigame() {
        input::Name::kMinus, input::Name::kC, input::Name::kN, input::Name::kT,
        input::Name::kR, input::Name::kL, input::Name::kE, input::Name::kA,
        input::Name::kApostrophe, input::Name::kF, input::Name::kX,
-       input::Name::kApostrophe, input::Name::kF, input::Name::kX,
        input::Name::kBackspace};
 
   std::shuffle(needed_keys.begin(),
                needed_keys.end(),
                std::mt19937(std::random_device()()));
 
-  int a = (needed_keys.size() / 4) + 1;
+  int keys_count = needed_keys.size() / 4;
   for (int i = 0; i < needed_keys.size(); ++i) {
-    available_keys_[i / a].push_back(needed_keys[i]);
+    available_keys_[i / keys_count].push_back(needed_keys[i]);
   }
 
   SendInitialMessages();

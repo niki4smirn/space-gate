@@ -5,6 +5,7 @@
 #include "src/Server/Models/RoomModel/room_model.h"
 // #include "src/Client/View/GameWidget/game_widget.h"
 #include "src/Client/View/FinalGameWidget/game_widget.h"
+#include "src/Client/Games/TerminalMinigameView/terminal_minigame_view.h"
 
 #include <QWidget>
 #include <QStackedWidget>
@@ -22,6 +23,8 @@ class ClientView : public QMainWindow {
   void OpenGame();
   void UpdateProgress(uint64_t progress);
   void UpdateMinigameBulbs(int minigame_pos, int waiting_count);
+  std::optional<MinigameType> IsMinigameStarted();
+  void UpdateMinigame(const minigame_responses::MinigameResponse& response);
 
  private:
   void CloseWindow();
@@ -30,6 +33,7 @@ class ClientView : public QMainWindow {
   void mouseMoveEvent(QMouseEvent* event) override;
   void keyPressEvent(QKeyEvent* event) override;
   void mousePressEvent(QMouseEvent* event) override;
+
   void mouseReleaseEvent(QMouseEvent* event) override;
 
  private:
@@ -38,6 +42,7 @@ class ClientView : public QMainWindow {
   GameWidget* game_widget_;
   QStackedWidget* stacked_widget_;
 
+  TerminalMinigameView* terminal_minigame_view_;
  signals:
   void ReadyButtonPressed();
   void CreateRoom();

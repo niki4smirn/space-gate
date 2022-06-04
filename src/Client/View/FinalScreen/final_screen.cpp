@@ -15,6 +15,12 @@ FinalScreen::FinalScreen(QWidget* parent) : QWidget(parent) {
   SetLayout();
   UpdateInfo();
   Connect();
+  setMouseTracking(true);
+  background_->setMouseTracking(true);
+  to_lobby_button_->setMouseTracking(true);
+  to_menu_button_->setMouseTracking(true);
+  info_->setMouseTracking(true);
+  game_name_->setMouseTracking(true);
 }
 
 void FinalScreen::SetSize() {
@@ -88,4 +94,9 @@ void FinalScreen::Connect() {
 void FinalScreen::SetResult(bool victory) {
   victory_ = victory;
   UpdateInfo();
+}
+
+void FinalScreen::mouseMoveEvent(QMouseEvent* event) {
+  QWidget::mouseMoveEvent(event);
+  background_->SetCenterPos(event->pos());
 }

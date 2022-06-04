@@ -21,6 +21,11 @@ class GameWidget : public QWidget {
 
   void SetProgress(int progress, int max_progress);
   void SetBulbsCount(int minigame_pos, int count);
+  void TurnOffGreen();
+  void TurnOffRed();
+  void TurnOffPurple();
+  void TurnOffBlue();
+
 
  signals:
   void JoinMinigame(int minigame_index_pos);

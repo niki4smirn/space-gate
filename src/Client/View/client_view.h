@@ -6,6 +6,7 @@
 #include "src/Client/View/FinalScreen/final_screen.h"
 // #include "src/Client/View/GameWidget/game_widget.h"
 #include "src/Client/View/FinalGameWidget/game_widget.h"
+#include "src/Client/Games/TerminalMinigameView/terminal_minigame_view.h"
 #include "src/Client/View/NetworkProblemWidget/network_problem_widget.h"
 
 #include <QWidget>
@@ -25,6 +26,9 @@ class ClientView : public QMainWindow {
   void OpenGame();
   void UpdateProgress(uint64_t progress);
   void UpdateMinigameBulbs(int minigame_pos, int waiting_count);
+  std::optional<MinigameType> IsMinigameStarted();
+  void UpdateMinigame(const minigame_responses::MinigameResponse& response);
+  void ResetAllBulbs();
 
   void ShowNetworkProblemWidget();
   void ShowMainMenu();
@@ -45,6 +49,7 @@ class ClientView : public QMainWindow {
   GameWidget* game_widget_;
   FinalScreen* final_screen_;
   NetworkProblemWidget* network_problem_widget_;
+  TerminalMinigameView* terminal_minigame_view_;
   QStackedWidget* stacked_widget_;
 
  signals:

@@ -161,7 +161,7 @@ void ClientMainMenu::Connect() {
       sound_on_->setText("Turn On");
       sound_->setMuted(1);
     }
-    sound_->setVolume(double(value) / 100);
+    sound_->setVolume(static_cast<double>(value) / 100);
     setting_->setValue("sound_value", sound_->volume());
     setting_->setValue("spin_box_value", value);
     setting_->setValue("muted", sound_->isMuted());
@@ -265,7 +265,8 @@ void ClientMainMenu::Settings() {
   set_sound_->setFixedSize(400, 100);
   set_sound_->setSpecialValueText("Volume");
   set_sound_->setFont(font_);
-  set_sound_->setStyleSheet("color : #88bcff; font-size: 10px; aligment : Qt::AlignCenter");
+  set_sound_->setStyleSheet("color : #88bcff; font-size: 10px; aligment : "
+                            "Qt::AlignCenter");
   set_sound_->setRange(0, 100);
   set_sound_->setValue((setting_->value("spin_box_value")).toInt());
   sound_->setMuted((setting_->value("muted").toBool()));
@@ -435,6 +436,7 @@ void ClientMainMenu::ResetAllWidgets() {
 
 void ClientMainMenu::BackToLobby() {
   background_->SetLightEffect(false);
+  ready_status_->setText("READY");
   if (is_chief_) {
     ShowRoomChiefInterface();
   } else {

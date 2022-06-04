@@ -12,6 +12,15 @@ message SampleResponse {
   Role role = 2;
 }
 
+message InitialTerminalResponse {
+  repeated uint64 available_buttons_id = 1;
+  string text = 2;
+}
+
+message TerminalResponse {
+  string entered_text = 1;
+}
+
 message MinigameResponse {
   enum Result {
     kCompleted = 0;
@@ -21,5 +30,7 @@ message MinigameResponse {
   oneof type {
     Result result = 2;
     SampleResponse sample_response = 3;
+    InitialTerminalResponse initial_terminal_respone = 4;
+    TerminalResponse terminal_response = 5;
   }
 }

@@ -615,3 +615,75 @@ void GameWidget::SetBulbsCount(int minigame_pos, int count) {
     default: {}
   }
 }
+
+void GameWidget::TurnOffGreen() {
+  QPixmap pixmap_red(":Bulbs/red_bulb_off.png");
+  pixmap_red = pixmap_red.scaled(red_bulb_green_->size());
+  red_bulb_green_->setPixmap(pixmap_red);
+
+  QPixmap pixmap_yellow(":Bulbs/yellow_bulb_off.png");
+  pixmap_yellow = pixmap_yellow.scaled(yellow_bulb_green_->size());
+  yellow_bulb_green_->setPixmap(pixmap_yellow);
+
+  QPixmap pixmap_green(":Bulbs/green_bulb_off.png");
+  pixmap_green = pixmap_green.scaled(green_bulb_green_->size());
+  green_bulb_green_->setPixmap(pixmap_green);
+
+  QPixmap pixmap_blue(":Bulbs/blue_bulb_off.png");
+  pixmap_blue = pixmap_blue.scaled(blue_bulb_green_->size());
+  blue_bulb_green_->setPixmap(pixmap_blue);
+}
+
+void GameWidget::TurnOffRed() {
+  QPixmap pixmap_red(":Bulbs/red_bulb_off.png");
+  pixmap_red = pixmap_red.scaled(red_bulb_green_->size());
+  red_bulb_red_->setPixmap(pixmap_red);
+
+  QPixmap pixmap_yellow(":Bulbs/yellow_bulb_off.png");
+  pixmap_yellow = pixmap_yellow.scaled(yellow_bulb_green_->size());
+  yellow_bulb_red_->setPixmap(pixmap_yellow);
+
+  QPixmap pixmap_green(":Bulbs/green_bulb_off.png");
+  pixmap_green = pixmap_green.scaled(green_bulb_green_->size());
+  green_bulb_red_->setPixmap(pixmap_green);
+
+  QPixmap pixmap_blue(":Bulbs/blue_bulb_off.png");
+  pixmap_blue = pixmap_blue.scaled(blue_bulb_green_->size());
+  blue_bulb_red_->setPixmap(pixmap_blue);
+}
+
+void GameWidget::TurnOffPurple() {
+  QPixmap pixmap_red(":Bulbs/red_bulb_off.png");
+  pixmap_red = pixmap_red.scaled(red_bulb_green_->size());
+  red_bulb_purple_->setPixmap(pixmap_red);
+
+  QPixmap pixmap_yellow(":Bulbs/yellow_bulb_off.png");
+  pixmap_yellow = pixmap_yellow.scaled(yellow_bulb_green_->size());
+  yellow_bulb_purple_->setPixmap(pixmap_yellow);
+
+  QPixmap pixmap_green(":Bulbs/green_bulb_off.png");
+  pixmap_green = pixmap_green.scaled(green_bulb_green_->size());
+  green_bulb_purple_->setPixmap(pixmap_green);
+
+  QPixmap pixmap_blue(":Bulbs/blue_bulb_off.png");
+  pixmap_blue = pixmap_blue.scaled(blue_bulb_green_->size());
+  blue_bulb_purple_->setPixmap(pixmap_blue);
+}
+
+void GameWidget::TurnOffBlue() {
+  QPixmap pixmap_red(":Bulbs/red_bulb_off.png");
+  pixmap_red = pixmap_red.scaled(red_bulb_green_->size());
+  red_bulb_blue_->setPixmap(pixmap_red);
+
+  QPixmap pixmap_yellow(":Bulbs/yellow_bulb_off.png");
+  pixmap_yellow = pixmap_yellow.scaled(yellow_bulb_green_->size());
+  yellow_bulb_blue_->setPixmap(pixmap_yellow);
+
+  QPixmap pixmap_green(":Bulbs/green_bulb_off.png");
+  pixmap_green = pixmap_green.scaled(green_bulb_green_->size());
+  green_bulb_blue_->setPixmap(pixmap_green);
+
+  QPixmap pixmap_blue(":Bulbs/blue_bulb_off.png");
+  pixmap_blue = pixmap_blue.scaled(blue_bulb_green_->size());
+  blue_bulb_blue_->setPixmap(pixmap_blue);
+}

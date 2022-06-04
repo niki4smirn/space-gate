@@ -27,7 +27,6 @@ class ClientView : public QMainWindow {
 
   void ShowNetworkProblemWidget();
   void ShowMainMenu();
-
   void ShowFinalScreen(bool is_win);
 
  private:

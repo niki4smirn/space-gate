@@ -142,4 +142,3 @@ void ClientView::ShowFinalScreen(bool is_win) {
   final_screen_->SetResult(is_win);
   stacked_widget_->setCurrentWidget(final_screen_);
 }
-

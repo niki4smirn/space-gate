@@ -69,7 +69,7 @@ void TerminalMinigame::StartMinigame() {
 bool TerminalMinigame::IsCompleted() {
   SendResponseMessages();
 
-  if (current_ < right_answer_) {
+  if (current_ != right_answer_) {
     return false;
   }
 

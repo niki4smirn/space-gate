@@ -30,7 +30,7 @@ class TerminalMinigame final : public AbstractMinigame {
 
   QString current_{};
   QString right_answer_
-      {"sudo ship-controller --reload && ship-controller --fix-all"};
+      {"sudo ship-controller --reload .. ship-controller --fix-all"};
 
   std::unordered_map<RoleId, std::vector<input::Name>> available_keys_;
   void SendInitialMessages();

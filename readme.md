@@ -4,6 +4,10 @@ Spacegate is cooperative online game written in C++ using Qt and Protobuf.
 
 You are on a spaceship with your friends. Solve minigames to stay alive!
 
+![Menu](https://github.com/niki4smirn/space-gate/blob/main/main_menu.png?raw=true)
+![Game](https://github.com/niki4smirn/space-gate/blob/main/game.png?raw=true)
+![Terminal](https://github.com/niki4smirn/space-gate/blob/main/terminal.jpg?raw=true)
+
 ### Prerequisites
 
 To run project you need at least 5.15.2 QT and 3.15.5 libprotoc.
@@ -15,9 +19,6 @@ Clone project from repository. Build project with Cmake on MINGW or Clang, link 
 Run server. By default, the game server will be running on localhost:1337.
 Then run cleint with ip string as argument to connect to custom server or default (176.53.160.34), otherwise it will try to connect to localhost.
 
-### Master branch build status
-[![Build Status](https://github.com/niki4smirn/space-gate/blob/main/.github/workflows/build.yml/badge.svg?branch=master)](https://github.com/niki4smirn/space-gate/blob/main/.github/workflows/build.yml)
-[![Cpplint Status](https://github.com/niki4smirn/space-gate/blob/main/.github/workflows/cpplint.yml/badge.svg?branch=master)](https://github.com/niki4smirn/space-gate/blob/main/.github/workflows/cpplint.yml)
 
 ## Authors
 

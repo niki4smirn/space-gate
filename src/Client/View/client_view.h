@@ -24,6 +24,7 @@ class ClientView : public QMainWindow {
   void OpenGame();
   void UpdateProgress(uint64_t progress);
   void UpdateMinigameBulbs(int minigame_pos, int waiting_count);
+  void ResetAllBulbs();
 
   void ShowNetworkProblemWidget();
   void ShowMainMenu();

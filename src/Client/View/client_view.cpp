@@ -126,25 +126,6 @@ void ClientView::UpdateProgress(uint64_t progress) {
 
 void ClientView::UpdateMinigameBulbs(
     int minigame_pos, int waiting_count) {
-  switch (minigame_pos) {
-    case 0: {
-      game_widget_->TurnOffGreen();
-      break;
-  }
-    case 1: {
-      game_widget_->TurnOffRed();
-      break;
-    }
-    case 2: {
-      game_widget_->TurnOffPurple();
-      break;
-    }
-    case 3: {
-      game_widget_->TurnOffBlue();
-      break;
-    }
-    default: {}
-  }
   game_widget_->SetBulbsCount(minigame_pos, waiting_count);
 }
 
@@ -160,4 +141,11 @@ void ClientView::ShowMainMenu() {
 void ClientView::ShowFinalScreen(bool is_win) {
   final_screen_->SetResult(is_win);
   stacked_widget_->setCurrentWidget(final_screen_);
+}
+
+void ClientView::ResetAllBulbs() {
+  game_widget_->TurnOffGreen();
+  game_widget_->TurnOffRed();
+  game_widget_->TurnOffPurple();
+  game_widget_->TurnOffBlue();
 }

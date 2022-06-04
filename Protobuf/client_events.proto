@@ -1,11 +1,14 @@
 syntax = "proto3";
 package client_events;
 
+import "Protobuf/minigame_actions.proto";
+
 message ClientEventWrapper {
   uint64 sender_id = 1;
   oneof receiver {
     EventToServer event_to_server = 2;
     EventToRoom event_to_room = 3;
+    EventToGame event_to_game = 4;
   }
 }
 
@@ -27,8 +30,25 @@ message EventToServer {
 
 message ChangeWaitingStatus {}
 
+message StartGame {}
+
 message EventToRoom {
   oneof type {
     ChangeWaitingStatus change_waiting_status = 1;
+    StartGame start_game = 2;
+  }
+}
+
+message JoinMinigame {
+  uint64 minigame_id = 1;
+}
+
+message LeaveMinigame {}
+
+message EventToGame {
+  oneof type {
+    JoinMinigame join_minigame = 1;
+    minigame_actions.MinigameAction minigame_action = 2;
+    LeaveMinigame leave_minigame = 3;
   }
 }

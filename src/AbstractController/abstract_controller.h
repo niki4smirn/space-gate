@@ -8,18 +8,7 @@
 #include "Protobuf/events.pb.h"
 
 #include "src/Helpers/helpers.h"
-
-namespace log {
-
-enum class Type {
-  kHandle,
-  kSend,
-  kReceive
-};
-
-QString GetProcessStringByType(Type type);
-
-}  // namespace log
+#include "src/Helpers/logging.h"
 
 class AbstractController : public QObject {
  public:
@@ -30,6 +19,8 @@ class AbstractController : public QObject {
   void AddEventToHandle(const events::EventWrapper& event);
   void AddEventToSend(const events::EventWrapper& event);
 
+  virtual void PrepareToClose();
+
  protected:
   AbstractController();
 
@@ -38,9 +29,11 @@ class AbstractController : public QObject {
   virtual void Send(const events::EventWrapper& event) = 0;
   virtual void Handle(const events::EventWrapper& event) = 0;
 
-  void LogEvent(const events::EventWrapper& event, log::Type log_type) const;
+  void LogEvent(const events::EventWrapper& event,
+                logging::Type log_type) const;
 
   void StartTicking();
+  void HandleAndSend();
 
  private:
   void Tick();

@@ -1,19 +1,6 @@
 #include "abstract_controller.h"
 
-#include "Constants/constants.h"
-
-namespace log {
-
-QString GetProcessStringByType(Type type) {
-  static const std::unordered_map<Type, QString> type_to_str = {
-      {Type::kHandle, " handling "},
-      {Type::kSend, " sending "},
-      {Type::kReceive, " received "},
-  };
-  return type_to_str.at(type);
-}
-
-}  // namespace log
+#include "src/Helpers/Constants/constants.h"
 
 AbstractController::AbstractController() {
   connect(&timer_, &QTimer::timeout, this, &AbstractController::Tick);
@@ -21,9 +8,9 @@ AbstractController::AbstractController() {
 
 void AbstractController::LogEvent(
     const events::EventWrapper& event,
-    log::Type log_type) const {
-  qDebug().noquote().nospace() << GetControllerName()
-      << log::GetProcessStringByType(log_type) << event.ShortDebugString();
+    logging::Type log_type) const {
+  LOG << GetControllerName()
+      << logging::GetProcessStringByType(log_type) << event.ShortDebugString();
 }
 
 void AbstractController::StartTicking() {
@@ -31,8 +18,20 @@ void AbstractController::StartTicking() {
 }
 
 void AbstractController::Tick() {
-  this->OnTick();
+  HandleAndSend();
 
+  this->OnTick();
+}
+
+void AbstractController::AddEventToHandle(const events::EventWrapper& event) {
+  events_to_handle_.push(event);
+}
+
+void AbstractController::AddEventToSend(const events::EventWrapper& event) {
+  events_to_send_.push(event);
+}
+
+void AbstractController::HandleAndSend() {
   while (!events_to_handle_.empty()) {
     auto& cur_event = events_to_handle_.front();
     this->Handle(cur_event);
@@ -48,10 +47,6 @@ void AbstractController::Tick() {
   }
 }
 
-void AbstractController::AddEventToHandle(const events::EventWrapper& event) {
-  events_to_handle_.push(event);
-}
-
-void AbstractController::AddEventToSend(const events::EventWrapper& event) {
-  events_to_send_.push(event);
+void AbstractController::PrepareToClose() {
+  HandleAndSend();
 }

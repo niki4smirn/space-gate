@@ -1,11 +1,21 @@
 syntax = "proto3";
 package server_events;
 
+import "Protobuf/minigame_responses.proto";
+
 message ServerEventWrapper {
+  uint64 receiver_id = 1;
   oneof type {
-    RoomInfo room_info = 1;
+    RoomInfo room_info = 2;
+    RoomsList rooms_list = 3;
+    StartGame start_game = 4;
+    GameInfo game_info = 5;
+    minigame_responses.MinigameResponse game_response = 6;
+    GameResult game_result = 7;
   }
 }
+
+message StartGame {}
 
 message RoomUser {
   enum Status {
@@ -14,11 +24,30 @@ message RoomUser {
     kReady = 2;
   }
   string nickname = 1;
-  Status is_ready = 2;
+  Status ready_status = 2;
 }
 
 message RoomInfo {
   repeated RoomUser users = 1;
   uint64 room_id = 2;
   uint64 chief_id = 3;
+}
+
+message RoomsList {
+  repeated uint64 ids = 1;
+}
+
+message MinigameInfo {
+  uint64 id = 1;
+  uint64 num_of_joined = 2;
+}
+
+message GameResult {
+  uint64 score = 1;
+}
+
+message GameInfo {
+  uint64 progress = 1;
+  repeated MinigameInfo minigames_info = 2;
+  optional uint64 joined_minigame = 3;
 }

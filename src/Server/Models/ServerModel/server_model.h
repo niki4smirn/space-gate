@@ -7,9 +7,11 @@
 #include <QWebSocket>
 
 #include "src/Server/Models/User/user.h"
-#include "src/Server/Controllers/room_controller.h"
+#include "src/Server/Controllers/RoomController/room_controller.h"
 
-class ServerModel {
+class ServerModel : public QObject {
+  Q_OBJECT
+
  public:
   std::shared_ptr<User> GetUserBySocket(QWebSocket* socket) const;
   std::shared_ptr<User> GetUserById(UserId id) const;
@@ -32,6 +34,12 @@ class ServerModel {
 
   bool IsInSomeRoom(UserId id) const;
   std::shared_ptr<RoomController> GetRoomByUserId(UserId id) const;
+
+  const std::map<RoomId, std::shared_ptr<RoomController>>& GetRooms() const;
+  const std::map<UserId, std::shared_ptr<User>>& GetUsers() const;
+
+ signals:
+  void SendRoomsList();
 
  private:
   std::map<UserId, std::shared_ptr<User>> users_;

@@ -1,7 +1,7 @@
 #include <QApplication>
 #include <QUrl>
 
-#include "Constants/constants.h"
+#include "src/Helpers/Constants/constants.h"
 #include "Controller/client_controller.h"
 
 int main(int argc, char* argv[]) {
@@ -14,6 +14,6 @@ int main(int argc, char* argv[]) {
   }
   url_str += ":" + QString::number(constants::kDefaultPort);
   QUrl server_url(url_str);
-  auto* client_controller = new ClientController(server_url);
+  auto client_controller = std::make_unique<ClientController>(server_url);
   return QApplication::exec();
 }

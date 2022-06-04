@@ -57,7 +57,7 @@ add_executable(server
         src/Server/Models/RoomModel/room_model.cpp
         src/Server/Models/GameModel/game_model.cpp
         src/Server/Games/AbstractMinigame/abstract_minigame.cpp
-        src/Server/Games/SampleMinigame/sample_minigame.cpp
+        src/Server/Games/TerminalMinigame/terminal_minigame.cpp
         )
 
 if (WIN32)
@@ -85,6 +85,7 @@ add_executable(client
         src/Client/View/GameWidget/WaitingScreen/waiting_screen.cpp
         src/Client/View/FinalScreen/final_screen.cpp
         src/Client/View/NetworkProblemWidget/network_problem_widget.cpp
+        src/Client/Games/TerminalMinigameView/terminal_minigame_view.cpp
         )
 
 set(REQUIRED_QT_PARTS

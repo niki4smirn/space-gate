@@ -43,7 +43,7 @@ void GameController::Handle(const events::EventWrapper& event) {
       break;
     }
     case client_events::EventToGame::kMinigameAction: {
-      MinigameId minigame_id = game_event.join_minigame().minigame_id();
+      MinigameId minigame_id = game_event.minigame_action().minigame_id();
       auto minigame =
           model_.GetMinigameByType(static_cast<MinigameType>(minigame_id));
 
@@ -116,8 +116,8 @@ void GameController::StartMinigameEvent(MinigameType type) {
   auto& players = model_.GetPlayersForMinigame(type);
 
   switch (type) {
-    case MinigameType::kSample: {
-      minigame = std::make_shared<SampleMinigame>(players);
+    case MinigameType::kTerminal: {
+      minigame = std::make_shared<TerminalMinigame>(players);
       break;
     }
     default: {}
@@ -200,7 +200,7 @@ void GameController::SendMinigameEndedEvent(MinigameType type, uint64_t score) {
 
 void GameController::TryAddMinigame() {
   std::vector<MinigameType> possible_types;
-  ENUM_LOOP(MinigameType::kSample, MinigameType::kLast, cur_type) {
+  ENUM_LOOP(MinigameType::kTerminal, MinigameType::kLast, cur_type) {
     if (!model_.GetMinigameByType(cur_type) &&
         helpers::GetMinigamePlayersCountByType(cur_type)
             <= model_.GetPlayersCount() &&

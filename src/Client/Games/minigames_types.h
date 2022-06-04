@@ -7,7 +7,7 @@ using MinigameId = uint64_t;
 enum class MinigameType {
   kNone = 0,
 
-  kSample = 1,
+  kTerminal = 1,
 
   kLast
 };

@@ -70,6 +70,7 @@ class ClientMainMenu : public QWidget {
   QSoundEffect* sound_;
   QSpinBox* set_sound_;
   QSettings* setting_;
+  QPushButton* sound_on_;
 
   bool is_chief_{true};
   static QColor StatusToColor(server_events::RoomUser::Status status);

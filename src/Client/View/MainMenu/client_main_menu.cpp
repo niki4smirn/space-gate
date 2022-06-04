@@ -33,11 +33,12 @@ ClientMainMenu::ClientMainMenu(QWidget* parent) :
   font_.setPointSize(105);
   font_.setBold(true);
   game_name_->setFont(font_);
-
+  sound_ = new QSoundEffect(this);
   SetMouseTracking();
   SetLayouts();
   ShowStartWidget();
   Connect();
+  SetSound();
 }
 void ClientMainMenu::SetCenterPos(QPoint pos) {
   background_->SetCenterPos(pos);
@@ -384,4 +385,9 @@ void ClientMainMenu::BackToLobby() {
   } else {
     ShowRoomGuestInterface();
   }
+}
+void ClientMainMenu::SetSound() {
+  sound_->setSource(QUrl::fromLocalFile(":sound.wav"));
+  sound_->setVolume(0.3);
+  sound_->play();
 }

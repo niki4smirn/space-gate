@@ -5,6 +5,7 @@ ClientView::ClientView() :
     stacked_widget_(new QStackedWidget(this)),
     main_menu_(new ClientMainMenu(this)),
     game_widget_(new GameWidget(this)),
+    final_screen_(new FinalScreen(this)),
     input_controller_(new InputController),
     network_problem_widget_(new NetworkProblemWidget(this)) {
   AddWidgets();
@@ -61,6 +62,15 @@ void ClientView::Connect() {
   connect(game_widget_, &GameWidget::LeaveMinigame, [&]() {
     emit LeaveMinigame();
   });
+  connect(final_screen_, &FinalScreen::MenuPressed, [this]() {
+    stacked_widget_->setCurrentWidget(main_menu_);
+    main_menu_->BackToStart();
+    emit LeaveRoom();
+  });
+  connect(final_screen_, &FinalScreen::LobbyPressed, [this]() {
+    stacked_widget_->setCurrentWidget(main_menu_);
+    main_menu_->BackToLobby();
+  });
   connect(network_problem_widget_, &NetworkProblemWidget::Reconnect, [&]() {
     emit Reconnect();
   });
@@ -69,6 +79,7 @@ void ClientView::Connect() {
 void ClientView::AddWidgets() {
   stacked_widget_->addWidget(main_menu_);
   stacked_widget_->addWidget(game_widget_);
+  stacked_widget_->addWidget(final_screen_);
   stacked_widget_->addWidget(network_problem_widget_);
 }
 
@@ -125,4 +136,9 @@ void ClientView::ShowNetworkProblemWidget() {
 void ClientView::ShowMainMenu() {
   stacked_widget_->setCurrentWidget(main_menu_);
   main_menu_->BackToStart();
+}
+
+void ClientView::ShowFinalScreen(bool is_win) {
+  final_screen_->SetResult(is_win);
+  stacked_widget_->setCurrentWidget(final_screen_);
 }

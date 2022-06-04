@@ -10,17 +10,19 @@ ClientController::ClientController(const QUrl& url) :
           &ClientController::OnDisconnect);
   connect(&socket_, &QWebSocket::binaryMessageReceived, this,
           &ClientController::OnByteArrayReceived);
-  socket_.open(url);
+  ConnectToServer();
   StartTicking();
   ConnectView();
 }
 
 void ClientController::OnConnect() {
-  LOG << "Connected to " << server_url_;
+  LOG << "Successful connection to " << server_url_;
+  view_->ShowMainMenu();
 }
 
 void ClientController::OnDisconnect() {
-  LOG << "Disconnected from " << server_url_;
+  LOG << "Failed connection to " << server_url_;
+  view_->ShowNetworkProblemWidget();
 }
 
 QString ClientController::GetControllerName() const {
@@ -65,6 +67,7 @@ void ClientController::Handle(const events::EventWrapper& event) {
             ++minigame_menu_pos;
           }
           view_->UpdateProgress(game_info.progress());
+          view_->ResetAllBulbs();
           for (const auto& minigame_info : game_info.minigames_info()) {
             auto minigame_pos = MinigamePosById(minigame_info.id());
             if (minigame_pos) {
@@ -72,6 +75,11 @@ void ClientController::Handle(const events::EventWrapper& event) {
                                          minigame_info.num_of_joined());
             }
           }
+          break;
+        }
+        case server_events::ServerEventWrapper::kGameResult: {
+          const auto& game_result = server_event.game_result();
+          view_->ShowFinalScreen(game_result.score() != 0);
           break;
         }
         case server_events::ServerEventWrapper::kGameResponse: {
@@ -137,6 +145,11 @@ void ClientController::ConnectView() {
           &ClientView::LeaveMinigame,
           this,
           &ClientController::SendLeaveMinigame);
+  connect(view_,
+          &ClientView::Reconnect,
+          [&]() {
+            ConnectToServer();
+  });
 }
 
 void ClientController::SendReadyStatus() {
@@ -282,4 +295,8 @@ std::optional<int> ClientController::MinigamePosById(int minigame_id) {
     return std::nullopt;
   }
   return {minigame_index_to_pos[minigame_id]};
+}
+
+void ClientController::ConnectToServer() {
+  socket_.open(server_url_);
 }

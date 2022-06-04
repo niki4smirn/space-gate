@@ -6,7 +6,10 @@ ClientView::ClientView() :
     main_menu_(new ClientMainMenu(this)),
     game_widget_(new GameWidget(this)),
     input_controller_(new InputController),
-    terminal_minigame_view_(new TerminalMinigameView(this)) {
+    terminal_minigame_view_(new TerminalMinigameView(this)),
+    final_screen_(new FinalScreen(this)),
+    input_controller_(new InputController),
+    network_problem_widget_(new NetworkProblemWidget(this)) {
   AddWidgets();
   stacked_widget_->setCurrentWidget(main_menu_);
   setCentralWidget(stacked_widget_);
@@ -20,6 +23,7 @@ ClientView::ClientView() :
 
 void ClientView::mouseMoveEvent(QMouseEvent* event) {
   main_menu_->SetCenterPos(event->pos());
+  network_problem_widget_->SetCenterPos(event->pos());
   input_controller_->MouseMove(event->pos());
 }
 
@@ -60,12 +64,26 @@ void ClientView::Connect() {
   connect(game_widget_, &GameWidget::LeaveMinigame, [&]() {
     emit LeaveMinigame();
   });
+  connect(final_screen_, &FinalScreen::MenuPressed, [this]() {
+    stacked_widget_->setCurrentWidget(main_menu_);
+    main_menu_->BackToStart();
+    emit LeaveRoom();
+  });
+  connect(final_screen_, &FinalScreen::LobbyPressed, [this]() {
+    stacked_widget_->setCurrentWidget(main_menu_);
+    main_menu_->BackToLobby();
+  });
+  connect(network_problem_widget_, &NetworkProblemWidget::Reconnect, [&]() {
+    emit Reconnect();
+  });
 }
 
 void ClientView::AddWidgets() {
   stacked_widget_->addWidget(terminal_minigame_view_);
   stacked_widget_->addWidget(main_menu_);
   stacked_widget_->addWidget(game_widget_);
+  stacked_widget_->addWidget(final_screen_);
+  stacked_widget_->addWidget(network_problem_widget_);
 }
 
 void ClientView::UpdateRoomInfoMenu(
@@ -111,6 +129,25 @@ void ClientView::UpdateProgress(uint64_t progress) {
 
 void ClientView::UpdateMinigameBulbs(
     int minigame_pos, int waiting_count) {
+  switch (minigame_pos) {
+    case 0: {
+      game_widget_->TurnOffGreen();
+      break;
+  }
+    case 1: {
+      game_widget_->TurnOffRed();
+      break;
+    }
+    case 2: {
+      game_widget_->TurnOffPurple();
+      break;
+    }
+    case 3: {
+      game_widget_->TurnOffBlue();
+      break;
+    }
+    default: {}
+  }
   game_widget_->SetBulbsCount(minigame_pos, waiting_count);
 }
 
@@ -150,4 +187,25 @@ std::optional<MinigameType> ClientView::IsMinigameStarted() {
   }
 
   return std::nullopt;
+}
+
+void ClientView::ShowNetworkProblemWidget() {
+  stacked_widget_->setCurrentWidget(network_problem_widget_);
+}
+
+void ClientView::ShowMainMenu() {
+  stacked_widget_->setCurrentWidget(main_menu_);
+  main_menu_->BackToStart();
+}
+
+void ClientView::ShowFinalScreen(bool is_win) {
+  final_screen_->SetResult(is_win);
+  stacked_widget_->setCurrentWidget(final_screen_);
+}
+
+void ClientView::ResetAllBulbs() {
+  game_widget_->TurnOffGreen();
+  game_widget_->TurnOffRed();
+  game_widget_->TurnOffPurple();
+  game_widget_->TurnOffBlue();
 }

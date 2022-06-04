@@ -36,6 +36,7 @@ class RoomController : public AbstractController {
   bool IsEverybodyReady();
   void SendEveryUser(events::EventWrapper event) const;
   void GameEndedEvent(uint64_t score);
+  void UnreadyRoomPlayers();
 
   RoomModel room_model_;
 };

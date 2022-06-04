@@ -24,6 +24,8 @@ class ClientMainMenu : public QWidget {
   void SetCenterPos(QPoint pos);
   void PlayStartEffect();
   void UpdateInterface(bool new_is_chief);
+  void BackToStart();
+  void BackToLobby();
 
  private:
   void RemoveAllWidgets();
@@ -35,7 +37,6 @@ class ClientMainMenu : public QWidget {
   void SetMouseTracking();
 
   void ChooseRoomOption();
-  void BackToStart();
   void BackToGameOption();
   void CreateRoom();
   void JoinRoom();

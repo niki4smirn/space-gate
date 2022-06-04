@@ -370,8 +370,19 @@ void ClientMainMenu::ShowRoomGuestInterface() {
 }
 
 void ClientMainMenu::ResetAllWidgets() {
+  background_->SetLightEffect(false);
   RemoveAllWidgets();
 
   ready_status_->setText("READY");
   player_list_->clear();
+}
+
+void ClientMainMenu::BackToLobby() {
+  background_->SetLightEffect(false);
+  ready_status_->setText("READY");
+  if (is_chief_) {
+    ShowRoomChiefInterface();
+  } else {
+    ShowRoomGuestInterface();
+  }
 }

@@ -3,9 +3,11 @@
 #include "src/Client/View/MainMenu/client_main_menu.h"
 #include "src/Client/InputController/input_controller.h"
 #include "src/Server/Models/RoomModel/room_model.h"
+#include "src/Client/View/FinalScreen/final_screen.h"
 // #include "src/Client/View/GameWidget/game_widget.h"
 #include "src/Client/View/FinalGameWidget/game_widget.h"
 #include "src/Client/Games/TerminalMinigameView/terminal_minigame_view.h"
+#include "src/Client/View/NetworkProblemWidget/network_problem_widget.h"
 
 #include <QWidget>
 #include <QStackedWidget>
@@ -25,6 +27,11 @@ class ClientView : public QMainWindow {
   void UpdateMinigameBulbs(int minigame_pos, int waiting_count);
   std::optional<MinigameType> IsMinigameStarted();
   void UpdateMinigame(const minigame_responses::MinigameResponse& response);
+  void ResetAllBulbs();
+
+  void ShowNetworkProblemWidget();
+  void ShowMainMenu();
+  void ShowFinalScreen(bool is_win);
 
  private:
   void CloseWindow();
@@ -33,16 +40,17 @@ class ClientView : public QMainWindow {
   void mouseMoveEvent(QMouseEvent* event) override;
   void keyPressEvent(QKeyEvent* event) override;
   void mousePressEvent(QMouseEvent* event) override;
-
   void mouseReleaseEvent(QMouseEvent* event) override;
 
  private:
   std::unique_ptr<InputController> input_controller_;
   ClientMainMenu* main_menu_;
   GameWidget* game_widget_;
+  FinalScreen* final_screen_;
+  NetworkProblemWidget* network_problem_widget_;
+  TerminalMinigameView* terminal_minigame_view_;
   QStackedWidget* stacked_widget_;
 
-  TerminalMinigameView* terminal_minigame_view_;
  signals:
   void ReadyButtonPressed();
   void CreateRoom();
@@ -53,4 +61,5 @@ class ClientView : public QMainWindow {
   void MouseMoveToServer(const QPoint& pos);
   void JoinMinigame(int minigame_index);
   void LeaveMinigame();
+  void Reconnect();
 };

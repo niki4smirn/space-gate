@@ -30,6 +30,8 @@ class ClientController : public AbstractController {
   void SendJoinMinigame(int minigame_index);
   void SendLeaveMinigame();
 
+  void ConnectToServer();
+
  protected:
   void OnTick() override;
   void Send(const events::EventWrapper& event) override;

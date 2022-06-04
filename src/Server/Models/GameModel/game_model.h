@@ -28,7 +28,6 @@ class GameModel : public QObject {
   std::vector<UserId> GetFreePlayersIds() const;
   bool IsPlayerBusy(UserId id);
 
-
   std::shared_ptr<AbstractMinigame> GetMinigameByType(MinigameType type);
   std::optional<MinigameType> GetMinigameTypeByPlayerId(UserId id) const;
   const
@@ -52,6 +51,8 @@ class GameModel : public QObject {
 
   void SetProgress(uint64_t progress);
   int GetPlayersCount() const;
+
+  bool IsWaitingForStart(MinigameType type);
 
  signals:
   void SendGameInfo();

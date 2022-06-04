@@ -148,7 +148,12 @@ void RoomController::GameEndedEvent(uint64_t score) {
 
   AddEventToSend(event);
 
+  UnreadyRoomPlayers();
+
   room_model_.DeleteGameController();
+
+  SendRoomInfoEvent();
+  emit SendRoomsList();
 }
 
 void RoomController::SendEventToGame(const events::EventWrapper& event) {
@@ -164,4 +169,12 @@ bool RoomController::IsInGame() const {
 
 int RoomController::GetPlayersCount() const {
   return room_model_.GetUsers().size();
+}
+
+void RoomController::UnreadyRoomPlayers() {
+  const auto& users = room_model_.GetUsers();
+  for (const auto& [user_id, _] : users) {
+    room_model_.SetUserWaitingStatus(user_id,
+                                     User::WaitingStatus::kNotReady);
+  }
 }

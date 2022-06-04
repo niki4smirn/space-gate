@@ -3,6 +3,7 @@
 #include "src/Client/View/MainMenu/client_main_menu.h"
 #include "src/Client/InputController/input_controller.h"
 #include "src/Server/Models/RoomModel/room_model.h"
+#include "src/Client/View/FinalScreen/final_screen.h"
 // #include "src/Client/View/GameWidget/game_widget.h"
 #include "src/Client/View/FinalGameWidget/game_widget.h"
 #include "src/Client/View/NetworkProblemWidget/network_problem_widget.h"
@@ -26,6 +27,7 @@ class ClientView : public QMainWindow {
 
   void ShowNetworkProblemWidget();
   void ShowMainMenu();
+  void ShowFinalScreen(bool is_win);
 
  private:
   void CloseWindow();
@@ -40,6 +42,7 @@ class ClientView : public QMainWindow {
   std::unique_ptr<InputController> input_controller_;
   ClientMainMenu* main_menu_;
   GameWidget* game_widget_;
+  FinalScreen* final_screen_;
   NetworkProblemWidget* network_problem_widget_;
   QStackedWidget* stacked_widget_;
 

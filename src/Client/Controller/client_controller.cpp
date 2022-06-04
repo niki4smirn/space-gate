@@ -76,6 +76,11 @@ void ClientController::Handle(const events::EventWrapper& event) {
           }
           break;
         }
+        case server_events::ServerEventWrapper::kGameResult: {
+          const auto& game_result = server_event.game_result();
+          view_->ShowFinalScreen(game_result.score() != 0);
+          break;
+        }
         default: {}
       }
       break;

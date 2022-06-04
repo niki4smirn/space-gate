@@ -3,8 +3,10 @@
 #include "src/Client/View/MainMenu/client_main_menu.h"
 #include "src/Client/InputController/input_controller.h"
 #include "src/Server/Models/RoomModel/room_model.h"
-#include "src/Client/View/GameWidget/game_widget.h"
 #include "src/Client/View/FinalScreen/final_screen.h"
+// #include "src/Client/View/GameWidget/game_widget.h"
+#include "src/Client/View/FinalGameWidget/game_widget.h"
+#include "src/Client/View/NetworkProblemWidget/network_problem_widget.h"
 
 #include <QWidget>
 #include <QStackedWidget>
@@ -21,7 +23,10 @@ class ClientView : public QMainWindow {
   void PlayStartEffect();
   void OpenGame();
   void UpdateProgress(uint64_t progress);
-  void UpdateMinigame(const server_events::MinigameInfo& minigame_info);
+  void UpdateMinigameBulbs(int minigame_pos, int waiting_count);
+
+  void ShowNetworkProblemWidget();
+  void ShowMainMenu();
 
   void ShowFinalScreen(bool is_win);
 
@@ -39,6 +44,7 @@ class ClientView : public QMainWindow {
   ClientMainMenu* main_menu_;
   GameWidget* game_widget_;
   FinalScreen* final_screen_;
+  NetworkProblemWidget* network_problem_widget_;
   QStackedWidget* stacked_widget_;
 
  signals:
@@ -51,4 +57,5 @@ class ClientView : public QMainWindow {
   void MouseMoveToServer(const QPoint& pos);
   void JoinMinigame(int minigame_index);
   void LeaveMinigame();
+  void Reconnect();
 };

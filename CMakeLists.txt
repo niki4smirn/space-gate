@@ -2,12 +2,16 @@ cmake_minimum_required(VERSION 3.19)
 project(space-gate)
 
 set(CMAKE_CXX_FLAGS"{$CMAKE_CXX_FLAGS} -Wall")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=address,leak,undefined")
+IF(CMAKE_BUILD_TYPE MATCHES Debug)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=address,leak,undefined")
+ENDIF(CMAKE_BUILD_TYPE MATCHES Debug)
 
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_CXX_STANDARD 20)
+
+set(CMAKE_PREFIX_PATH "~/Qt/5.15.2/gcc_64/lib/cmake")
 
 find_package(Qt5 COMPONENTS
         Core
@@ -17,6 +21,10 @@ find_package(Qt5 COMPONENTS
         WebSockets
         REQUIRED
         )
+
+include_directories(Resources/Images/Buttons)
+include_directories(Resources/Images/Bulbs)
+include_directories(Resources/Images/Background)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
@@ -70,10 +78,13 @@ add_executable(client
         src/Client/View/MainMenu/Background/star.cpp
         src/Client/InputController/input_controller.cpp
         ${SYSTEM_DEPENDENT_SOURCES}
-        src/Client/View/GameWidget/game_widget.cpp
+        src/Client/View/FinalGameWidget/game_widget.cpp
+        Resources/Images/images.qrc
+#        src/Client/View/GameWidget/game_widget.cpp
         src/Client/View/GameWidget/MainGameWidget/main_game_widget.cpp
         src/Client/View/GameWidget/WaitingScreen/waiting_screen.cpp
         src/Client/View/FinalScreen/final_screen.cpp
+        src/Client/View/NetworkProblemWidget/network_problem_widget.cpp
         )
 
 set(REQUIRED_QT_PARTS
@@ -87,5 +98,9 @@ set(REQUIRED_QT_PARTS
 foreach (executable server; client)
     target_link_libraries(${executable} ${REQUIRED_QT_PARTS})
     target_link_libraries(${executable} protobuf::libprotobuf)
-    protobuf_generate(TARGET ${executable} PROTOC_OUT_DIR ../ PROTOS ${scheme_PROTOS})
+
+    protobuf_generate(TARGET ${executable}  PROTOC_OUT_DIR  ../ PROTOS  ${scheme_PROTOS})
+
+
 endforeach()
+

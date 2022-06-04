@@ -6,7 +6,8 @@ ClientView::ClientView() :
     main_menu_(new ClientMainMenu(this)),
     game_widget_(new GameWidget(this)),
     final_screen_(new FinalScreen(this)),
-    input_controller_(new InputController) {
+    input_controller_(new InputController),
+    network_problem_widget_(new NetworkProblemWidget(this)) {
   AddWidgets();
   stacked_widget_->setCurrentWidget(main_menu_);
   setCentralWidget(stacked_widget_);
@@ -15,10 +16,12 @@ ClientView::ClientView() :
   setMouseTracking(true);
   stacked_widget_->setMouseTracking(true);
   main_menu_->setMouseTracking(true);
+  game_widget_->setMouseTracking(true);
 }
 
 void ClientView::mouseMoveEvent(QMouseEvent* event) {
   main_menu_->SetCenterPos(event->pos());
+  network_problem_widget_->SetCenterPos(event->pos());
   input_controller_->MouseMove(event->pos());
 }
 
@@ -53,8 +56,8 @@ void ClientView::Connect() {
           &InputController::MouseKeyToServer,
           [this](input::Name key) { emit KeyEventToServer(key); });
   connect(game_widget_, &GameWidget::JoinMinigame,
-          [this](int minigame_index) {
-    emit JoinMinigame(minigame_index);
+          [this](int minigame_menu_pos) {
+    emit JoinMinigame(minigame_menu_pos);
   });
   connect(game_widget_, &GameWidget::LeaveMinigame, [&]() {
     emit LeaveMinigame();
@@ -69,13 +72,16 @@ void ClientView::Connect() {
     main_menu_->BackToLobby();
 
   });
-
+  connect(network_problem_widget_, &NetworkProblemWidget::Reconnect, [&]() {
+    emit Reconnect();
+  });
 }
 
 void ClientView::AddWidgets() {
   stacked_widget_->addWidget(main_menu_);
   stacked_widget_->addWidget(game_widget_);
   stacked_widget_->addWidget(final_screen_);
+  stacked_widget_->addWidget(network_problem_widget_);
 }
 
 void ClientView::UpdateRoomInfoMenu(
@@ -115,11 +121,22 @@ void ClientView::OpenGame() {
   stacked_widget_->setCurrentWidget(game_widget_);
 }
 
-void ClientView::UpdateProgress(uint64_t progress) {}
+void ClientView::UpdateProgress(uint64_t progress) {
+  game_widget_->SetProgress(progress, constants::kScoreToFinish);
+}
 
-void ClientView::UpdateMinigame(
-    const server_events::MinigameInfo& minigame_info) {
-  LOG << "Update Minigame";
+void ClientView::UpdateMinigameBulbs(
+    int minigame_pos, int waiting_count) {
+  game_widget_->SetBulbsCount(minigame_pos, waiting_count);
+}
+
+void ClientView::ShowNetworkProblemWidget() {
+  stacked_widget_->setCurrentWidget(network_problem_widget_);
+}
+
+void ClientView::ShowMainMenu() {
+  stacked_widget_->setCurrentWidget(main_menu_);
+  main_menu_->BackToStart();
 }
 
 void ClientView::ShowFinalScreen(bool is_win) {

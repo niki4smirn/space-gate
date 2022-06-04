@@ -11,6 +11,7 @@ extern const int kKeyTickTime;
 
 extern const int kScoreToFinish;
 extern const int kMaxMinigamesCount;
+extern const int kMaxRoomPlayersCount;
 
 extern const int kMinigamesAddingTimeFrequency;
 extern const int kMinigamesAddingTickFrequency;

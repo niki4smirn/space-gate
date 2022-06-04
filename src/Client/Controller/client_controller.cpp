@@ -10,17 +10,19 @@ ClientController::ClientController(const QUrl& url) :
           &ClientController::OnDisconnect);
   connect(&socket_, &QWebSocket::binaryMessageReceived, this,
           &ClientController::OnByteArrayReceived);
-  socket_.open(url);
+  ConnectToServer();
   StartTicking();
   ConnectView();
 }
 
 void ClientController::OnConnect() {
-  LOG << "Connected to " << server_url_;
+  LOG << "Successful connection to " << server_url_;
+  view_->ShowMainMenu();
 }
 
 void ClientController::OnDisconnect() {
-  LOG << "Disconnected from " << server_url_;
+  LOG << "Failed connection to " << server_url_;
+  view_->ShowNetworkProblemWidget();
 }
 
 QString ClientController::GetControllerName() const {
@@ -56,14 +58,20 @@ void ClientController::Handle(const events::EventWrapper& event) {
         }
         case server_events::ServerEventWrapper::kGameInfo: {
           const auto& game_info = server_event.game_info();
+          int minigame_menu_pos = 0;
+          minigame_index_to_pos.clear();
+          minigame_pos_to_index.clear();
+          for (const auto& minigame_info : game_info.minigames_info()) {
+            minigame_index_to_pos[minigame_info.id()] = minigame_menu_pos;
+            minigame_pos_to_index[minigame_menu_pos] = minigame_info.id();
+            ++minigame_menu_pos;
+          }
           view_->UpdateProgress(game_info.progress());
-          if (game_info.has_joined_minigame()) {
-            for (const auto& minigame_info : game_info.minigames_info()) {
-              if (minigame_info.id() == game_info.joined_minigame()) {
-                auto minigame_index = game_info.joined_minigame();
-                view_->UpdateMinigame(game_info.minigames_info(
-                    minigame_index));
-              }
+          for (const auto& minigame_info : game_info.minigames_info()) {
+            auto minigame_pos = MinigamePosById(minigame_info.id());
+            if (minigame_pos) {
+              view_->UpdateMinigameBulbs(minigame_pos.value(),
+                                         minigame_info.num_of_joined());
             }
           }
           break;
@@ -122,12 +130,21 @@ void ClientController::ConnectView() {
           &ClientController::SendMouseMoveEvent);
   connect(view_,
           &ClientView::JoinMinigame,
-          this,
-          &ClientController::SendJoinMinigame);
+          [&](int minigame_menu_pos) {
+            int minigame_id = MinigameIdByPos(minigame_menu_pos);
+            if (minigame_id != 0) {
+              SendJoinMinigame(minigame_id);
+            }
+  });
   connect(view_,
           &ClientView::LeaveMinigame,
           this,
           &ClientController::SendLeaveMinigame);
+  connect(view_,
+          &ClientView::Reconnect,
+          [&]() {
+            ConnectToServer();
+  });
 }
 
 void ClientController::SendReadyStatus() {
@@ -232,4 +249,21 @@ void ClientController::SendLeaveMinigame() {
   events::EventWrapper event;
   event.set_allocated_client_event(event_wrapper);
   AddEventToSend(event);
+}
+
+int ClientController::MinigameIdByPos(int minigame_pos) {
+  if (!minigame_pos_to_index.contains(minigame_pos)) {
+    return 0;
+  }
+  return minigame_pos_to_index[minigame_pos];
+}
+std::optional<int> ClientController::MinigamePosById(int minigame_id) {
+  if (!minigame_index_to_pos.contains(minigame_id)) {
+    return std::nullopt;
+  }
+  return {minigame_index_to_pos[minigame_id]};
+}
+
+void ClientController::ConnectToServer() {
+  socket_.open(server_url_);
 }

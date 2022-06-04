@@ -378,5 +378,10 @@ void ClientMainMenu::ResetAllWidgets() {
 }
 
 void ClientMainMenu::BackToLobby() {
-  ShowRoomGuestInterface();
+  background_->SetLightEffect(false);
+  if (is_chief_) {
+    ShowRoomChiefInterface();
+  } else {
+    ShowRoomGuestInterface();
+  }
 }

@@ -1,5 +1,4 @@
-#ifndef FINAL_SCREEN_H
-#define FINAL_SCREEN_H
+#pragma once
 
 #include "src/Client/View/MainMenu/Background/background_widget.h"
 
@@ -15,6 +14,7 @@
 
 class FinalScreen : public QWidget {
   Q_OBJECT
+
  public:
   explicit FinalScreen(QWidget* parent = nullptr);
 
@@ -45,6 +45,3 @@ class FinalScreen : public QWidget {
   void MenuPressed();
   void LobbyPressed();
 };
-
-
-#endif // FINAL_SCREEN_H

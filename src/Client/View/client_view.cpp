@@ -70,7 +70,6 @@ void ClientView::Connect() {
   connect(final_screen_, &FinalScreen::LobbyPressed, [this]() {
     stacked_widget_->setCurrentWidget(main_menu_);
     main_menu_->BackToLobby();
-
   });
   connect(network_problem_widget_, &NetworkProblemWidget::Reconnect, [&]() {
     emit Reconnect();

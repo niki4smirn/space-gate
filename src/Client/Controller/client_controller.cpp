@@ -82,6 +82,10 @@ void ClientController::Handle(const events::EventWrapper& event) {
           view_->ShowFinalScreen(game_result.score() != 0);
           break;
         }
+        case server_events::ServerEventWrapper::kGameResponse: {
+          const auto& game_response = server_event.game_response();
+          view_->UpdateMinigame(game_response);
+        }
         default: {}
       }
       break;
@@ -136,7 +140,7 @@ void ClientController::ConnectView() {
             if (minigame_id != 0) {
               SendJoinMinigame(minigame_id);
             }
-  });
+          });
   connect(view_,
           &ClientView::LeaveMinigame,
           this,
@@ -217,6 +221,34 @@ void ClientController::SendStartGameEvent() {
 
 void ClientController::SendKeyEvent(input::Name key) {
   LOG << input::InputNameToString(key);
+
+  auto minigame = view_->IsMinigameStarted();
+  if (!minigame.has_value()) {
+    return;
+  }
+
+  switch (minigame.value()) {
+    case MinigameType::kTerminal: {
+      auto* terminal_minigame = new minigame_actions::TerminalMinigame();
+
+      terminal_minigame->set_key_id(static_cast<uint64_t>(key));
+
+      auto* game_action = new minigame_actions::MinigameAction;
+      game_action->set_allocated_terminal_minigame(terminal_minigame);
+      game_action->set_minigame_id(static_cast<uint64_t>(minigame.value()));
+
+      auto* game_event = new client_events::EventToGame;
+      game_event->set_allocated_minigame_action(game_action);
+
+      auto* client_event = new client_events::ClientEventWrapper;
+      client_event->set_allocated_event_to_game(game_event);
+
+      events::EventWrapper event;
+      event.set_allocated_client_event(client_event);
+
+      AddEventToSend(event);
+    }
+  }
 }
 
 void ClientController::SendMouseMoveEvent(const QPoint& pos) {

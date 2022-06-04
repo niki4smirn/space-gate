@@ -51,17 +51,6 @@ GameWidget::GameWidget(QWidget* parent) : QWidget(parent) {
   SetTracking();
   BackgroundShines();
   Loss();
-<<<<<<< Updated upstream
-=======
-<<<<<<< HEAD
-
-  // QTimer::singleShot(6000, [&](){
-  //   EndGame();
-  // });
-  // SetProgress(50,100);
-=======
->>>>>>> b9f1416cddef47122ca02902f064bbb007787ed0
->>>>>>> Stashed changes
 }
 
 void GameWidget::SetIcons() {

@@ -198,8 +198,16 @@ void ClientView::ShowMainMenu() {
 }
 
 void ClientView::ShowFinalScreen(bool is_win) {
-  final_screen_->SetResult(is_win);
-  stacked_widget_->setCurrentWidget(final_screen_);
+  auto call_final_screen = [&]() {
+    final_screen_->SetResult(is_win);
+    stacked_widget_->setCurrentWidget(final_screen_);
+  };
+  if (is_win) {
+    call_final_screen();
+  } else {
+    game_widget_->EndGame();
+    QTimer::singleShot(2500, call_final_screen);
+  }
 }
 
 void ClientView::ResetAllBulbs() {

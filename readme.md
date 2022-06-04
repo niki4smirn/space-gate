@@ -4,9 +4,9 @@ Spacegate is cooperative online game written in C++ using Qt and Protobuf.
 
 You are on a spaceship with your friends. Solve minigames to stay alive!
 
-![Menu](https://github.com/niki4smirn/space-gate/blob/main/main_menu.png?raw=true)
-![Game](https://github.com/niki4smirn/space-gate/blob/main/game.png?raw=true)
-![Terminal](https://github.com/niki4smirn/space-gate/blob/main/terminal.jpg?raw=true)
+![Menu](https://github.com/niki4smirn/space-gate/blob/readme/main_menu.png?raw=true)
+![Game](https://github.com/niki4smirn/space-gate/blob/readme/game.png?raw=true)
+![Terminal](https://github.com/niki4smirn/space-gate/blob/readme/terminal.jpg?raw=true)
 
 ### Prerequisites
 

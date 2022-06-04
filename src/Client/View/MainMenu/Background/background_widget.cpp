@@ -161,14 +161,6 @@ void BackgroundWidget::paintEvent(QPaintEvent*) {
   Paint(&painter);
 }
 
-void BackgroundWidget::mousePressEvent(QMouseEvent*) {
-  SetLightEffect(true);
-}
-
-void BackgroundWidget::mouseReleaseEvent(QMouseEvent*) {
-  SetLightEffect(false);
-}
-
 void BackgroundWidget::mouseMoveEvent(QMouseEvent* event) {
   SetCenterPos(event->pos());
 }

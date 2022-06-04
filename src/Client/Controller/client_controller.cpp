@@ -67,6 +67,7 @@ void ClientController::Handle(const events::EventWrapper& event) {
             ++minigame_menu_pos;
           }
           view_->UpdateProgress(game_info.progress());
+          view_->ResetAllBulbs();
           for (const auto& minigame_info : game_info.minigames_info()) {
             auto minigame_pos = MinigamePosById(minigame_info.id());
             if (minigame_pos) {

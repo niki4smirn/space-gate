@@ -20,6 +20,8 @@ class FinalScreen : public QWidget {
 
   ~FinalScreen() override = default;
 
+  void mouseMoveEvent(QMouseEvent* event) override;
+
   void SetResult(bool victory);
 
  private:

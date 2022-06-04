@@ -1,4 +1,6 @@
 #include <QFontDatabase>
+#include <QApplication>
+#include <QScreen>
 #include "network_problem_widget.h"
 
 NetworkProblemWidget::NetworkProblemWidget(QWidget* parent) :
@@ -9,6 +11,8 @@ NetworkProblemWidget::NetworkProblemWidget(QWidget* parent) :
     interface_layout_(new QGridLayout()),
     text_(new QLabel("Network problems", this)),
     reconnect_button_(new QPushButton("Reconnect", this)) {
+  background_widget_->setFixedSize(QApplication::screens()[0]->size().width(),
+                                   QApplication::screens()[0]->size().height());
   QString family =
       QFontDatabase::applicationFontFamilies(QFontDatabase::addApplicationFont(
           "../Resources/Fonts/Paladins.otf")).at(0);

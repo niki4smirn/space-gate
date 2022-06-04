@@ -156,6 +156,7 @@ void ClientMainMenu::Connect() {
           this, [&](int value){
     sound_->setVolume(double(value) / 100);
     setting_->setValue("sound_value", sound_->volume());
+    setting_->setValue("spin_box_value", value);
   });
 
 }
@@ -242,7 +243,7 @@ void ClientMainMenu::Settings() {
   set_sound_->setStyleSheet("color : #88bcff; font-size: 60px;");
   set_sound_->setRange(0, 100);
 
-  set_sound_->setValue((setting_->value("sound_value")).toInt());
+  set_sound_->setValue((setting_->value("spin_box_value")).toInt());
   nothing_here_->setVisible(true);
   back_to_start_->setVisible(true);
   set_sound_->setVisible(true);

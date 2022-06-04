@@ -42,8 +42,6 @@ class BackgroundWidget : public QWidget {
 
   void timerEvent(QTimerEvent* event) override;
   void paintEvent(QPaintEvent*) override;
-  void mousePressEvent(QMouseEvent*) override;
-  void mouseReleaseEvent(QMouseEvent*) override;
   void mouseMoveEvent(QMouseEvent* event) override;
   void resizeEvent(QResizeEvent *event) override;
 

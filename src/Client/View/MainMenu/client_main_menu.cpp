@@ -379,6 +379,7 @@ void ClientMainMenu::ResetAllWidgets() {
 
 void ClientMainMenu::BackToLobby() {
   background_->SetLightEffect(false);
+  ready_status_->setText("READY");
   if (is_chief_) {
     ShowRoomChiefInterface();
   } else {

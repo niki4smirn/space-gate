@@ -5,6 +5,18 @@ message SampleMinigame {
   string str = 1;
 }
 
+message Point {
+  double x = 1;
+  double y = 2;
+}
+
+message HoleRepairMinigame {
+  oneof pos {
+    Point mouse_pos = 1;
+    Point plate_pos = 2;
+  }
+}
+
 message TerminalMinigame {
   uint64 key_id = 1;
 }
@@ -13,6 +25,7 @@ message MinigameAction {
   uint64 minigame_id = 1;
   oneof minigame {
     SampleMinigame sample_minigame = 2;
-    TerminalMinigame terminal_minigame = 3;
+    HoleRepairMinigame hole_repair_minigame = 3;
+    TerminalMinigame terminal_minigame = 4;
   }
 }

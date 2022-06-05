@@ -58,6 +58,8 @@ add_executable(server
         src/Server/Models/GameModel/game_model.cpp
         src/Server/Games/AbstractMinigame/abstract_minigame.cpp
         src/Server/Games/TerminalMinigame/terminal_minigame.cpp
+        src/Server/Games/HoleRepairMinigame/hole_repair.cpp
+        src/Helpers/Constants/minigames_settings.cpp
         )
 
 if (WIN32)
@@ -65,7 +67,7 @@ if (WIN32)
             src/Client/InputController/input_names_windows.cpp)
 else()
     set(SYSTEM_DEPENDENT_SOURCES
-            src/Client/InputController/input_names_unix.cpp)
+            src/Client/InputController/input_names_unix.cpp src/Helpers/Constants/minigames_settings.cpp src/Helpers/Constants/minigames_settings.h)
 endif (WIN32)
 
 add_executable(client

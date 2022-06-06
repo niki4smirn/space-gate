@@ -7,6 +7,7 @@ using namespace hole_repair_settings;
 HoleRepairView::HoleRepairView(QWidget* parent) :
     QWidget(parent),
     screen_size_(qApp->screens()[0]->size()) {
+
   setMouseTracking(true);
 }
 
@@ -36,10 +37,10 @@ void HoleRepairView::PaintHoles(QPainter* painter) {
   for (int i = 0; i < holes_.size(); i++) {
     QPointF rel_pnt = holes_.at(i);
     QPointF pnt
-        (rel_pnt.x() / kRelativeCoords
+        (1. * rel_pnt.x() / kRelativeCoords
              * screen_size_.width()
              - hole.width() / 2,
-         rel_pnt.y() / kRelativeCoords
+         1. * rel_pnt.y() / kRelativeCoords
              * screen_size_.height()
              - hole.height() / 2);
     painter->drawPixmap(pnt, hole);
@@ -48,15 +49,20 @@ void HoleRepairView::PaintHoles(QPainter* painter) {
 
 void HoleRepairView::mousePressEvent(QMouseEvent* event) {
   QWidget::mousePressEvent(event);
-  if (player_ == kMechanic) {
-    QPointF rel_pnt(1. * event->pos().x() / screen_size_.width()
-                        * kRelativeCoords,
-                    1. * event->pos().y() / screen_size_.height()
-                        * kRelativeCoords);
-    emit PlatePos(rel_pnt);
-    plates_.emplace_back(rel_pnt);
+  if (player_ == kNavigator) {
     repaint();
+    return;
   }
+  if (available_plates_ <= 0) {
+    return;
+  }
+  QPointF rel_pnt(1. * event->pos().x() / screen_size_.width()
+                      * kRelativeCoords,
+                  1. * event->pos().y() / screen_size_.height()
+                      * kRelativeCoords);
+  emit PlatePos(rel_pnt);
+  plates_.emplace_back(rel_pnt);
+  available_plates_--;
   repaint();
 }
 
@@ -75,12 +81,12 @@ void HoleRepairView::mouseMoveEvent(QMouseEvent* event) {
 }
 
 void HoleRepairView::PaintPlates(QPainter* painter) {
-  QPixmap cover(":HoleRepair/cover.png");
+  QPixmap cover(":HoleRepair/plate.png");
   cover = cover.scaled(hole_size_, hole_size_);
   for (int i = 0; i < plates_.size(); i++) {
-    QPointF pnt(plates_.at(i).x() / kRelativeCoords
+    QPointF pnt(1. * plates_.at(i).x() / kRelativeCoords
                     * screen_size_.width() - cover.width() / 2,
-                plates_.at(i).y() / kRelativeCoords
+                1. * plates_.at(i).y() / kRelativeCoords
                     * screen_size_.height() - cover.height() / 2);
     painter->drawPixmap(pnt, cover);
   }
@@ -110,9 +116,9 @@ response) {
   for (int i = 0;
        i < response.initial_hole_repair_response().holes().points_size(); i++) {
     auto pnt = response.initial_hole_repair_response().holes().points(i);
-    holes_.emplace_back(1. * pnt.x() / kRelativeCoords * screen_size_.width(),
-                        1. * pnt.y() / kRelativeCoords * screen_size_.height());
+    holes_.emplace_back(pnt.x(), pnt.y());
   }
+  repaint();
 }
 
 void HoleRepairView::UpdateView(const minigame_responses::MinigameResponse&
@@ -127,22 +133,21 @@ response) {
     }
     case minigame_responses::HoleRepairResponse::kPlatePos: {
       auto pnt = response.hole_repair_response().plate_pos();
-      plates_.emplace_back(
-          1. * pnt.x() / kRelativeCoords * screen_size_.width(),
-          1. * pnt.y() / kRelativeCoords * screen_size_.height());
+      plates_.emplace_back(pnt.x(), pnt.y());
       available_plates_--;
       break;
     }
   }
   time_ = response.remaining_time();
+  repaint();
 }
 
 void HoleRepairView::PaintAvailablePlatesNumber(QPainter* painter) {
   QFont font = painter->font();
   font.setPixelSize(20);
   painter->setFont(font);
-  painter->drawText(screen_size_.width() / 2 - text_size_ / 2,
-                    screen_size_.height() / 2 - text_size_ / 2,
+  painter->drawText(1. * screen_size_.width() / 2 - text_size_ / 2,
+                    1. * screen_size_.height() / 2 - text_size_ / 2,
                     QString(available_plates_));
 }
 

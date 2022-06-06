@@ -104,4 +104,16 @@
     <qresource>
         <file>Buttons/yellow_button_ready.png</file>
     </qresource>
+    <qresource>
+        <file>HoleRepair/background.png</file>
+    </qresource>
+    <qresource>
+        <file>HoleRepair/plate.png</file>
+    </qresource>
+    <qresource>
+        <file>HoleRepair/cursor.png</file>
+    </qresource>
+    <qresource>
+        <file>HoleRepair/hole.png</file>
+    </qresource>
 </RCC>

@@ -334,7 +334,7 @@ void ClientController::HoleRepairPlatePos(QPointF pos) {
   plate_pos->set_x(pos.x());
   plate_pos->set_y(pos.y());
   auto* hole_repair_minigame = new minigame_actions::HoleRepairMinigame;
-  hole_repair_minigame->set_allocated_mouse_pos(plate_pos);
+  hole_repair_minigame->set_allocated_plate_pos(plate_pos);
   auto* minigame_action = new minigame_actions::MinigameAction;
   minigame_action->set_allocated_hole_repair_minigame(hole_repair_minigame);
   minigame_action->set_minigame_id(2);

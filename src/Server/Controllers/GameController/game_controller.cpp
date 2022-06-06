@@ -120,6 +120,10 @@ void GameController::StartMinigameEvent(MinigameType type) {
       minigame = std::make_shared<TerminalMinigame>(players);
       break;
     }
+    case MinigameType::kHoleRepair: {
+      minigame = std::make_shared<HoleRepair>(players);
+      break;
+    }
     default: {}
   }
 

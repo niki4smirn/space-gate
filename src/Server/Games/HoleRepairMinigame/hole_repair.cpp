@@ -78,7 +78,8 @@ void HoleRepair::Send(const events::EventWrapper& event) {
 
 void HoleRepair::Handle(const events::EventWrapper& event) {
   const auto& action =
-      event.client_event().event_to_game().minigame_action().hole_repair_minigame();
+      event.client_event().event_to_game().minigame_action()
+          .hole_repair_minigame();
   switch (action.pos_case()) {
     case minigame_actions::HoleRepairMinigame::kMousePos: {
       ReceiveMousePos(QPointF(action.mouse_pos().x(),
@@ -102,7 +103,8 @@ void HoleRepair::SendInitialResponse() {
     minigame_response->set_remaining_time(duration_);
     auto* initial_hole_repair_response =
         new minigame_responses::InitialHoleRepairResponse;
-    initial_hole_repair_response->set_role(static_cast<minigame_responses::InitialHoleRepairResponse::Role>(i));
+    initial_hole_repair_response->set_role(static_cast<minigame_responses::
+    InitialHoleRepairResponse::Role>(i));
     auto* holes = new minigame_responses::Holes;
     for (int i = 0; i < holes_.size(); ++i) {
       auto* point = holes->add_points();
@@ -126,9 +128,7 @@ events::EventWrapper HoleRepair::GenerateResponseMessage(UserId user_id) {
   return event;
 }
 
-void HoleRepair::SendResponseMessages() {
-
-}
+void HoleRepair::SendResponseMessages() {}
 
 bool HoleRepair::IsCompleted() {
   if (plates_.size() < kHolesNumber + kAdditionPlates) {

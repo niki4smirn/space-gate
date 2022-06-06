@@ -32,6 +32,4 @@ class HoleRepair : public AbstractMinigame {
  private:
   std::vector<QPointF> plates_;
   std::vector<QPointF> holes_;
-
 };
-

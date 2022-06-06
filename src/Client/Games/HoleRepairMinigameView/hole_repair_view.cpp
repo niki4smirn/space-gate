@@ -102,7 +102,8 @@ void HoleRepairView::PaintCursor(QPainter* painter) {
   painter->drawPixmap(cursor_pos_, cursor);
 }
 
-void HoleRepairView::InitializeView(const minigame_responses::MinigameResponse& response) {
+void HoleRepairView::InitializeView(const minigame_responses::MinigameResponse&
+response) {
   player_ =
       static_cast<PlayerType>(response.initial_hole_repair_response().role());
   available_plates_ = response.initial_hole_repair_response().plates();
@@ -114,7 +115,8 @@ void HoleRepairView::InitializeView(const minigame_responses::MinigameResponse& 
   }
 }
 
-void HoleRepairView::UpdateView(const minigame_responses::MinigameResponse& response) {
+void HoleRepairView::UpdateView(const minigame_responses::MinigameResponse&
+response) {
   switch (response.hole_repair_response().message_case()) {
     case minigame_responses::HoleRepairResponse::kMousePos: {
       auto pnt = response.hole_repair_response().mouse_pos();

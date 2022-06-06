@@ -17,7 +17,7 @@ enum PlayerType {
 };
 
 class HoleRepairView : public QWidget {
- Q_OBJECT
+  Q_OBJECT
 
  public:
   explicit HoleRepairView(QWidget* parent = nullptr);

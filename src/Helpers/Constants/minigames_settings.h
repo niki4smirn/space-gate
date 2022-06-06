@@ -13,6 +13,3 @@ extern const int kRelativeCoords;
 extern const int kMaxMistakes;
 
 }  // namespace hole_repair_settings
-
-
-

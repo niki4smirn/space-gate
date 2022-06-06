@@ -29,6 +29,8 @@ class ClientController : public AbstractController {
   void SendMouseMoveEvent(const QPoint& pos);
   void SendJoinMinigame(int minigame_index);
   void SendLeaveMinigame();
+  void HoleRepairMousePos(QPointF pos);
+  void HoleRepairPlatePos(QPointF pos);
 
   void ConnectToServer();
 

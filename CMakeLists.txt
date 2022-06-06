@@ -25,6 +25,7 @@ find_package(Qt5 COMPONENTS
 include_directories(Resources/Images/Buttons)
 include_directories(Resources/Images/Bulbs)
 include_directories(Resources/Images/Background)
+include_directories(Resources/Images/HoleRepair)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
@@ -89,6 +90,7 @@ add_executable(client
         src/Client/View/FinalScreen/final_screen.cpp
         src/Client/View/NetworkProblemWidget/network_problem_widget.cpp
         src/Client/Games/TerminalMinigameView/terminal_minigame_view.cpp
+        src/Client/Games/HoleRepairMinigameView/hole_repair_view.cpp
         )
 
 set(REQUIRED_QT_PARTS

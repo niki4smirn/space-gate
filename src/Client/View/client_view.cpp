@@ -6,6 +6,7 @@ ClientView::ClientView() :
     main_menu_(new ClientMainMenu(this)),
     game_widget_(new GameWidget(this)),
     terminal_minigame_view_(new TerminalMinigameView(this)),
+    hole_repair_minigame_view_(new HoleRepairView(this)),
     final_screen_(new FinalScreen(this)),
     input_controller_(new InputController),
     network_problem_widget_(new NetworkProblemWidget(this)) {
@@ -75,10 +76,21 @@ void ClientView::Connect() {
   connect(network_problem_widget_, &NetworkProblemWidget::Reconnect, [&]() {
     emit Reconnect();
   });
+  connect(hole_repair_minigame_view_,
+          &HoleRepairView::MousePos,
+          [&](QPointF pos) {
+            emit HoleRepairMousePos(pos);
+          });
+  connect(hole_repair_minigame_view_,
+          &HoleRepairView::PlatePos,
+          [&](QPointF pos) {
+            emit HoleRepairPlatePos(pos);
+          });
 }
 
 void ClientView::AddWidgets() {
   stacked_widget_->addWidget(terminal_minigame_view_);
+  stacked_widget_->addWidget(hole_repair_minigame_view_);
   stacked_widget_->addWidget(main_menu_);
   stacked_widget_->addWidget(game_widget_);
   stacked_widget_->addWidget(final_screen_);
@@ -172,6 +184,24 @@ void ClientView::UpdateMinigame(
 
       break;
     }
+    case minigame_responses::MinigameResponse::kInitialHoleRepairResponse: {
+      if (stacked_widget_->currentWidget() != hole_repair_minigame_view_) {
+        stacked_widget_->setCurrentWidget(hole_repair_minigame_view_);
+      }
+
+      hole_repair_minigame_view_->InitializeView(response);
+
+      break;
+    }
+    case minigame_responses::MinigameResponse::kHoleRepairResponse: {
+      if (stacked_widget_->currentWidget() != hole_repair_minigame_view_) {
+        stacked_widget_->setCurrentWidget(hole_repair_minigame_view_);
+      }
+
+      hole_repair_minigame_view_->UpdateView(response);
+
+      break;
+    }
     case minigame_responses::MinigameResponse::kResult: {
       stacked_widget_->setCurrentWidget(game_widget_);
       break;
@@ -183,6 +213,10 @@ void ClientView::UpdateMinigame(
 std::optional<MinigameType> ClientView::IsMinigameStarted() {
   if (stacked_widget_->currentWidget() == terminal_minigame_view_) {
     return MinigameType::kTerminal;
+  }
+
+  if (stacked_widget_->currentWidget() == hole_repair_minigame_view_) {
+    return MinigameType::kHoleRepair;
   }
 
   return std::nullopt;

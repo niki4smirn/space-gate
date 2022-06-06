@@ -178,5 +178,12 @@ double HoleRepair::Length(QPointF pnt1, QPointF pnt2) {
 
 void HoleRepair::OnTick() {
   AbstractMinigame::OnTick();
-  IsCompleted();
+
+  bool is_completed = IsCompleted();
+
+  if (is_completed) {
+    emit MinigameEnded(MinigameType::kHoleRepair, max_score_);
+  } else if (ticks_ >= duration_) {
+    emit MinigameEnded(MinigameType::kHoleRepair, 0);
+  }
 }

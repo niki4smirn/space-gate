@@ -95,7 +95,7 @@ void HoleRepairView::PaintPlates(QPainter* painter) {
 void HoleRepairView::PaintBackground(QPainter* painter) {
   QPixmap background(":HoleRepair/background.png");
   background = background.scaled(
-      background.width() * screen_size_.width()
+      background.width() * screen_size_.height()
           / background.height(), screen_size_.height());
   QBrush brush(Qt::TexturePattern, background);
   painter->setBrush(brush);
@@ -144,11 +144,11 @@ response) {
 
 void HoleRepairView::PaintAvailablePlatesNumber(QPainter* painter) {
   QFont font = painter->font();
-  font.setPixelSize(20);
+  font.setPixelSize(text_size_);
   painter->setFont(font);
-  painter->drawText(1. * screen_size_.width() / 2 - text_size_ / 2,
-                    1. * screen_size_.height() / 2 - text_size_ / 2,
-                    QString(available_plates_));
+  painter->drawText(0, screen_size_.height() - text_size_ / 2,
+                    QString("Available plates: ")
+                        + QString::number(available_plates_));
 }
 
 void HoleRepairView::PaintTimeBar(QPainter* painter) {

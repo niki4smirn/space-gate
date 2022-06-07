@@ -17,6 +17,7 @@ class HoleRepair : public AbstractMinigame {
   void ReceiveMousePos(QPointF pos);
   void ReceivePlatePos(QPointF pos);
   void SendInitialResponse();
+  void SendTimeMessage();
   void GenerateHoles();
   bool Check();
   double Length(QPointF pnt1, QPointF pnt2);

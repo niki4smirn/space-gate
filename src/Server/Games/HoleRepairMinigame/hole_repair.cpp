@@ -131,19 +131,19 @@ events::EventWrapper HoleRepair::GenerateResponseMessage(UserId user_id) {
 void HoleRepair::SendResponseMessages() {}
 
 bool HoleRepair::IsCompleted() {
-  if (plates_.size() < kHolesNumber + kAdditionPlates) {
+  if (plates_.size() < holes_.size() + kAdditionPlates) {
     return false;
   }
-  return Check();
+  return true;
 }
 
 void HoleRepair::GenerateHoles() {
   int holes_number;
   if (kIsRandomHolesNumber) {
-    holes_number = kHolesNumber;
-  } else {
     holes_number = QRandomGenerator::global()->bounded(
         kMaxHolesNumber - kMinHolesNumber + 1) - kMinHolesNumber;
+  } else {
+    holes_number = kHolesNumber;
   }
   for (int i = 0; i < holes_number; ++i) {
     holes_.emplace_back(QRandomGenerator::global()->bounded(
@@ -178,12 +178,35 @@ double HoleRepair::Length(QPointF pnt1, QPointF pnt2) {
 
 void HoleRepair::OnTick() {
   AbstractMinigame::OnTick();
+  SendTimeMessage();
 
   bool is_completed = IsCompleted();
 
   if (is_completed) {
-    emit MinigameEnded(MinigameType::kHoleRepair, max_score_);
+    if (Check()) {
+      emit MinigameEnded(MinigameType::kHoleRepair, max_score_);
+    } else {
+      emit MinigameEnded(MinigameType::kHoleRepair, 0);
+    }
   } else if (ticks_ >= duration_) {
     emit MinigameEnded(MinigameType::kHoleRepair, 0);
+  }
+}
+
+void HoleRepair::SendTimeMessage() {
+  for (int i = 0; i < players_.size(); ++i) {
+    events::EventWrapper event;
+    auto* server_event = new server_events::ServerEventWrapper;
+    server_event->set_receiver_id(player_id_by_role_id_.at(i));
+    auto* minigame_response = new minigame_responses::MinigameResponse;
+    minigame_response->set_remaining_time(duration_ - ticks_);
+    auto* hole_repair_response = new minigame_responses::HoleRepairResponse;
+    minigame_response->set_allocated_hole_repair_response(
+        hole_repair_response);
+
+    server_event->set_allocated_game_response(minigame_response);
+    event.set_allocated_server_event(server_event);
+
+    AddEventToSend(event);
   }
 }

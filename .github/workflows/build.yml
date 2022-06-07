@@ -27,6 +27,17 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 11
+      - name: Install dependencies
+        run: >
+          pacman -Sy --noconfirm
+          base-devel
+          gcc
+          cmake
+          qt5-base
+          qt5-multimedia
+          qt5-websockets
+          protobuf
+          unzip
       - name: Cache SonarCloud packages
         uses: actions/cache@v1
         with:
@@ -48,16 +59,6 @@ jobs:
           curl -sSLo $HOME/.sonar/build-wrapper-linux-x86.zip ${{ env.BUILD_WRAPPER_DOWNLOAD_URL }}
           unzip -o $HOME/.sonar/build-wrapper-linux-x86.zip -d $HOME/.sonar/
           echo "$HOME/.sonar/build-wrapper-linux-x86" >> $GITHUB_PATH
-      - name: Install dependencies
-        run: >
-          pacman -Sy --noconfirm
-          base-devel
-          gcc
-          cmake
-          qt5-base
-          qt5-multimedia
-          qt5-websockets
-          protobuf
       - run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DCMAKE_CXX_COMPILER=g++ -DCMAKE_C_COMPILER=gcc
         name: Configure CMake
       - run: build-wrapper-linux-x86-64 --out-dir ${{ env.BUILD_WRAPPER_OUT_DIR }} cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}} -j2

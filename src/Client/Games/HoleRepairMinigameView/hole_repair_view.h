@@ -12,7 +12,7 @@
 #include "Protobuf/minigame_responses.pb.h"
 
 class HoleRepairView : public QWidget {
- Q_OBJECT
+  Q_OBJECT
   enum PlayerType {
     kNavigator,
     kMechanic,

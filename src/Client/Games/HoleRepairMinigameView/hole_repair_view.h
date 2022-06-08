@@ -11,13 +11,12 @@
 #include "src/Helpers/Constants/constants.h"
 #include "Protobuf/minigame_responses.pb.h"
 
-enum PlayerType {
-  kNavigator,
-  kMechanic,
-};
-
 class HoleRepairView : public QWidget {
-  Q_OBJECT
+ Q_OBJECT
+  enum PlayerType {
+    kNavigator,
+    kMechanic,
+  };
 
  public:
   explicit HoleRepairView(QWidget* parent = nullptr);

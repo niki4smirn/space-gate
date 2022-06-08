@@ -68,7 +68,7 @@ if (WIN32)
             src/Client/InputController/input_names_windows.cpp)
 else()
     set(SYSTEM_DEPENDENT_SOURCES
-            src/Client/InputController/input_names_unix.cpp src/Helpers/Constants/minigames_settings.cpp src/Helpers/Constants/minigames_settings.h)
+            src/Client/InputController/input_names_unix.cpp)
 endif (WIN32)
 
 add_executable(client
@@ -91,6 +91,7 @@ add_executable(client
         src/Client/View/NetworkProblemWidget/network_problem_widget.cpp
         src/Client/Games/TerminalMinigameView/terminal_minigame_view.cpp
         src/Client/Games/HoleRepairMinigameView/hole_repair_view.cpp
+        src/Helpers/Constants/minigames_settings.cpp
         )
 
 set(REQUIRED_QT_PARTS

@@ -1,9 +1,7 @@
 #include "hole_repair.h"
 
-using namespace hole_repair_settings;
-
 HoleRepair::HoleRepair(const std::vector<std::shared_ptr<User>>& players) :
-    AbstractMinigame(players, 1000, kGameDuration) {
+    AbstractMinigame(players, 5, hole_repair_settings::kGameDuration) {
   StartMinigame();
 }
 
@@ -112,7 +110,8 @@ void HoleRepair::SendInitialResponse() {
       point->set_y(holes_.at(i).y());
     }
     initial_hole_repair_response->set_allocated_holes(holes);
-    initial_hole_repair_response->set_plates(holes_.size() + kAdditionPlates);
+    initial_hole_repair_response->set_plates(
+        holes_.size() + hole_repair_settings::kAdditionalPlates);
     minigame_response->set_allocated_initial_hole_repair_response(
         initial_hole_repair_response);
 
@@ -125,38 +124,50 @@ void HoleRepair::SendInitialResponse() {
 
 events::EventWrapper HoleRepair::GenerateResponseMessage(UserId user_id) {
   events::EventWrapper event;
+
+  auto* server_event = new server_events::ServerEventWrapper;
+  server_event->set_receiver_id(user_id);
+
+  auto* game_response = new minigame_responses::MinigameResponse;
+  auto* hole_repair_response = new minigame_responses::HoleRepairResponse;
+
+  game_response->set_remaining_time(duration_ - ticks_);
+  game_response->set_allocated_hole_repair_response(hole_repair_response);
+  server_event->set_allocated_game_response(game_response);
+
+  event.set_allocated_server_event(server_event);
+
   return event;
 }
 
-void HoleRepair::SendResponseMessages() {}
+void HoleRepair::SendResponseMessages() {
+  if (ticks_ > duration_) {
+    return;
+  }
+  for (const auto& [id, _]: players_) {
+    AddEventToSend(GenerateResponseMessage(id));
+  }
+}
 
 bool HoleRepair::IsCompleted() {
-  if (plates_.size() < holes_.size() + kAdditionPlates) {
+  if (plates_.size()
+      < holes_.size() + hole_repair_settings::kAdditionalPlates) {
     return false;
   }
   return true;
 }
 
 void HoleRepair::GenerateHoles() {
-  int holes_number;
-  if (kIsRandomHolesNumber) {
-    holes_number = QRandomGenerator::global()->bounded(
-        kMaxHolesNumber - kMinHolesNumber + 1) - kMinHolesNumber;
-  } else {
-    holes_number = kHolesNumber;
-  }
-  for (int i = 0; i < holes_number; ++i) {
-    holes_.emplace_back(QRandomGenerator::global()->bounded(
-                            kRelativeCoords + 1),
-                        QRandomGenerator::global()->bounded(
-                            kRelativeCoords + 1));
+  for (int i = 0; i < hole_repair_settings::kHolesNumber; ++i) {
+    holes_.emplace_back(QRandomGenerator::global()->generateDouble(),
+                        QRandomGenerator::global()->generateDouble());
   }
 }
 
 bool HoleRepair::Check() {
   int mistakes = 0;
   for (int i = 0; i < plates_.size(); ++i) {
-    double min = kRelativeCoords;
+    double min = hole_repair_settings::kRelativeCoords;
     for (int j = 0; j < holes_.size(); ++j) {
       QPointF user_point(plates_.at(i).x(), plates_.at(i).y());
       double length = Length(user_point, holes_.at(j));
@@ -164,11 +175,11 @@ bool HoleRepair::Check() {
         min = length;
       }
     }
-    if (min > kMaxDeviation) {
+    if (min > hole_repair_settings::kMaxDeviation) {
       mistakes++;
     }
   }
-  return mistakes < kMaxMistakes;
+  return mistakes < hole_repair_settings::kMaxMistakes;
 }
 
 double HoleRepair::Length(QPointF pnt1, QPointF pnt2) {
@@ -194,19 +205,10 @@ void HoleRepair::OnTick() {
 }
 
 void HoleRepair::SendTimeMessage() {
-  for (int i = 0; i < players_.size(); ++i) {
-    events::EventWrapper event;
-    auto* server_event = new server_events::ServerEventWrapper;
-    server_event->set_receiver_id(player_id_by_role_id_.at(i));
-    auto* minigame_response = new minigame_responses::MinigameResponse;
-    minigame_response->set_remaining_time(duration_ - ticks_);
-    auto* hole_repair_response = new minigame_responses::HoleRepairResponse;
-    minigame_response->set_allocated_hole_repair_response(
-        hole_repair_response);
-
-    server_event->set_allocated_game_response(minigame_response);
-    event.set_allocated_server_event(server_event);
-
-    AddEventToSend(event);
+  if (ticks_ > duration_) {
+    return;
+  }
+  for (const auto& [id, _]: players_) {
+    AddEventToSend(GenerateResponseMessage(id));
   }
 }

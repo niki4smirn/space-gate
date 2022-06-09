@@ -7,6 +7,9 @@ uint64_t GetMinigamePlayersCountByType(MinigameType type) {
     case MinigameType::kTerminal: {
       return 4;
     }
+    case MinigameType::kHoleRepair: {
+      return 2;
+    }
     default: {
       return 0;
     }

@@ -28,7 +28,7 @@ ClientMainMenu::ClientMainMenu(QWidget* parent) :
   set_sound_->setVisible(0);
   QString family =
       QFontDatabase::applicationFontFamilies(QFontDatabase::addApplicationFont(
-          "../Resources/Fonts/Paladins.otf")).at(0);
+          ":Paladins.otf")).at(0);
   font_ = QFont(family);
 
   ButtonsConfigure();

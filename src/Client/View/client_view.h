@@ -7,6 +7,7 @@
 // #include "src/Client/View/GameWidget/game_widget.h"
 #include "src/Client/View/FinalGameWidget/game_widget.h"
 #include "src/Client/Games/TerminalMinigameView/terminal_minigame_view.h"
+#include "src/Client/Games/HoleRepairMinigameView/hole_repair_view.h"
 #include "src/Client/View/NetworkProblemWidget/network_problem_widget.h"
 
 #include <QWidget>
@@ -50,6 +51,7 @@ class ClientView : public QMainWindow {
   FinalScreen* final_screen_;
   NetworkProblemWidget* network_problem_widget_;
   TerminalMinigameView* terminal_minigame_view_;
+  HoleRepairView* hole_repair_minigame_view_;
   QStackedWidget* stacked_widget_;
 
  signals:
@@ -63,4 +65,6 @@ class ClientView : public QMainWindow {
   void JoinMinigame(int minigame_index);
   void LeaveMinigame();
   void Reconnect();
+  void HoleRepairPlatePos(QPointF pos);
+  void HoleRepairMousePos(QPointF pos);
 };

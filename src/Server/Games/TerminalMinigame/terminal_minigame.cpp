@@ -50,7 +50,7 @@ void TerminalMinigame::StartMinigame() {
        input::Name::kSpace, input::Name::kH, input::Name::kI, input::Name::kP,
        input::Name::kMinus, input::Name::kC, input::Name::kN, input::Name::kT,
        input::Name::kR, input::Name::kL, input::Name::kE, input::Name::kA,
-       input::Name::kApostrophe, input::Name::kF, input::Name::kX,
+       input::Name::kPoint, input::Name::kF, input::Name::kX,
        input::Name::kBackspace};
 
   std::shuffle(needed_keys.begin(),
@@ -168,8 +168,8 @@ void TerminalMinigame::HandleKey(input::Name key_name) {
 
       break;
     }
-    case input::Name::kApostrophe: {
-      current_ += '&';
+    case input::Name::kPoint: {
+      current_ += '.';
 
       break;
     }

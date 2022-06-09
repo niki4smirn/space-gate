@@ -43,7 +43,7 @@ void FinalScreen::SetSize() {
 void FinalScreen::SetName() {
   QString family =
       QFontDatabase::applicationFontFamilies(QFontDatabase::addApplicationFont(
-          "../Resources/Fonts/Paladins.otf")).at(0);
+          ":Paladins.otf")).at(0);
   font_ =  QFont(family);
   game_name_->setVisible(1);
   game_name_->setText("Spacegate");

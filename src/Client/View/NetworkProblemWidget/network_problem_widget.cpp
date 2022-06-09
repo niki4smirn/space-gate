@@ -15,7 +15,7 @@ NetworkProblemWidget::NetworkProblemWidget(QWidget* parent) :
                                    QApplication::screens()[0]->size().height());
   QString family =
       QFontDatabase::applicationFontFamilies(QFontDatabase::addApplicationFont(
-          "../Resources/Fonts/Paladins.otf")).at(0);
+          ":Paladins.otf")).at(0);
   QFont font(family);
   font.setPointSize(55);
   font.setBold(true);

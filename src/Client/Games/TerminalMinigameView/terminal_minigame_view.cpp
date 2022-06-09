@@ -13,7 +13,7 @@ TerminalMinigameView::TerminalMinigameView(QWidget* parent)
       layout_(new QGridLayout(this)) {
   QString family =
       QFontDatabase::applicationFontFamilies(QFontDatabase::addApplicationFont(
-          "../Resources/Fonts/Fairfax.ttf")).at(0);
+          ":Fairfax.ttf")).at(0);
   auto font = QFont(family);
   font.setPointSize(36);
 

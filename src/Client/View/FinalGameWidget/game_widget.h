@@ -25,7 +25,7 @@ class GameWidget : public QWidget {
   void TurnOffRed();
   void TurnOffPurple();
   void TurnOffBlue();
-
+  void EndGame();
 
  signals:
   void JoinMinigame(int minigame_index_pos);
@@ -46,7 +46,6 @@ class GameWidget : public QWidget {
   void SetMainAnimations();
   void SetCrackAnimation();
   void Loss();
-  void EndGame();
 
   QPushButton* red_button_;
   QPushButton* green_button_;

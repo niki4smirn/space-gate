@@ -189,7 +189,7 @@ double HoleRepair::Length(QPointF pnt1, QPointF pnt2) {
 
 void HoleRepair::OnTick() {
   AbstractMinigame::OnTick();
-  SendTimeMessage();
+  SendResponseMessages();
 
   bool is_completed = IsCompleted();
 
@@ -201,14 +201,5 @@ void HoleRepair::OnTick() {
     }
   } else if (ticks_ >= duration_) {
     emit MinigameEnded(MinigameType::kHoleRepair, 0);
-  }
-}
-
-void HoleRepair::SendTimeMessage() {
-  if (ticks_ > duration_) {
-    return;
-  }
-  for (const auto& [id, _] : players_) {
-    AddEventToSend(GenerateResponseMessage(id));
   }
 }

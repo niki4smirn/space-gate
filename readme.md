@@ -22,32 +22,25 @@ Then run cleint with ip string as argument to connect to custom server or defaul
 
 ## Authors
 
-* **Nikita Smirnov**
+* **[Nikita Smirnov](https://github.com/niki4smirn)**
     - *Server-room-clients interaction*
     - *Protobuf messages architecture (+@DudkoAndrei)*
     - *Logging system*
     - *Deployment using Docker*
 
-  [niki4smirn](https://github.com/niki4smirn)
-* **Andrei Dudko**
+* **[Andrei Dudko](https://github.com/DudkoAndrei)**
     - *CI*
     - *Server Game Controller (+@niki4smirn)*
     - *Terminal Minigame*
 
-  [DudkoAndrei](https://github.com/DudkoAndrei)
-* **Egor Lechenko**
+* **[Egor Lechenko](https://github.com/YahorL)**
     - *Main menu*
     - *Stars background animation*
     - *Hole repair minigame*
     - *Input Controller*
 
-  [YahorL](https://github.com/YahorL)
-* **Ekaterina Novikova**
+* **[Ekaterina Novikova](https://github.com/ekkatrina)**
     - *Game design*
     - *Animations*
     - *Menus implementation*
     - *Sound*
-
-  [ekkatrina](https://github.com/ekkatrina)
-
-![funny-cat-gif](https://user-images.githubusercontent.com/33293845/159215740-9512d9cf-1c9b-4663-8eb1-8a03f39ddaa8.gif)

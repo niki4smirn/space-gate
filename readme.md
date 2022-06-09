@@ -1,6 +1,6 @@
 # SPACEGATE
 
-Spacegate is cooperative online game written in C++ using Qt and Protobuf.
+Spacegate is a cooperative online game written in C++ using Qt and Protobuf.
 
 You are on a spaceship with your friends. Solve minigames to stay alive!
 

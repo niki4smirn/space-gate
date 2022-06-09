@@ -10,6 +10,8 @@ ClientView::ClientView() :
     final_screen_(new FinalScreen(this)),
     input_controller_(new InputController),
     network_problem_widget_(new NetworkProblemWidget(this)) {
+  QSound sound(":sound.wav");
+  sound.play(":sound.wav");
   AddWidgets();
   stacked_widget_->setCurrentWidget(main_menu_);
   setCentralWidget(stacked_widget_);

@@ -13,6 +13,7 @@
 #include <QWidget>
 #include <QStackedWidget>
 #include <QMainWindow>
+#include "QSound"
 
 class ClientView : public QMainWindow {
   Q_OBJECT

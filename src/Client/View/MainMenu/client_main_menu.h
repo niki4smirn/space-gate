@@ -13,6 +13,9 @@
 #include <QGraphicsScene>
 #include <QGraphicsView>
 #include <QFont>
+#include "QSoundEffect"
+#include "QSpinBox"
+#include "QSettings"
 
 class ClientMainMenu : public QWidget {
   Q_OBJECT
@@ -42,6 +45,8 @@ class ClientMainMenu : public QWidget {
   void JoinRoom();
   void Settings();
   void ReadyButtonPressEvent();
+  void SetSound();
+  void SoundValueChangedEvent();
 
  private:
   BackgroundWidget* background_;
@@ -62,12 +67,17 @@ class ClientMainMenu : public QWidget {
   QLabel* nothing_here_;
   QWidget* interface_;
   QFont font_;
+  QSoundEffect* sound_;
+  QSpinBox* set_sound_;
+  QSettings* setting_;
+  QPushButton* sound_on_;
 
   bool is_chief_{true};
   static QColor StatusToColor(server_events::RoomUser::Status status);
 
   void ShowRoomChiefInterface();
   void ShowRoomGuestInterface();
+
 
  signals:
   void StartEffect(bool state);
@@ -77,5 +87,6 @@ class ClientMainMenu : public QWidget {
   void LeaveRoom();
   void JoinRoomSignal(RoomId room_id);
   void StartGame();
+  void SoundValueChanged();
 };
 

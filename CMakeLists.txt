@@ -20,6 +20,7 @@ find_package(Qt5 COMPONENTS
         Network
         WebSockets
         REQUIRED
+        Multimedia
         )
 
 include_directories(Resources/Images/Buttons)
@@ -89,6 +90,7 @@ add_executable(client
         src/Client/View/GameWidget/WaitingScreen/waiting_screen.cpp
         src/Client/View/FinalScreen/final_screen.cpp
         src/Client/View/NetworkProblemWidget/network_problem_widget.cpp
+        Resources/Sound/Sound.qrc
         src/Client/Games/TerminalMinigameView/terminal_minigame_view.cpp
         src/Client/Games/HoleRepairMinigameView/hole_repair_view.cpp
         src/Helpers/Constants/minigames_settings.cpp
@@ -100,6 +102,7 @@ set(REQUIRED_QT_PARTS
         Qt::Widgets
         Qt::Network
         Qt::WebSockets
+        Qt::Multimedia
         )
 
 foreach (executable server; client)

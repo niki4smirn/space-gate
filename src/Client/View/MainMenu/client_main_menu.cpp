@@ -5,7 +5,9 @@
 
 ClientMainMenu::ClientMainMenu(QWidget* parent) :
     QWidget(parent),
+    setting_(new QSettings(this)),
     background_(new BackgroundWidget(this)),
+    sound_on_(new QPushButton(this)),
     background_layout_(new QGridLayout),
     game_name_(new QLabel("SpaceGate", this)),
     interface_layout_(new QGridLayout),
@@ -21,7 +23,9 @@ ClientMainMenu::ClientMainMenu(QWidget* parent) :
     player_list_(new QListWidget(this)),
     rooms_list_(new QListWidget(this)),
     nothing_here_(new QLabel(this)),
-    interface_(new QWidget(this)) {
+    interface_(new QWidget(this)),
+    set_sound_(new QSpinBox(this)) {
+  set_sound_->setVisible(0);
   QString family =
       QFontDatabase::applicationFontFamilies(QFontDatabase::addApplicationFont(
           ":Paladins.otf")).at(0);
@@ -33,11 +37,12 @@ ClientMainMenu::ClientMainMenu(QWidget* parent) :
   font_.setPointSize(105);
   font_.setBold(true);
   game_name_->setFont(font_);
-
+  sound_ = new QSoundEffect(this);
   SetMouseTracking();
   SetLayouts();
   ShowStartWidget();
   Connect();
+  SetSound();
 }
 void ClientMainMenu::SetCenterPos(QPoint pos) {
   background_->SetCenterPos(pos);
@@ -139,7 +144,7 @@ void ClientMainMenu::Connect() {
           &ClientMainMenu::BackToGameOption);
   connect(exit_,
           &QPushButton::clicked,
-          [this]() { emit Close(); });
+          [this]() { emit Close();});
   connect(back_to_start_,
           &QPushButton::clicked,
           this,
@@ -147,6 +152,37 @@ void ClientMainMenu::Connect() {
   connect(settings_, &QPushButton::clicked, this, &ClientMainMenu::Settings);
   connect(ready_status_,
           &QPushButton::clicked, this, &ClientMainMenu::ReadyButtonPressEvent);
+  connect(set_sound_, QOverload<int>::of(&QSpinBox::valueChanged),
+          this, [&](int value){
+    if (value > 0) {
+      sound_on_->setText("Turn Off");
+      sound_->setMuted(0);
+    } else {
+      sound_on_->setText("Turn On");
+      sound_->setMuted(1);
+    }
+    sound_->setVolume(static_cast<double>(value) / 100);
+    setting_->setValue("sound_value", sound_->volume());
+    setting_->setValue("spin_box_value", value);
+    setting_->setValue("muted", sound_->isMuted());
+      });
+  connect(sound_on_, &QPushButton::clicked, this, [&](){
+    if (sound_->isMuted()) {
+      sound_->setMuted(0);
+      sound_on_->setText("Turn Off");
+    } else {
+      sound_->setMuted(1);
+      sound_on_->setText("Turn On");
+    }
+    setting_->setValue("muted", sound_->isMuted());
+  });
+  connect(sound_, &QSoundEffect::mutedChanged, this, [&](){
+    if (sound_->isMuted()) {
+      sound_on_->setText("Turn On");
+    } else {
+      sound_on_->setText("Turn Off");
+    }
+  });
 }
 
 void ClientMainMenu::ChooseRoomOption() {
@@ -192,6 +228,8 @@ void ClientMainMenu::RemoveAllWidgets() {
   ready_status_->setVisible(false);
   rooms_list_->setVisible(false);
   nothing_here_->setVisible(false);
+  set_sound_->setVisible(false);
+  sound_on_->setVisible(false);
 
   interface_layout_->removeWidget(create_room_);
   interface_layout_->removeWidget(join_room_);
@@ -224,17 +262,36 @@ void ClientMainMenu::JoinRoom() {
 
 void ClientMainMenu::Settings() {
   RemoveAllWidgets();
+  set_sound_->setFixedSize(400, 100);
+  set_sound_->setSpecialValueText("Volume");
+  set_sound_->setFont(font_);
+  set_sound_->setStyleSheet("color : #88bcff; font-size: 10px; aligment : "
+                            "Qt::AlignCenter");
+  set_sound_->setRange(0, 100);
+  set_sound_->setValue((setting_->value("spin_box_value")).toInt());
+  sound_->setMuted((setting_->value("muted").toBool()));
+  set_sound_->setVisible(true);
 
   nothing_here_->setVisible(true);
   back_to_start_->setVisible(true);
 
-  nothing_here_->setText("Nothing Here");
+  sound_on_->setVisible(true);
+  sound_on_->setFixedSize(400, 100);
+  sound_on_->setText("Turn Off");
+  sound_on_->setFont(font_);
+  sound_on_->setStyleSheet("color : #88bcff; font-size: 40px;");
+
+  nothing_here_->setText("Adjust Sound");
   nothing_here_->setFont(font_);
-  nothing_here_->setStyleSheet("QLabel {color : #88bcff; font-size: 40px;}");
+  nothing_here_->setStyleSheet("color : #88bcff; font-size: 40px;");
 
   interface_layout_->addWidget(nothing_here_, 1, 0, 1, 2,
                                Qt::AlignHCenter | Qt::AlignVCenter);
-  interface_layout_->addWidget(back_to_start_, 3, 0, 1, 2,
+  interface_layout_->addWidget(back_to_start_, 4, 0, 1, 2,
+                               Qt::AlignHCenter | Qt::AlignVCenter);
+  interface_layout_->addWidget(set_sound_, 2, 0, 1, 2,
+                               Qt::AlignHCenter | Qt::AlignVCenter);
+  interface_layout_->addWidget(sound_on_, 3, 0, 1, 2,
                                Qt::AlignHCenter | Qt::AlignVCenter);
 }
 
@@ -385,4 +442,16 @@ void ClientMainMenu::BackToLobby() {
   } else {
     ShowRoomGuestInterface();
   }
+}
+void ClientMainMenu::SetSound() {
+  sound_->setSource(QUrl::fromLocalFile(":sound.wav"));
+  auto volume = setting_->value("sound_value");
+  if (!volume.isNull()) {
+     sound_->setVolume(volume.toDouble());
+  } else {
+    sound_->setVolume(0.5);
+  }
+  sound_->setMuted((setting_->value("muted")).toBool());
+  sound_->setLoopCount(1000);
+  sound_->play();
 }

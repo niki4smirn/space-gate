@@ -12,6 +12,32 @@ message SampleResponse {
   Role role = 2;
 }
 
+message Point {
+  double x = 1;
+  double y = 2;
+}
+
+message Holes {
+  repeated Point points = 1;
+}
+
+message HoleRepairResponse {
+  oneof message {
+    Point mouse_pos = 1;
+    Point plate_pos = 2;
+  }
+}
+
+message InitialHoleRepairResponse {
+  enum Role {
+    kNavigator = 0;
+    kMechanic = 1;
+  }
+  Role role = 1;
+  Holes holes = 2;
+  int32 plates = 3;
+}
+
 message InitialTerminalResponse {
   repeated uint64 available_buttons_id = 1;
   string text = 2;
@@ -30,7 +56,9 @@ message MinigameResponse {
   oneof type {
     Result result = 2;
     SampleResponse sample_response = 3;
-    InitialTerminalResponse initial_terminal_respone = 4;
-    TerminalResponse terminal_response = 5;
+    HoleRepairResponse hole_repair_response = 4;
+    InitialHoleRepairResponse initial_hole_repair_response = 5;
+    InitialTerminalResponse initial_terminal_respone = 6;
+    TerminalResponse terminal_response = 7;
   }
 }

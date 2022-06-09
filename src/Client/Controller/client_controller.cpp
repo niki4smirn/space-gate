@@ -149,7 +149,17 @@ void ClientController::ConnectView() {
           &ClientView::Reconnect,
           [&]() {
             ConnectToServer();
-  });
+          });
+  connect(view_,
+          &ClientView::HoleRepairPlatePos,
+          [&](QPointF pos) {
+            HoleRepairPlatePos(pos);
+          });
+  connect(view_,
+          &ClientView::HoleRepairMousePos,
+          [&](QPointF pos) {
+            HoleRepairMousePos(pos);
+          });
 }
 
 void ClientController::SendReadyStatus() {
@@ -299,4 +309,40 @@ std::optional<int> ClientController::MinigamePosById(int minigame_id) {
 
 void ClientController::ConnectToServer() {
   socket_.open(server_url_);
+}
+
+void ClientController::HoleRepairMousePos(QPointF pos) {
+  auto* mouse_pos = new minigame_actions::Point;
+  mouse_pos->set_x(pos.x());
+  mouse_pos->set_y(pos.y());
+  auto* hole_repair_minigame = new minigame_actions::HoleRepairMinigame;
+  hole_repair_minigame->set_allocated_mouse_pos(mouse_pos);
+  auto* minigame_action = new minigame_actions::MinigameAction;
+  minigame_action->set_allocated_hole_repair_minigame(hole_repair_minigame);
+  minigame_action->set_minigame_id(2);
+  auto* event_to_game = new client_events::EventToGame;
+  event_to_game->set_allocated_minigame_action(minigame_action);
+  auto* client_event_wrapper = new client_events::ClientEventWrapper;
+  client_event_wrapper->set_allocated_event_to_game(event_to_game);
+  events::EventWrapper event;
+  event.set_allocated_client_event(client_event_wrapper);
+  AddEventToSend(event);
+}
+
+void ClientController::HoleRepairPlatePos(QPointF pos) {
+  auto* plate_pos = new minigame_actions::Point;
+  plate_pos->set_x(pos.x());
+  plate_pos->set_y(pos.y());
+  auto* hole_repair_minigame = new minigame_actions::HoleRepairMinigame;
+  hole_repair_minigame->set_allocated_plate_pos(plate_pos);
+  auto* minigame_action = new minigame_actions::MinigameAction;
+  minigame_action->set_allocated_hole_repair_minigame(hole_repair_minigame);
+  minigame_action->set_minigame_id(2);
+  auto* event_to_game = new client_events::EventToGame;
+  event_to_game->set_allocated_minigame_action(minigame_action);
+  auto* client_event_wrapper = new client_events::ClientEventWrapper;
+  client_event_wrapper->set_allocated_event_to_game(event_to_game);
+  events::EventWrapper event;
+  event.set_allocated_client_event(client_event_wrapper);
+  AddEventToSend(event);
 }

@@ -8,6 +8,7 @@ enum class MinigameType {
   kNone = 0,
 
   kTerminal = 1,
+  kHoleRepair = 2,
 
   kLast
 };

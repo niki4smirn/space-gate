@@ -25,6 +25,7 @@ find_package(Qt5 COMPONENTS
 include_directories(Resources/Images/Buttons)
 include_directories(Resources/Images/Bulbs)
 include_directories(Resources/Images/Background)
+include_directories(Resources/Images/HoleRepair)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
@@ -58,6 +59,8 @@ add_executable(server
         src/Server/Models/GameModel/game_model.cpp
         src/Server/Games/AbstractMinigame/abstract_minigame.cpp
         src/Server/Games/TerminalMinigame/terminal_minigame.cpp
+        src/Server/Games/HoleRepairMinigame/hole_repair.cpp
+        src/Helpers/Constants/minigames_settings.cpp
         )
 
 if (WIN32)
@@ -87,6 +90,8 @@ add_executable(client
         src/Client/View/FinalScreen/final_screen.cpp
         src/Client/View/NetworkProblemWidget/network_problem_widget.cpp
         src/Client/Games/TerminalMinigameView/terminal_minigame_view.cpp
+        src/Client/Games/HoleRepairMinigameView/hole_repair_view.cpp
+        src/Helpers/Constants/minigames_settings.cpp
         )
 
 set(REQUIRED_QT_PARTS

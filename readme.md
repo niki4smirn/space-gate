@@ -44,3 +44,7 @@ Then run cleint with ip string as argument to connect to custom server or defaul
     - *Animations*
     - *Menus implementation*
     - *Sound*
+
+## Special gratitudes for our donators
+
+* :heart_on_fire:**[Klim Markevich](https://github.com/sn0wyQ)**:heart_on_fire:

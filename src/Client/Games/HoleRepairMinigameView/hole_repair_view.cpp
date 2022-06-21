@@ -96,6 +96,8 @@ void HoleRepairView::PaintCursor(QPainter* painter) {
 
 void HoleRepairView::InitializeView(
     const minigame_responses::MinigameResponse& response) {
+  plates_.clear();
+  holes_.clear();
   player_ =
       static_cast<PlayerType>(response.initial_hole_repair_response().role());
   available_plates_ = response.initial_hole_repair_response().plates();
@@ -145,8 +147,4 @@ void HoleRepairView::PaintTimeBar(QPainter* painter) {
                     1. * time_ / hole_repair_settings::kGameDuration
                         * screen_size_.width(),
                     bar_width_);
-}
-
-void HoleRepairView::ResetView() {
-  plates_.clear();
 }

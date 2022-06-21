@@ -13,6 +13,7 @@
 #include <QGraphicsScene>
 #include <QGraphicsView>
 #include <QFont>
+#include <QStackedWidget>
 
 class ClientMainMenu : public QWidget {
   Q_OBJECT

@@ -186,6 +186,7 @@ void ClientView::UpdateMinigame(
     }
     case minigame_responses::MinigameResponse::kInitialHoleRepairResponse: {
       if (stacked_widget_->currentWidget() != hole_repair_minigame_view_) {
+        hole_repair_minigame_view_->ResetView();
         stacked_widget_->setCurrentWidget(hole_repair_minigame_view_);
       }
 

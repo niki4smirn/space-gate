@@ -146,3 +146,7 @@ void HoleRepairView::PaintTimeBar(QPainter* painter) {
                         * screen_size_.width(),
                     bar_width_);
 }
+
+void HoleRepairView::ResetView() {
+  plates_.clear();
+}

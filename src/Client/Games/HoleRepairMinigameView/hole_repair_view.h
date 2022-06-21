@@ -22,6 +22,7 @@ class HoleRepairView : public QWidget {
   explicit HoleRepairView(QWidget* parent = nullptr);
   void InitializeView(const minigame_responses::MinigameResponse& response);
   void UpdateView(const minigame_responses::MinigameResponse& response);
+  void ResetView();
 
  private:
   void PaintHoles(QPainter* painter);

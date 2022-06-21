@@ -13,6 +13,7 @@
 #include <QGraphicsScene>
 #include <QGraphicsView>
 #include <QFont>
+#include <QStackedWidget>
 
 class ClientMainMenu : public QWidget {
   Q_OBJECT
@@ -62,6 +63,7 @@ class ClientMainMenu : public QWidget {
   QLabel* nothing_here_;
   QWidget* interface_;
   QFont font_;
+
 
   bool is_chief_{true};
   static QColor StatusToColor(server_events::RoomUser::Status status);

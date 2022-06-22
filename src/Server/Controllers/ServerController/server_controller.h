@@ -30,6 +30,8 @@ class ServerController : public AbstractController {
 
   void SendRoomsListEvent();
 
+  static events::EventWrapper GenerateDeleteUserEvent(UserId user_id) ;
+
   QWebSocketServer web_socket_server_;
   ServerModel server_model_;
 };

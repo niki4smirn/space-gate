@@ -41,11 +41,13 @@ RUN ssh-keyscan github.com >> /root/.ssh/known_hosts
 WORKDIR /root
 RUN git clone git@github.com:niki4smirn/space-gate.git
 WORKDIR space-gate
+RUN git fetch
+RUN git pull
 RUN git checkout origin/developing
-RUN mkdir cmake-build-release
+RUN mkdir cmake-build-debug
 
-RUN cmake -S /root/space-gate -B /root/space-gate/cmake-build-release
-RUN cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_COMPILER=clang++ -G "CodeBlocks - Unix Makefiles" /root/space-gate/cmake-build-release
-RUN cmake --build /root/space-gate/cmake-build-release --target server -j 8
-WORKDIR /root/space-gate/cmake-build-release
+RUN cmake -S /root/space-gate -B /root/space-gate/cmake-build-debug
+RUN cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_COMPILER=clang++ -G "CodeBlocks - Unix Makefiles" /root/space-gate/cmake-build-debug
+RUN cmake --build /root/space-gate/cmake-build-debug --target server -j 8
+WORKDIR /root/space-gate/cmake-build-debug
 CMD ./server

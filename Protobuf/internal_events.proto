@@ -1,0 +1,12 @@
+syntax = "proto3";
+package internal_events;
+
+message InternalEventWrapper {
+  oneof type {
+    DeleteUser delete_user = 1;
+  }
+}
+
+message DeleteUser {
+  uint64 user_id = 1;
+}

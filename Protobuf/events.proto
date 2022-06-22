@@ -3,10 +3,12 @@ package events;
 
 import "Protobuf/client_events.proto";
 import "Protobuf/server_events.proto";
+import "Protobuf/internal_events.proto";
 
 message EventWrapper {
   oneof type {
     server_events.ServerEventWrapper server_event = 1;
     client_events.ClientEventWrapper client_event = 2;
+    internal_events.InternalEventWrapper internal_event = 3;
   }
 }

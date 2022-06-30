@@ -144,7 +144,7 @@ void HoleRepair::SendResponseMessages() {
   if (ticks_ > duration_) {
     return;
   }
-  for (const auto& [id, _] : players_) {
+  for (const auto& [id, _]: players_) {
     AddEventToSend(GenerateResponseMessage(id));
   }
 }
@@ -159,8 +159,9 @@ bool HoleRepair::IsCompleted() {
 
 void HoleRepair::GenerateHoles() {
   for (int i = 0; i < hole_repair_settings::kHolesNumber; ++i) {
-    holes_.emplace_back(QRandomGenerator::global()->generateDouble() * 0.9 + 0.05,
-                        QRandomGenerator::global()->generateDouble() * 0.9 + 0.05);
+    holes_.emplace_back(
+        QRandomGenerator::global()->generateDouble() * 0.9 + 0.05,
+        QRandomGenerator::global()->generateDouble() * 0.9 + 0.05);
   }
 }
 

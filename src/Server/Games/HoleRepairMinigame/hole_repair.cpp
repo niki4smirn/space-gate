@@ -159,8 +159,8 @@ bool HoleRepair::IsCompleted() {
 
 void HoleRepair::GenerateHoles() {
   for (int i = 0; i < hole_repair_settings::kHolesNumber; ++i) {
-    holes_.emplace_back(QRandomGenerator::global()->generateDouble(),
-                        QRandomGenerator::global()->generateDouble());
+    holes_.emplace_back(QRandomGenerator::global()->generateDouble() * 0.9 + 0.05,
+                        QRandomGenerator::global()->generateDouble() * 0.9 + 0.05);
   }
 }
 

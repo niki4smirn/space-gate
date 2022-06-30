@@ -33,7 +33,7 @@ GameWidget::GameWidget(QWidget* parent) : QWidget(parent) {
   blue_bulb_blue_ = new QLabel(this);
   yellow_bulb_blue_ = new QLabel(this);
   loss_timer_ = new QTimer(this);
-  loss_timer_->setInterval(500);
+  loss_timer_->setInterval(1300);
   loss_timer_->setSingleShot(0);
   shining_timer_ = new QTimer(this);
   shining_timer_->setInterval(300);
@@ -127,6 +127,7 @@ void GameWidget::ButtonClicked() {
     red_button_->setIcon(QIcon(pixmap_red));
     red_button_->setIconSize(pixmap_red.size());
   });
+
   connect(red_button_, &QPushButton::released, this, [&] {
     QPixmap pixmap_red(":Buttons/red_button.png");
     pixmap_red = pixmap_red.scaled(red_button_->size());
@@ -141,6 +142,7 @@ void GameWidget::ButtonClicked() {
     purple_button_->setIcon(QIcon(pixmap_pr));
     purple_button_->setIconSize(pixmap_pr.size());
   });
+
   connect(purple_button_, &QPushButton::released, this, [&] {
     QPixmap pixmap_pr(":Buttons/purple_button.png");
     pixmap_pr = pixmap_pr.scaled(purple_button_->size());
@@ -155,6 +157,7 @@ void GameWidget::ButtonClicked() {
     blue_button_->setIcon(QIcon(pixmap_bl));
     blue_button_->setIconSize(pixmap_bl.size());
   });
+
   connect(blue_button_, &QPushButton::released, this, [&] {
     QPixmap pixmap_bl(":Buttons/blue_button.png");
     pixmap_bl = pixmap_bl.scaled(blue_button_->size());
@@ -169,6 +172,7 @@ void GameWidget::ButtonClicked() {
     yellow_button_->setIcon(QIcon(pixmap_yel));
     yellow_button_->setIconSize(pixmap_yel.size());
   });
+
   connect(yellow_button_, &QPushButton::released, this, [&] {
     QPixmap pixmap_yel(":Buttons/yellow_button.png");
     pixmap_yel = pixmap_yel.scaled(yellow_button_->size());
@@ -405,40 +409,43 @@ void GameWidget::SetProgress(int progress, int max_progress) {
 
 void GameWidget::BackgroundShines() {
   connect(shining_timer_, &QTimer::timeout, this, [&] {
+    if (is_end_){
+      return;
+    }
     index_ = (index_ + 1) % 2;
-    main_image_ = images_shining[index_];
-
+    main_image_ = images_shining_[index_];
     repaint();
   });
 }
 
 void GameWidget::SetCrackAnimation() {
-  images_crack[0] = new QPixmap(":Background/background_crack_1.png");
-  images_crack[1] = new QPixmap(":Background/background_crack_2.png");
-  images_crack[2] = new QPixmap(":Background/background_crack_3.png");
-  images_crack[3] = new QPixmap(":Background/background_crack_4.png");
-  images_crack[4] = new QPixmap(":Background/background_crack_5.png");
+  images_crack_.push_back(new QPixmap(":Background/background_crack_1.png"));
+  images_crack_.push_back(new QPixmap(":Background/background_crack_2.png"));
+  images_crack_.push_back(new QPixmap(":Background/background_crack_3.png"));
+  images_crack_.push_back(new QPixmap(":Background/background_crack_4.png"));
+  images_crack_.push_back(new QPixmap(":Background/background_crack_5.png"));
 }
 
 void GameWidget::SetMainAnimations() {
-  images_shining[0] = new QPixmap(":Background/background_shines.png");
-  images_shining[1] = new QPixmap(":Background/display.png");
-  main_image_ = images_shining[0];
+  images_shining_.push_back(new QPixmap(":Background/background_shines.png"));
+  images_shining_.push_back(new QPixmap(":Background/display.png"));
+  main_image_ = images_shining_[0];
 }
 
 void GameWidget::Loss() {
   connect(loss_timer_, &QTimer::timeout, this, [&] {
     index_ = (index_ + 1) % 5;
-    main_image_ = images_crack[index_];
-
+    main_image_ = images_crack_[index_];
     repaint();
     if (index_ == 4) {
       loss_timer_->stop();
+      is_end_ = false;
     }
   });
 }
 
 void GameWidget::EndGame() {
+  is_end_ = true;
   index_ = 0;
 
   QPixmap pixmap_gr(":Buttons/green_button_clicked.png");
@@ -465,8 +472,6 @@ void GameWidget::EndGame() {
   pixmap_yel = pixmap_yel.scaled(yellow_button_->size());
   yellow_button_->setIcon(QIcon(pixmap_yel));
   yellow_button_->setIconSize(pixmap_yel.size());
-
-  shining_timer_->stop();
 
   blue_button_->disconnect();
   yellow_button_->disconnect();

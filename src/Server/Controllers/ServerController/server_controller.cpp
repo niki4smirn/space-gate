@@ -104,68 +104,75 @@ void ServerController::Send(const events::EventWrapper& event) {
   }
 }
 
-// super awful code and it's mine *cute* ©niki4smirn
+void ServerController::HandleClientEvent(const events::EventWrapper& event) {
+  const auto& client_event = event.client_event();
+  UserId user_id = client_event.sender_id();
+  const auto& event_to_server = client_event.event_to_server();
+  auto user = server_model_.GetUserById(user_id);
+  switch (event_to_server.type_case()) {
+    case client_events::EventToServer::kCreateRoom: {
+      RoomId new_room_id = server_model_.GetUnusedRoomId();
+      auto new_room = std::make_shared<RoomController>(new_room_id, user);
+      server_model_.AddRoom(new_room);
+      connect(new_room.get(), &RoomController::SendRoomsList, [&]() {
+        emit SendRoomsListEvent();
+      });
+      server_model_.AddUserToRoom(user_id, new_room_id);
+      break;
+    }
+    case client_events::EventToServer::kEnterRoom: {
+      auto room_id = event_to_server.enter_room().room_id();
+      if (!server_model_.ExistsRoom(room_id)) {
+        break;
+      }
+      auto room = server_model_.GetRoomById(room_id);
+      if (room->IsInGame() ||
+          room->GetPlayersCount() >= constants::kMaxRoomPlayersCount) {
+        break;
+      }
+      if (server_model_.IsInSomeRoom(user_id)) {
+        break;
+      }
+      server_model_.AddUserToRoom(user_id, room_id);
+      break;
+    }
+    case client_events::EventToServer::kLeaveRoom: {
+      if (server_model_.IsInSomeRoom(user_id)) {
+        server_model_.DeleteUserFromRoom(user_id);
+      }
+      break;
+    }
+    default: {}
+  }
+}
+
+void ServerController::HandleInternalEvent(const events::EventWrapper& event) {
+  switch (event.internal_event().type_case()) {
+    case internal_events::InternalEventWrapper::kDeleteUser: {
+      UserId user_id = event.internal_event().delete_user().user_id();
+      if (server_model_.IsInSomeRoom(user_id)) {
+        auto room = server_model_.GetRoomByUserId(user_id);
+        room->DeleteUser(user_id);
+        if (room->IsEmpty()) {
+          server_model_.DeleteRoom(room->GetId());
+        }
+      }
+      server_model_.DeleteUser(user_id);
+      break;
+    }
+    default: {}
+  }
+}
+
 void ServerController::Handle(const events::EventWrapper& event) {
   LogEvent(event, logging::Type::kHandle);
   switch (event.type_case()) {
     case events::EventWrapper::kClientEvent: {
-      const auto& client_event = event.client_event();
-      UserId user_id = client_event.sender_id();
-      const auto& event_to_server = client_event.event_to_server();
-      auto user = server_model_.GetUserById(user_id);
-      switch (event_to_server.type_case()) {
-        case client_events::EventToServer::kCreateRoom: {
-          RoomId new_room_id = server_model_.GetUnusedRoomId();
-          auto new_room = std::make_shared<RoomController>(new_room_id, user);
-          server_model_.AddRoom(new_room);
-          connect(new_room.get(), &RoomController::SendRoomsList, [&]() {
-            emit SendRoomsListEvent();
-          });
-          server_model_.AddUserToRoom(user_id, new_room_id);
-          break;
-        }
-        case client_events::EventToServer::kEnterRoom: {
-          auto room_id = event_to_server.enter_room().room_id();
-          if (!server_model_.ExistsRoom(room_id)) {
-            break;
-          }
-          auto room = server_model_.GetRoomById(room_id);
-          if (room->IsInGame() ||
-              room->GetPlayersCount() >= constants::kMaxRoomPlayersCount) {
-            break;
-          }
-          if (server_model_.IsInSomeRoom(user_id)) {
-            break;
-          }
-          server_model_.AddUserToRoom(user_id, room_id);
-          break;
-        }
-        case client_events::EventToServer::kLeaveRoom: {
-          if (server_model_.IsInSomeRoom(user_id)) {
-            server_model_.DeleteUserFromRoom(user_id);
-          }
-          break;
-        }
-        default: {}
-      }
+      HandleClientEvent(event);
       break;
     }
     case events::EventWrapper::kInternalEvent: {
-      switch (event.internal_event().type_case()) {
-        case internal_events::InternalEventWrapper::kDeleteUser: {
-          UserId user_id = event.internal_event().delete_user().user_id();
-          if (server_model_.IsInSomeRoom(user_id)) {
-            auto room = server_model_.GetRoomByUserId(user_id);
-            room->DeleteUser(user_id);
-            if (room->IsEmpty()) {
-              server_model_.DeleteRoom(room->GetId());
-            }
-          }
-          server_model_.DeleteUser(user_id);
-          break;
-        }
-        default: {}
-      }
+      HandleInternalEvent(event);
       break;
     }
     default: {}

@@ -34,10 +34,12 @@ void GameController::Handle(const events::EventWrapper& event) {
 
   switch (game_event.type_case()) {
     case client_events::EventToGame::kJoinMinigame: {
-      if (!model_.IsPlayerBusy(client_event.sender_id())) {
-        MinigameId minigame_id = game_event.join_minigame().minigame_id();
+      if (auto minigame_type =
+          static_cast<MinigameType>(game_event.join_minigame().minigame_id());
+          !model_.IsPlayerBusy(client_event.sender_id()) &&
+          model_.IsWaitingForStart(minigame_type)) {
         model_.AddPlayerToMinigameQueue(client_event.sender_id(),
-                                        static_cast<MinigameType>(minigame_id));
+                                        minigame_type);
       }
 
       break;

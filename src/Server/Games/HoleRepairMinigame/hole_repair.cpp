@@ -144,7 +144,7 @@ void HoleRepair::SendResponseMessages() {
   if (ticks_ > duration_) {
     return;
   }
-  for (const auto& [id, _]: players_) {
+  for (const auto& [id, _] : players_) {
     AddEventToSend(GenerateResponseMessage(id));
   }
 }

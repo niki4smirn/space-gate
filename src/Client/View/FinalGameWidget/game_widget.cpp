@@ -409,7 +409,7 @@ void GameWidget::SetProgress(int progress, int max_progress) {
 
 void GameWidget::BackgroundShines() {
   connect(shining_timer_, &QTimer::timeout, this, [&] {
-    if (is_end_){
+    if (is_end_) {
       return;
     }
     index_ = (index_ + 1) % 2;

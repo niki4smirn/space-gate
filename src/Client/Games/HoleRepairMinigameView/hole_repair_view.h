@@ -41,7 +41,7 @@ class HoleRepairView : public QWidget {
   QPointF cursor_pos_;
   PlayerType player_;
   QSize screen_size_;
-  double hole_size_ = screen_size_.width() / 15;
+  double hole_size_ = screen_size_.width() / 10;
   double cursor_size_ = screen_size_.width() / 60;
   double bar_width_ = screen_size_.height() / 80;
   double text_size_ = screen_size_.height() / 40;

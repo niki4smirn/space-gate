@@ -71,9 +71,10 @@ class GameWidget : public QWidget {
   QTimer* shining_timer_;
   QTimer* loss_timer_;
   QPixmap* main_image_;
-  QPixmap* images_shining[2];
-  QPixmap* images_crack[6];
+  std::vector<QPixmap*> images_shining_;
+  std::vector<QPixmap*> images_crack_;
   int progress_ = 0;
   int max_progress_;
   int index_ = 0;
+  bool is_end_ = false;
 };

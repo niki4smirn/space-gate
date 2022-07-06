@@ -240,7 +240,7 @@ void ClientView::ShowFinalScreen(bool is_win) {
     call_final_screen();
   } else {
     game_widget_->EndGame();
-    QTimer::singleShot(2500, call_final_screen);
+    QTimer::singleShot(5200, call_final_screen);
   }
 }
 

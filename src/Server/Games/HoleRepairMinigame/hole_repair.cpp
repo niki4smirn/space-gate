@@ -167,7 +167,7 @@ void HoleRepair::GenerateHoles() {
 bool HoleRepair::Check() {
   int mistakes = 0;
   for (int i = 0; i < plates_.size(); ++i) {
-    double min = hole_repair_settings::kRelativeCoords;
+    double min = 1;
     for (int j = 0; j < holes_.size(); ++j) {
       QPointF user_point(plates_.at(i).x(), plates_.at(i).y());
       double length = Length(user_point, holes_.at(j));

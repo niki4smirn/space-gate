@@ -33,17 +33,17 @@ void AbstractController::AddEventToSend(const events::EventWrapper& event) {
 
 void AbstractController::HandleAndSend() {
   while (!events_to_handle_.empty()) {
-    auto& cur_event = events_to_handle_.front();
+    auto cur_event = std::move(events_to_handle_.front());
+    events_to_handle_.pop();
     this->Handle(cur_event);
     cur_event.Clear();
-    events_to_handle_.pop();
   }
 
   while (!events_to_send_.empty()) {
-    auto& cur_event = events_to_send_.front();
+    auto cur_event = std::move(events_to_send_.front());
+    events_to_send_.pop();
     this->Send(cur_event);
     cur_event.Clear();
-    events_to_send_.pop();
   }
 }
 

@@ -36,6 +36,7 @@ set(scheme_PROTOS
         Protobuf/server_events.proto
         Protobuf/minigame_actions.proto
         Protobuf/minigame_responses.proto
+        Protobuf/internal_events.proto
         )
 include_directories(${Protobuf_INCLUDE_DIRS})
 

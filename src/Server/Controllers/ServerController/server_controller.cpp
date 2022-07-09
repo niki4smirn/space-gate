@@ -62,16 +62,8 @@ void ServerController::OnSocketDisconnect() {
   auto web_socket = qobject_cast<QWebSocket*>(sender());
   LOG << "Socket disconnected: " << web_socket;
   if (web_socket) {
-    auto user = server_model_.GetUserBySocket(web_socket);
-    UserId user_id = user->GetId();
-    if (server_model_.IsInSomeRoom(user_id)) {
-      auto room = server_model_.GetRoomByUserId(user_id);
-      room->DeleteUser(user_id);
-      if (room->IsEmpty()) {
-        server_model_.DeleteRoom(room->GetId());
-      }
-    }
-    server_model_.DeleteUser(user_id);
+    UserId user_id = server_model_.GetUserBySocket(web_socket)->GetId();
+    AddEventToHandle(GenerateDeleteUserEvent(user_id));
   }
 }
 
@@ -112,8 +104,7 @@ void ServerController::Send(const events::EventWrapper& event) {
   }
 }
 
-void ServerController::Handle(const events::EventWrapper& event) {
-  LogEvent(event, logging::Type::kHandle);
+void ServerController::HandleClientEvent(const events::EventWrapper& event) {
   const auto& client_event = event.client_event();
   UserId user_id = client_event.sender_id();
   const auto& event_to_server = client_event.event_to_server();
@@ -155,6 +146,39 @@ void ServerController::Handle(const events::EventWrapper& event) {
   }
 }
 
+void ServerController::HandleInternalEvent(const events::EventWrapper& event) {
+  switch (event.internal_event().type_case()) {
+    case internal_events::InternalEventWrapper::kDeleteUser: {
+      UserId user_id = event.internal_event().delete_user().user_id();
+      if (server_model_.IsInSomeRoom(user_id)) {
+        auto room = server_model_.GetRoomByUserId(user_id);
+        room->DeleteUser(user_id);
+        if (room->IsEmpty()) {
+          server_model_.DeleteRoom(room->GetId());
+        }
+      }
+      server_model_.DeleteUser(user_id);
+      break;
+    }
+    default: {}
+  }
+}
+
+void ServerController::Handle(const events::EventWrapper& event) {
+  LogEvent(event, logging::Type::kHandle);
+  switch (event.type_case()) {
+    case events::EventWrapper::kClientEvent: {
+      HandleClientEvent(event);
+      break;
+    }
+    case events::EventWrapper::kInternalEvent: {
+      HandleInternalEvent(event);
+      break;
+    }
+    default: {}
+  }
+}
+
 void ServerController::SendEventToRoom(
     const events::EventWrapper& event) const {
   server_model_.GetRoomByUserId(
@@ -184,4 +208,16 @@ void ServerController::SendEveryUser(events::EventWrapper event) const {
     QByteArray byte_array(serialized.data(), serialized.size());
     user_ptr->GetSocket()->sendBinaryMessage(byte_array);
   }
+}
+
+events::EventWrapper ServerController::GenerateDeleteUserEvent(
+    UserId user_id) {
+  auto* delete_user_event = new internal_events::DeleteUser;
+  delete_user_event->set_user_id(user_id);
+  auto* internal_event_wrapper = new internal_events::InternalEventWrapper;
+  internal_event_wrapper->set_allocated_delete_user(delete_user_event);
+
+  events::EventWrapper event_wrapper;
+  event_wrapper.set_allocated_internal_event(internal_event_wrapper);
+  return event_wrapper;
 }

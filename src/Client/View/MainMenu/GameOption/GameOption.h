@@ -2,8 +2,8 @@
 
 #include <QWidget>
 
-class MainScreen : public QWidget {
-  Q_OBJECT
+class MainPage : public QWidget {
+ Q_OBJECT
 
  public:
 

@@ -4,8 +4,9 @@
 #include "src/Client/View/MainMenu/ChiefRoomLobby/chief_room_lobby.h"
 #include "src/Client/View/MainMenu/GuestRoomLobby/guest_room_lobby.h"
 #include "src/Client/View/MainMenu/MainPage/main_page.h"
-#include "src/Client/View/MainMenu/RoomList/room_list.h"
+#include "src/Client/View/MainMenu/RoomsList/rooms_list.h"
 #include "src/Client/View/MainMenu/SettingsMenu/settings_menu.h"
+#include "src/Client/View/MainMenu/LightEffect/light_effect.h"
 #include "src/Server/Models/RoomModel/room_model.h"
 #include "Protobuf/client_events.pb.h"
 #include "Protobuf/server_events.pb.h"
@@ -24,41 +25,36 @@ class ClientMainMenu : public QWidget {
   void SetCenterPos(QPoint pos);
   void PlayStartEffect();
   void UpdateInterface(bool new_is_chief);
-  void BackToStart();
+  void BackToMainPage();
   void BackToLobby();
 
  private:
-  void RemoveAllWidgets();
-  void ResetAllWidgets();
+  void ConnectChiefRoomLobby();
+  void ConnectGuestRoomLobby();
+  void ConnectMainPage();
+  void ConnectRoomList();
+  void ConnectSettingsMenu();
+  void AddStackedWidgets();
   void Connect();
-  void ButtonsConfigure();
-  void ShowStartWidget();
   void SetLayouts();
-  void SetMouseTracking();
 
-  void ChooseRoomOption();
-  void BackToGameOption();
   void CreateRoom();
   void JoinRoom();
-  void Settings();
-  void ReadyButtonPressEvent();
 
  private:
-  BackgroundWidget* background_;
+  QStackedWidget* stacked_widget_;
   QGridLayout* background_layout_;
-  QLabel* game_name_;
-  QLabel* nothing_here_;
-  QWidget* interface_;
-  QFont font_;
+  BackgroundWidget* background_;
+  ChiefRoomLobby* chief_room_lobby_;
+  GuestRoomLobby* guest_room_lobby_;
+  LightEffect* light_effect_;
+  MainPage* main_page_;
+  RoomsList* rooms_list_;
+  SettingsMenu* settings_menu_;
 
   bool is_chief_{true};
-  static QColor StatusToColor(server_events::RoomUser::Status status);
-
-  void ShowRoomChiefInterface();
-  void ShowRoomGuestInterface();
 
  signals:
-  void StartEffect(bool state);
   void Close();
   void ReadyButtonPressed();
   void CreateRoomSignal();

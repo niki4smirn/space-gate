@@ -1,6 +1,6 @@
-#include "room_list.h"
+#include "rooms_list.h"
 
-RoomList::RoomList(QWidget* parent) :
+RoomsList::RoomsList(QWidget* parent) :
     QWidget(parent),
     game_name_(new QLabel("SpaceGate", this)),
     interface_layout_(new QGridLayout),
@@ -15,7 +15,7 @@ RoomList::RoomList(QWidget* parent) :
   Connect();
 }
 
-void RoomList::Connect() {
+void RoomsList::Connect() {
   connect(create_room_button_,
           &QPushButton::clicked,
           [this]() { emit CreateRoom(); });
@@ -26,7 +26,7 @@ void RoomList::Connect() {
           [this]() { emit Back(); });
 }
 
-void RoomList::InterfaceConfigure() {
+void RoomsList::InterfaceConfigure() {
   setStyleSheet("QPushButton {background-color: rgb(136, 247, 255); font-size: 40px;}");
 
   game_name_->setStyleSheet("QLabel {color : #88bcff; font-size : 105; font-weight : bold }");
@@ -45,7 +45,7 @@ void RoomList::InterfaceConfigure() {
   back_button_->setFont(fonts::game_title_font);
 }
 
-void RoomList::SetLayout() {
+void RoomsList::SetLayout() {
   interface_layout_->addWidget(rooms_list_, 1, 0, 1, 2,
                                Qt::AlignHCenter | Qt::AlignVCenter);
   interface_layout_->addWidget(create_room_button_,
@@ -58,7 +58,7 @@ void RoomList::SetLayout() {
                                Qt::AlignHCenter | Qt::AlignVCenter);
 }
 
-void RoomList::UpdateRoomList(const server_events::RoomsList& room_list) {
+void RoomsList::UpdateRoomList(const server_events::RoomsList& room_list) {
   int current_row = rooms_list_->currentRow();
   rooms_list_->clear();
   for (auto room : room_list.ids()) {
@@ -71,3 +71,12 @@ void RoomList::UpdateRoomList(const server_events::RoomsList& room_list) {
     rooms_list_->setCurrentRow(current_row);
   }
 }
+
+int RoomsList::GetRow() {
+  return rooms_list_->currentRow();
+}
+
+QListWidgetItem* RoomsList::GetItem() {
+  return rooms_list_->currentItem();
+}
+

@@ -5,16 +5,19 @@
 #include <QPushButton>
 #include <QLabel>
 #include <QListWidget>
+#include <QListWidgetItem>
 
 #include "Resources/Fonts/fonts.h"
 #include "Protobuf/server_events.pb.h"
 
-class RoomList : public QWidget {
+class RoomsList : public QWidget {
  Q_OBJECT
 
  public:
-  RoomList(QWidget* parent = nullptr);
+  RoomsList(QWidget* parent = nullptr);
   void UpdateRoomList(const server_events::RoomsList& room_list);
+  int GetRow();
+  QListWidgetItem* GetItem();
 
  private:
   void Connect();

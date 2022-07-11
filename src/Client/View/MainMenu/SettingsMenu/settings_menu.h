@@ -5,6 +5,7 @@
 #include <QPushButton>
 #include <QGridLayout>
 
+#include "Resources/Fonts/fonts.h"
 
 class SettingsMenu : public QWidget {
  Q_OBJECT

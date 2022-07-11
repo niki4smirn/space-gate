@@ -14,12 +14,14 @@ class ChiefRoomLobby : public QWidget {
 
  public:
   ChiefRoomLobby(QWidget* parent = nullptr);
-  void UpdatePlayerList(const server_events::RoomsList& room_info);
+  void UpdatePlayerList(const server_events::RoomInfo& room_info);
 
  private:
   void Connect();
   void InterfaceConfigure();
   void SetLayout();
+  void ReadyButtonPressEvent();
+  static QColor StatusToColor(server_events::RoomUser::Status status);
 
  private:
   QGridLayout* interface_layout_;

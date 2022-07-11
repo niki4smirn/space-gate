@@ -19,9 +19,7 @@ void ChiefRoomLobby::Connect() {
   connect(start_button_,
           &QPushButton::clicked,
           [this]() { emit Start(); });
-  connect(ready_button_,
-          &QPushButton::clicked,
-          [this]() { emit Ready(); });
+  connect(ready_button_, &QPushButton::clicked, this, &ChiefRoomLobby::ReadyButtonPressEvent);
   connect(back_button_, &QPushButton::clicked,
           [this]() { emit Back(); });
 }
@@ -58,7 +56,7 @@ void ChiefRoomLobby::SetLayout() {
                                Qt::AlignHCenter | Qt::AlignVCenter);
 }
 
-void ChiefRoomLobby::UpdatePlayerList(const server_events::RoomsList& room_info) {
+void ChiefRoomLobby::UpdatePlayerList(const server_events::RoomInfo& room_info) {
   player_list_->clear();
   const auto& users = room_info.users();
   for (int i = 0; i < users.size(); i++) {
@@ -75,4 +73,33 @@ void ChiefRoomLobby::UpdatePlayerList(const server_events::RoomsList& room_info)
     can_start = false;
   }
   start_button_->setEnabled(can_start);
+}
+
+void ChiefRoomLobby::ReadyButtonPressEvent() {
+  if (ready_button_->text() == "READY") {
+    ready_button_->setText("NOT READY");
+  } else {
+    ready_button_->setText("READY");
+  }
+  emit Ready();
+}
+
+QColor ChiefRoomLobby::StatusToColor(server_events::RoomUser::Status status) {
+  QColor result;
+  switch (status) {
+    case server_events::RoomUser::kNotReady: {
+      result = QColorConstants::Red;
+      break;
+    }
+    case server_events::RoomUser::kReady: {
+      result = QColorConstants::Green;
+      break;
+    }
+    case server_events::RoomUser::kNone: {
+      result = QColorConstants::Gray;
+      break;
+    }
+    default: {}
+  }
+  return result;
 }

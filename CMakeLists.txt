@@ -68,7 +68,7 @@ if (WIN32)
             src/Client/InputController/input_names_windows.cpp)
 else()
     set(SYSTEM_DEPENDENT_SOURCES
-            src/Client/InputController/input_names_unix.cpp)
+            src/Client/InputController/input_names_unix.cpp src/Client/View/MainMenu/LightEffect/light_effect.cpp src/Client/View/MainMenu/LightEffect/light_effect.h)
 endif (WIN32)
 
 add_executable(client
@@ -91,11 +91,11 @@ add_executable(client
         src/Client/Games/HoleRepairMinigameView/hole_repair_view.cpp
         src/Helpers/Constants/minigames_settings.cpp
         src/Client/View/MainMenu/MainPage/main_page.cpp
-        src/Client/View/MainMenu/RoomList/room_list.cpp
+        src/Client/View/MainMenu/RoomsList/rooms_list.cpp
         src/Client/View/MainMenu/ChiefRoomLobby/chief_room_lobby.cpp
         src/Client/View/MainMenu/GuestRoomLobby/guest_room_lobby.cpp
         src/Client/View/MainMenu/SettingsMenu/settings_menu.cpp
-        src/Client/View/MainMenu/RoomList/room_list.cpp
+        src/Client/View/MainMenu/RoomsList/rooms_list.cpp
         Resources/Fonts/fonts.cpp
         )
 

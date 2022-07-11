@@ -21,7 +21,7 @@ GameController::GameController(
 }
 
 QString GameController::GetControllerName() const {
-  return "Game";
+  return "GameView";
 }
 
 void GameController::Handle(const events::EventWrapper& event) {

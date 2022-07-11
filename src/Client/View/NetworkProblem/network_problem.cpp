@@ -1,7 +1,7 @@
 #include <QFontDatabase>
 #include <QApplication>
 #include <QScreen>
-#include "network_problem_widget.h"
+#include "network_problem.h"
 
 NetworkProblemWidget::NetworkProblemWidget(QWidget* parent) :
     QWidget(parent),

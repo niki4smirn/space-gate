@@ -4,11 +4,10 @@
 #include "src/Client/InputController/input_controller.h"
 #include "src/Server/Models/RoomModel/room_model.h"
 #include "src/Client/View/FinalScreen/final_screen.h"
-// #include "src/Client/View/GameWidget/game_widget.h"
-#include "src/Client/View/FinalGameWidget/game_widget.h"
+#include "src/Client/View/GameView/game_view.h"
 #include "src/Client/Games/TerminalMinigameView/terminal_minigame_view.h"
 #include "src/Client/Games/HoleRepairMinigameView/hole_repair_view.h"
-#include "src/Client/View/NetworkProblemWidget/network_problem_widget.h"
+#include "src/Client/View/NetworkProblem/network_problem.h"
 
 #include <QWidget>
 #include <QStackedWidget>
@@ -46,7 +45,7 @@ class ClientView : public QMainWindow {
  private:
   std::unique_ptr<InputController> input_controller_;
   ClientMainMenu* main_menu_;
-  GameWidget* game_widget_;
+  GameView* game_view_;
   FinalScreen* final_screen_;
   NetworkProblemWidget* network_problem_widget_;
   TerminalMinigameView* terminal_minigame_view_;

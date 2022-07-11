@@ -81,14 +81,12 @@ add_executable(client
         src/Client/View/MainMenu/Background/star.cpp
         src/Client/InputController/input_controller.cpp
         ${SYSTEM_DEPENDENT_SOURCES}
-        src/Client/View/FinalGameWidget/game_widget.cpp
+        src/Client/View/GameView/game_view.cpp
         Resources/Images/images.qrc
         Resources/Fonts/fonts.qrc
-#        src/Client/View/GameWidget/game_widget.cpp
-        src/Client/View/GameWidget/MainGameWidget/main_game_widget.cpp
-        src/Client/View/GameWidget/WaitingScreen/waiting_screen.cpp
+        src/Client/View/GameView/game_view.cpp
         src/Client/View/FinalScreen/final_screen.cpp
-        src/Client/View/NetworkProblemWidget/network_problem_widget.cpp
+        src/Client/View/NetworkProblem/network_problem.cpp
         src/Client/Games/TerminalMinigameView/terminal_minigame_view.cpp
         src/Client/Games/HoleRepairMinigameView/hole_repair_view.cpp
         src/Helpers/Constants/minigames_settings.cpp

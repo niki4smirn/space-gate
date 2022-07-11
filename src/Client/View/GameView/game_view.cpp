@@ -1,5 +1,5 @@
 #include <iostream>
-#include "game_widget.h"
+#include "game_view.h"
 #include "src/Helpers/logging.h"
 
 #include <QApplication>
@@ -7,7 +7,7 @@
 #include <QScreen>
 #include <QBrush>
 
-GameWidget::GameWidget(QWidget* parent) : QWidget(parent) {
+GameView::GameView(QWidget* parent) : QWidget(parent) {
   if (parent) {
     resize(parent->size());
   }
@@ -53,7 +53,7 @@ GameWidget::GameWidget(QWidget* parent) : QWidget(parent) {
   Loss();
 }
 
-void GameWidget::SetIcons() {
+void GameView::SetIcons() {
   QPixmap pixmap_yel(":Buttons/yellow_button.png");
   pixmap_yel = pixmap_yel.scaled(yellow_button_->size());
   yellow_button_->setIcon(QIcon(pixmap_yel));
@@ -85,7 +85,7 @@ void GameWidget::SetIcons() {
   red_button_->setVisible(1);
 }
 
-void GameWidget::SetButtonsSize() {
+void GameView::SetButtonsSize() {
   double width = QApplication::screens()[0]->size().width();
   double height = QApplication::screens()[0]->size().height();
   blue_button_->setFixedSize(width / 1920 * 380, height / 1080 * 122);
@@ -95,7 +95,7 @@ void GameWidget::SetButtonsSize() {
   purple_button_->setFixedSize(width / 1920 * 227, height / 1080 * 152);
 }
 
-void GameWidget::SetButtonsGeometry() {
+void GameView::SetButtonsGeometry() {
   double width = QApplication::screens()[0]->size().width();
   double height = QApplication::screens()[0]->size().height();
 
@@ -106,7 +106,7 @@ void GameWidget::SetButtonsGeometry() {
   purple_button_->setGeometry(width / 1920 * 1080, height / 1080 * 885, 1, 1);
 }
 
-void GameWidget::ButtonClicked() {
+void GameView::ButtonClicked() {
   connect(green_button_, &QPushButton::pressed, this, [&] {
     QPixmap pixmap_gr(":Buttons/green_button_clicked.png");
     pixmap_gr = pixmap_gr.scaled(green_button_->size());
@@ -177,7 +177,7 @@ void GameWidget::ButtonClicked() {
   });
 }
 
-void GameWidget::SetBulbsIcons() {
+void GameView::SetBulbsIcons() {
   QPixmap pixmap_yel(":Bulbs/yellow_bulb_off.png");
   pixmap_yel = pixmap_yel.scaled(yellow_bulb_red_->size());
   yellow_bulb_red_->setPixmap(pixmap_yel);
@@ -207,7 +207,7 @@ void GameWidget::SetBulbsIcons() {
   red_bulb_blue_->setPixmap(pixmap_red);
 }
 
-void GameWidget::SetBulbsSize() {
+void GameView::SetBulbsSize() {
   double width = QApplication::screens()[0]->size().width();
   double height = QApplication::screens()[0]->size().height();
 
@@ -232,7 +232,7 @@ void GameWidget::SetBulbsSize() {
   green_bulb_blue_->setFixedSize(width / 1920 * 41, height / 1080 * 33);
 }
 
-void GameWidget::SetBulbsGeometry() {
+void GameView::SetBulbsGeometry() {
   double width = QApplication::screens()[0]->size().width();
   double height = QApplication::screens()[0]->size().height();
 
@@ -269,7 +269,7 @@ void GameWidget::SetBulbsGeometry() {
   red_bulb_blue_->setGeometry(width / 1920 * 1733, height / 1080 * 891, 1, 1);
 }
 
-void GameWidget::mouseMoveEvent(QMouseEvent* event) {
+void GameView::mouseMoveEvent(QMouseEvent* event) {
   double rx = cursor().pos().rx();
   double ry = cursor().pos().ry();
 
@@ -364,7 +364,7 @@ void GameWidget::mouseMoveEvent(QMouseEvent* event) {
   }
 }
 
-void GameWidget::SetTracking() {
+void GameView::SetTracking() {
   setMouseTracking(1);
   yellow_button_->setMouseTracking(1);
   blue_button_->setMouseTracking(1);
@@ -373,7 +373,7 @@ void GameWidget::SetTracking() {
   purple_button_->setMouseTracking(1);
 }
 
-void GameWidget::paintEvent(QPaintEvent* event) {
+void GameView::paintEvent(QPaintEvent* event) {
   QWidget::paintEvent(event);
   QPainter painter(this);
   QPixmap background = *main_image_;
@@ -397,13 +397,13 @@ void GameWidget::paintEvent(QPaintEvent* event) {
   }
 }
 
-void GameWidget::SetProgress(int progress, int max_progress) {
+void GameView::SetProgress(int progress, int max_progress) {
   progress_ = progress;
   max_progress_ = max_progress;
   repaint();
 }
 
-void GameWidget::BackgroundShines() {
+void GameView::BackgroundShines() {
   connect(shining_timer_, &QTimer::timeout, this, [&] {
     index_ = (index_ + 1) % 2;
     main_image_ = images_shining[index_];
@@ -412,7 +412,7 @@ void GameWidget::BackgroundShines() {
   });
 }
 
-void GameWidget::SetCrackAnimation() {
+void GameView::SetCrackAnimation() {
   images_crack[0] = new QPixmap(":Background/background_crack_1.png");
   images_crack[1] = new QPixmap(":Background/background_crack_2.png");
   images_crack[2] = new QPixmap(":Background/background_crack_3.png");
@@ -420,13 +420,13 @@ void GameWidget::SetCrackAnimation() {
   images_crack[4] = new QPixmap(":Background/background_crack_5.png");
 }
 
-void GameWidget::SetMainAnimations() {
+void GameView::SetMainAnimations() {
   images_shining[0] = new QPixmap(":Background/background_shines.png");
   images_shining[1] = new QPixmap(":Background/display.png");
   main_image_ = images_shining[0];
 }
 
-void GameWidget::Loss() {
+void GameView::Loss() {
   connect(loss_timer_, &QTimer::timeout, this, [&] {
     index_ = (index_ + 1) % 5;
     main_image_ = images_crack[index_];
@@ -438,7 +438,7 @@ void GameWidget::Loss() {
   });
 }
 
-void GameWidget::EndGame() {
+void GameView::EndGame() {
   index_ = 0;
 
   QPixmap pixmap_gr(":Buttons/green_button_clicked.png");
@@ -506,7 +506,7 @@ void GameWidget::EndGame() {
   red_bulb_purple_->setPixmap(pixmap_r);
 }
 
-void GameWidget::SetBulbsCount(int minigame_pos, int count) {
+void GameView::SetBulbsCount(int minigame_pos, int count) {
   switch (minigame_pos) {
     case 0: {
       switch (count) {
@@ -616,7 +616,7 @@ void GameWidget::SetBulbsCount(int minigame_pos, int count) {
   }
 }
 
-void GameWidget::TurnOffGreen() {
+void GameView::TurnOffGreen() {
   QPixmap pixmap_red(":Bulbs/red_bulb_off.png");
   pixmap_red = pixmap_red.scaled(red_bulb_green_->size());
   red_bulb_green_->setPixmap(pixmap_red);
@@ -634,7 +634,7 @@ void GameWidget::TurnOffGreen() {
   blue_bulb_green_->setPixmap(pixmap_blue);
 }
 
-void GameWidget::TurnOffRed() {
+void GameView::TurnOffRed() {
   QPixmap pixmap_red(":Bulbs/red_bulb_off.png");
   pixmap_red = pixmap_red.scaled(red_bulb_green_->size());
   red_bulb_red_->setPixmap(pixmap_red);
@@ -652,7 +652,7 @@ void GameWidget::TurnOffRed() {
   blue_bulb_red_->setPixmap(pixmap_blue);
 }
 
-void GameWidget::TurnOffPurple() {
+void GameView::TurnOffPurple() {
   QPixmap pixmap_red(":Bulbs/red_bulb_off.png");
   pixmap_red = pixmap_red.scaled(red_bulb_green_->size());
   red_bulb_purple_->setPixmap(pixmap_red);
@@ -670,7 +670,7 @@ void GameWidget::TurnOffPurple() {
   blue_bulb_purple_->setPixmap(pixmap_blue);
 }
 
-void GameWidget::TurnOffBlue() {
+void GameView::TurnOffBlue() {
   QPixmap pixmap_red(":Bulbs/red_bulb_off.png");
   pixmap_red = pixmap_red.scaled(red_bulb_green_->size());
   red_bulb_blue_->setPixmap(pixmap_red);

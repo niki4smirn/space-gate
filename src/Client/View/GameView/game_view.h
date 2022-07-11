@@ -11,13 +11,13 @@
 #include "QTimer"
 #include "QWidget"
 
-class GameWidget : public QWidget {
+class GameView : public QWidget {
   Q_OBJECT
 
  public:
-  explicit GameWidget(QWidget* parent = nullptr);
+  explicit GameView(QWidget* parent = nullptr);
 
-  ~GameWidget() override = default;
+  ~GameView() override = default;
 
   void SetProgress(int progress, int max_progress);
   void SetBulbsCount(int minigame_pos, int count);

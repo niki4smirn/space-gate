@@ -4,7 +4,7 @@
 ClientView::ClientView() :
     stacked_widget_(new QStackedWidget(this)),
     main_menu_(new ClientMainMenu(this)),
-    game_widget_(new GameWidget(this)),
+    game_view_(new GameView(this)),
     terminal_minigame_view_(new TerminalMinigameView(this)),
     hole_repair_minigame_view_(new HoleRepairView(this)),
     final_screen_(new FinalScreen(this)),
@@ -18,7 +18,7 @@ ClientView::ClientView() :
   setMouseTracking(true);
   stacked_widget_->setMouseTracking(true);
   main_menu_->setMouseTracking(true);
-  game_widget_->setMouseTracking(true);
+  game_view_->setMouseTracking(true);
 }
 
 void ClientView::mouseMoveEvent(QMouseEvent* event) {
@@ -57,11 +57,11 @@ void ClientView::Connect() {
   connect(input_controller_.get(),
           &InputController::MouseKeyToServer,
           [this](input::Name key) { emit KeyEventToServer(key); });
-  connect(game_widget_, &GameWidget::JoinMinigame,
+  connect(game_view_, &GameView::JoinMinigame,
           [this](int minigame_menu_pos) {
     emit JoinMinigame(minigame_menu_pos);
   });
-  connect(game_widget_, &GameWidget::LeaveMinigame, [&]() {
+  connect(game_view_, &GameView::LeaveMinigame, [&]() {
     emit LeaveMinigame();
   });
   connect(final_screen_, &FinalScreen::MenuPressed, [this]() {
@@ -92,7 +92,7 @@ void ClientView::AddWidgets() {
   stacked_widget_->addWidget(terminal_minigame_view_);
   stacked_widget_->addWidget(hole_repair_minigame_view_);
   stacked_widget_->addWidget(main_menu_);
-  stacked_widget_->addWidget(game_widget_);
+  stacked_widget_->addWidget(game_view_);
   stacked_widget_->addWidget(final_screen_);
   stacked_widget_->addWidget(network_problem_widget_);
 }
@@ -131,35 +131,35 @@ void ClientView::mouseReleaseEvent(QMouseEvent* event) {
 }
 
 void ClientView::OpenGame() {
-  stacked_widget_->setCurrentWidget(game_widget_);
+  stacked_widget_->setCurrentWidget(game_view_);
 }
 
 void ClientView::UpdateProgress(uint64_t progress) {
-  game_widget_->SetProgress(progress, constants::kScoreToFinish);
+  game_view_->SetProgress(progress, constants::kScoreToFinish);
 }
 
 void ClientView::UpdateMinigameBulbs(
     int minigame_pos, int waiting_count) {
   switch (minigame_pos) {
     case 0: {
-      game_widget_->TurnOffGreen();
+      game_view_->TurnOffGreen();
       break;
   }
     case 1: {
-      game_widget_->TurnOffRed();
+      game_view_->TurnOffRed();
       break;
     }
     case 2: {
-      game_widget_->TurnOffPurple();
+      game_view_->TurnOffPurple();
       break;
     }
     case 3: {
-      game_widget_->TurnOffBlue();
+      game_view_->TurnOffBlue();
       break;
     }
     default: {}
   }
-  game_widget_->SetBulbsCount(minigame_pos, waiting_count);
+  game_view_->SetBulbsCount(minigame_pos, waiting_count);
 }
 
 void ClientView::UpdateMinigame(
@@ -203,7 +203,7 @@ void ClientView::UpdateMinigame(
       break;
     }
     case minigame_responses::MinigameResponse::kResult: {
-      stacked_widget_->setCurrentWidget(game_widget_);
+      stacked_widget_->setCurrentWidget(game_view_);
       break;
     }
     default: {}
@@ -239,14 +239,14 @@ void ClientView::ShowFinalScreen(bool is_win) {
   if (is_win) {
     call_final_screen();
   } else {
-    game_widget_->EndGame();
+    game_view_->EndGame();
     QTimer::singleShot(2500, call_final_screen);
   }
 }
 
 void ClientView::ResetAllBulbs() {
-  game_widget_->TurnOffGreen();
-  game_widget_->TurnOffRed();
-  game_widget_->TurnOffPurple();
-  game_widget_->TurnOffBlue();
+  game_view_->TurnOffGreen();
+  game_view_->TurnOffRed();
+  game_view_->TurnOffPurple();
+  game_view_->TurnOffBlue();
 }

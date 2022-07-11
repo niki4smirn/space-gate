@@ -1,18 +1,17 @@
 #pragma once
 
 #include "src/Client/View/MainMenu/Background/background_widget.h"
+#include "src/Client/View/MainMenu/ChiefRoomLobby/chief_room_lobby.h"
+#include "src/Client/View/MainMenu/GuestRoomLobby/guest_room_lobby.h"
+#include "src/Client/View/MainMenu/MainPage/main_page.h"
+#include "src/Client/View/MainMenu/RoomList/room_list.h"
+#include "src/Client/View/MainMenu/SettingsMenu/settings_menu.h"
 #include "src/Server/Models/RoomModel/room_model.h"
 #include "Protobuf/client_events.pb.h"
 #include "Protobuf/server_events.pb.h"
 
 #include <QGridLayout>
-#include <QPushButton>
-#include <QLabel>
 #include <QWidget>
-#include <QListWidget>
-#include <QGraphicsScene>
-#include <QGraphicsView>
-#include <QFont>
 #include <QStackedWidget>
 
 class ClientMainMenu : public QWidget {
@@ -46,19 +45,7 @@ class ClientMainMenu : public QWidget {
 
  private:
   BackgroundWidget* background_;
-  QGridLayout* interface_layout_;
   QGridLayout* background_layout_;
-  QListWidget* player_list_;
-  QListWidget* rooms_list_;
-  QPushButton* settings_;
-  QPushButton* exit_;
-  QPushButton* back_to_start_;
-  QPushButton* back_to_game_option_;
-  QPushButton* play_;
-  QPushButton* start_game_;
-  QPushButton* create_room_;
-  QPushButton* join_room_;
-  QPushButton* ready_status_;
   QLabel* game_name_;
   QLabel* nothing_here_;
   QWidget* interface_;

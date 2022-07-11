@@ -6,22 +6,7 @@
 ClientMainMenu::ClientMainMenu(QWidget* parent) :
     QWidget(parent),
     background_(new BackgroundWidget(this)),
-    background_layout_(new QGridLayout),
-    game_name_(new QLabel("SpaceGate", this)),
-    interface_layout_(new QGridLayout),
-    play_(new QPushButton(this)),
-    start_game_(new QPushButton(this)),
-    settings_(new QPushButton(this)),
-    exit_(new QPushButton(this)),
-    create_room_(new QPushButton(this)),
-    join_room_(new QPushButton(this)),
-    back_to_game_option_(new QPushButton(this)),
-    back_to_start_(new QPushButton(this)),
-    ready_status_(new QPushButton(this)),
-    player_list_(new QListWidget(this)),
-    rooms_list_(new QListWidget(this)),
-    nothing_here_(new QLabel(this)),
-    interface_(new QWidget(this)) {
+    background_layout_(new QGridLayout) {
   QString family =
       QFontDatabase::applicationFontFamilies(QFontDatabase::addApplicationFont(
           ":Paladins.otf")).at(0);

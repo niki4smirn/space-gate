@@ -9,12 +9,12 @@
 #include "Resources/Fonts/fonts.h"
 #include "Protobuf/server_events.pb.h"
 
-class RoomList : public QWidget {
+class ChiefRoomLobby : public QWidget {
  Q_OBJECT
 
  public:
-  RoomList(QWidget* parent = nullptr);
-  void UpdateRoomList(const server_events::RoomsList& room_list);
+  ChiefRoomLobby(QWidget* parent = nullptr);
+  void UpdatePlayerList(const server_events::RoomsList& room_info);
 
  private:
   void Connect();
@@ -24,13 +24,13 @@ class RoomList : public QWidget {
  private:
   QGridLayout* interface_layout_;
   QPushButton* back_button_;
-  QPushButton* create_room_button_;
-  QPushButton* join_room_button_;
-  QListWidget* rooms_list_;
+  QPushButton* start_button_;
+  QPushButton* ready_button_;
+  QListWidget* player_list_;
   QLabel* game_name_;
 
  signals:
-  void CreateRoom();
-  void JoinRoom();
+  void Start();
+  void Ready();
   void Back();
 };

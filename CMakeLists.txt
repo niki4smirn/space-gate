@@ -68,7 +68,7 @@ if (WIN32)
             src/Client/InputController/input_names_windows.cpp)
 else()
     set(SYSTEM_DEPENDENT_SOURCES
-            src/Client/InputController/input_names_unix.cpp src/Client/View/MainMenu/MainPage/main_page.cpp src/Client/View/MainMenu/MainPage/main_page.h src/Client/View/MainMenu/RoomList/room_list.cpp src/Client/View/MainMenu/RoomList/room_list.h src/Client/View/MainMenu/RoomLobby/RoomLobby.cpp src/Client/View/MainMenu/RoomLobby/RoomLobby.h src/Client/View/MainMenu/SettingsMenu/settings_menu.cpp src/Client/View/MainMenu/SettingsMenu/settings_menu.h src/Client/View/MainMenu/GameOption/game_option.cpp src/Client/View/MainMenu/GameOption/game_option.h Resources/Fonts/fonts.cpp Resources/Fonts/fonts.h)
+            src/Client/InputController/input_names_unix.cpp)
 endif (WIN32)
 
 add_executable(client
@@ -90,6 +90,13 @@ add_executable(client
         src/Client/Games/TerminalMinigameView/terminal_minigame_view.cpp
         src/Client/Games/HoleRepairMinigameView/hole_repair_view.cpp
         src/Helpers/Constants/minigames_settings.cpp
+        src/Client/View/MainMenu/MainPage/main_page.cpp
+        src/Client/View/MainMenu/RoomList/room_list.cpp
+        src/Client/View/MainMenu/ChiefRoomLobby/chief_room_lobby.cpp
+        src/Client/View/MainMenu/GuestRoomLobby/guest_room_lobby.cpp
+        src/Client/View/MainMenu/SettingsMenu/settings_menu.cpp
+        src/Client/View/MainMenu/RoomList/room_list.cpp
+        Resources/Fonts/fonts.cpp
         )
 
 set(REQUIRED_QT_PARTS

@@ -68,7 +68,7 @@ if (WIN32)
             src/Client/InputController/input_names_windows.cpp)
 else()
     set(SYSTEM_DEPENDENT_SOURCES
-            src/Client/InputController/input_names_unix.cpp src/Client/View/MainMenu/MainPage/main_page.cpp src/Client/View/MainMenu/MainPage/main_page.h src/Client/View/MainMenu/RoomList/room_list.cpp src/Client/View/MainMenu/RoomList/room_list.h src/Client/View/MainMenu/RoomLobby/RoomLobby.cpp src/Client/View/MainMenu/RoomLobby/RoomLobby.h src/Client/View/MainMenu/SettingsMenu/settings_menu.cpp src/Client/View/MainMenu/SettingsMenu/settings_menu.h src/Client/View/MainMenu/GameOption/GameOption.cpp src/Client/View/MainMenu/GameOption/GameOption.h Resources/Fonts/fonts.cpp Resources/Fonts/fonts.h)
+            src/Client/InputController/input_names_unix.cpp src/Client/View/MainMenu/MainPage/main_page.cpp src/Client/View/MainMenu/MainPage/main_page.h src/Client/View/MainMenu/RoomList/room_list.cpp src/Client/View/MainMenu/RoomList/room_list.h src/Client/View/MainMenu/RoomLobby/RoomLobby.cpp src/Client/View/MainMenu/RoomLobby/RoomLobby.h src/Client/View/MainMenu/SettingsMenu/settings_menu.cpp src/Client/View/MainMenu/SettingsMenu/settings_menu.h src/Client/View/MainMenu/GameOption/game_option.cpp src/Client/View/MainMenu/GameOption/game_option.h Resources/Fonts/fonts.cpp Resources/Fonts/fonts.h)
 endif (WIN32)
 
 add_executable(client

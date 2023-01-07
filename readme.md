@@ -48,3 +48,9 @@ Then run cleint with ip string as argument to connect to custom server or defaul
 ## Special gratitudes for our donators
 
 * :heart_on_fire:**[Klim Markevich](https://github.com/sn0wyQ)**:heart_on_fire:
+
+## Our lovely mentors
+
+* :rainbow_flag:**[Klim Markevich](https://github.com/sn0wyQ)**
+* :rainbow_flag:**[Konstantin Mekhovich](https://github.com/kmekhovich)**
+* :rainbow_flag:**[Matvey Maximov](https://github.com/OS-M)**
